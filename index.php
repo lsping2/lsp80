@@ -2,7 +2,7 @@
 
 define('_INDEX_', true);
 include_once('./_common.php');
-echo "test1";
+echo "test1--2222";
 /* 
 $to = 'in2323a@naver.com'; //상대 메<cd class=""></cd>일주소 
 $subject = 'the subject'; //제목 
