@@ -1,0 +1,52 @@
+
+
+
+
+
+
+#########################
+vi /usr/local/apache2/conf/httpd.conf
+#########################
+
+
+
+DirectoryIndex index.html index.php
+
+
+
+AddType application/x-httpd-php .php .html .s
+AddType application/x-httpd-php-source .phps
+
+
+ServerAdmin webmaster@imagemember.com
+
+
+ServerName imagemember.com
+
+
+
+<Directory "/home/member/www">  
+
+
+
+NameVirtualHost 61.109.245.21
+
+
+<!-- 가상서버 -->
+<VirtualHost *:80>
+#    ServerAdmin webmaster@dummy-host.example.com
+#    DocumentRoot /www/docs/dummy-host.example.com
+#    ServerName dummy-host.example.com
+#    ErrorLog logs/dummy-host.example.com-error_log
+#    CustomLog logs/dummy-host.example.com-access_log common
+#</VirtualHost>
+
+<VirtualHost 61.109.245.21>
+        ServerAdmin webmaster@imagemember.comm
+        DocumentRoot /home/member/www
+        ServerName www.imagemember.com
+        ServerAlias imagemember.com
+        ErrorLog logs/example.com_error_log
+        CustomLog logs/example.com_access_log common
+</VirtualHost>
+

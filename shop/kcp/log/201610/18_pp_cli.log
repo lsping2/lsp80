@@ -1,0 +1,5 @@
+1018-224950 - 25200 - SR42YAIMN73KTBNM - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2016101822475081]+log_level=[3]
+1018-224950 - 25200 - SR42YAIMN73KTBNM - MSG : PG_서버_접속__정상
+1018-224950 - 25200 - SR42YAIMN73KTBNM - MSG : PG_서버_요청_전문_전송__정상
+1018-224951 - 25200 - SR42YAIMN73KTBNM - MSG : PG_서버_응답_전문_수신__정상
+1018-224951 - 25200 - SR42YAIMN73KTBNM - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42YAIMN73KTBNMpay_method=PACAorder_no=2016101822475081card_cd=CCBCcard_name=BC카드acqu_cd=CCBCacqu_name=BC카드card_no=4906030000003422mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2016101822475081tno=16922643432211amount=84100card_mny=84100coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20161018224950van_apptime=20161018224950app_no=54186781bizx_numb=780284397quota=00noinf=Npg_txid=1018224950MG34CEXI1JJL0000000841000054186781res_tax_flag=TG01res_tax_mny=76454res_free_mny=0res_vat_mny=7646partcanc_yn=Ycard_bin_type_01=0card_bin_type_02=0join_cd=0000]

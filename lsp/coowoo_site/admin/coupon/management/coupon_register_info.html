@@ -1,0 +1,314 @@
+<?
+
+require_once "../../../include/include.php";
+html_cache_disable();
+
+require_once "../../login/login_check.php";
+login_check( $PHP_SELF );
+
+$user_no = request( 'user_no', 'get' );
+
+
+$db = new mysql();
+
+$query = "
+					SELECT	ui.user_no ,
+							ui.user_id ,
+							ui.mileage ,
+							ui.user_name ,
+							ui.jumin_no ,
+							ui.postcode ,
+							ui.address1 ,
+							ui.address2 ,
+							ui.telephone ,
+							ui.handphone ,
+							ui.email ,
+							ui.mailing ,
+							ui.join_count ,
+							ui.withdraw ,
+							ui.use_status ,
+							ui.reg_date ,
+							ui.company_name ,
+							ui.company_postcode ,
+							ui.company_address1 ,
+							ui.company_address2 ,
+							ui.company_telephone ,
+							ui.company_fax
+					FROM	user_info as ui
+					WHERE	user_no = '$user_no'
+";
+$db->query( $query );
+$db->fetch();
+
+$rs_user_no			= $db->result( 'user_no' );
+$rs_user_id			= $db->result( 'user_id' );
+$rs_mileage			= $db->result( 'mileage' );
+$rs_user_name		= $db->result( 'user_name' );
+$rs_jumin_no			= $db->result( 'jumin_no' );
+$rs_postcode			= $db->result( 'postcode' );
+$rs_address1			= $db->result( 'address1' );
+$rs_address2			= $db->result( 'address2' );
+$rs_telephone			= $db->result( 'telephone' );
+$rs_handphone		= $db->result( 'handphone' );
+$rs_email				= $db->result( 'email' );
+$rs_mailing			= $db->result( 'mailing' );
+$rs_join_count			= $db->result( 'join_count' );
+$rs_withdraw			= $db->result( 'withdraw' );
+$rs_use_status		= $db->result( 'use_status' );
+$rs_reg_date			= $db->result( 'reg_date' );
+
+$rs_company_name		= $db->result( 'company_name' );
+$rs_company_postcode	= $db->result( 'company_postcode' );
+$rs_company_address1	= $db->result( 'company_address1' );
+$rs_company_address2	= $db->result( 'company_address2' );
+$rs_company_telephone	= $db->result( 'company_telephone' );
+$rs_company_fax		= $db->result( 'company_fax' );
+
+?>
+<script language=javascript>
+window.resizeTo( 500,540 );
+window.focus();
+</script>
+<html>
+<head>
+<title><?$HTML->Title( 'Admin' )?></title>
+<?=$HTML->Metatag()?>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-kr">
+<link rel="stylesheet" href="../../admin_style.css" type="text/css">
+</head>
+
+<font style="font-size:9pt"><b>※ 기본정보</b></font>
+
+<table width=100% border=0 cellpadding=0 cellspacing=3 border=0 bgcolor="#CDCD9A">
+<tr>
+	<td bgcolor=#FFFFFF valign=top>
+	<table width=100% border=0 cellpadding=0 cellspacing=0>
+	<tr>
+		<td width=100 height=22 align=center>
+		아이디
+		</td>
+		<td width=1 background="../../image/dot.gif">
+		</td>
+		<td style="padding-left:5pt">
+		<?=$rs_user_id?>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+	<tr>
+		<td width=100 height=22 align=center>
+		이름
+		</td>
+		<td width=1 background="../../image/dot.gif">
+		</td>
+		<td style="padding-left:5pt">
+		<?=$rs_user_name?>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+	<tr>
+		<td width=100 height=22 align=center>
+		주민등록번호
+		</td>
+		<td width=1 background="../../image/dot.gif">
+		</td>
+		<td style="padding-left:5pt">
+		<?=$rs_jumin_no?>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+	<tr>
+		<td width=100 height=22 align=center>
+		주소
+		</td>
+		<td width=1 background="../../image/dot.gif">
+		</td>
+		<td style="padding-left:5pt; padding-top:5pt; padding-bottom:5pt">
+		[ <?=$rs_postcode?> ]
+		<br>
+		<?=$rs_address1?> <?=$rs_address2?>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+	<tr>
+		<td width=100 height=22 align=center>
+		전화번호
+		</td>
+		<td width=1 background="../../image/dot.gif">
+		</td>
+		<td style="padding-left:5pt">
+		<?=$rs_telephone?>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+	<tr>
+		<td width=100 height=22 align=center>
+		handphone
+		</td>
+		<td width=1 background="../../image/dot.gif">
+		</td>
+		<td style="padding-left:5pt">
+		<?=$rs_handphone?>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+	<tr>
+		<td width=100 height=22 align=center>
+		이메일주소
+		</td>
+		<td width=1 background="../../image/dot.gif">
+		</td>
+		<td style="padding-left:5pt">
+		<?=$rs_email?>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+	<tr>
+		<td width=100 height=22 align=center>
+		메일링 허용
+		</td>
+		<td width=1 background="../../image/dot.gif">
+		</td>
+		<td style="padding-left:5pt">
+<?
+
+if( 'Yes' == $rs_mailing ) echo $mailing_confirm = "<font color=#6633FF>허용</font>";
+else  echo $mailing_confirm = "<font color=#FF3366>비허용</font>";
+
+?>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+	<tr>
+		<td width=100 height=22 align=center>
+		마일리지
+		</td>
+		<td width=1 background="../../image/dot.gif">
+		</td>
+		<td style="padding-left:5pt">
+		<?=$rs_mileage?> 원
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+	<tr>
+		<td width=100 height=22 align=center>
+		접속횟수
+		</td>
+		<td width=1 background="../../image/dot.gif">
+		</td>
+		<td style="padding-left:5pt">
+		<?=$rs_join_count?> 회
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+	<tr>
+		<td width=100 height=22 align=center>
+		가입일
+		</td>
+		<td width=1 background="../../image/dot.gif">
+		</td>
+		<td style="padding-left:5pt">
+		<?=$rs_reg_date?>
+		</td>
+	</tr>
+	</table>
+	</td>
+</tr>
+</table>
+
+<font style="font-size:9pt"><b>※ 회사정보</b></font>
+
+<table width=100% border=0 cellpadding=0 cellspacing=3 border=0 bgcolor="#CDCD9A">
+<tr>
+	<td bgcolor=#FFFFFF valign=top>
+	<table width=100% border=0 cellpadding=0 cellspacing=0>
+	<tr>
+		<td width=100 height=22 align=center>
+		회사명
+		</td>
+		<td width=1 background="../../image/dot.gif">
+		</td>
+		<td style="padding-left:5pt">
+		<?=$rs_company_name?>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+	<tr>
+		<td width=100 height=22 align=center>
+		회사주소
+		</td>
+		<td width=1 background="../../image/dot.gif">
+		</td>
+		<td  style="padding-left:5pt; padding-top:5pt; padding-bottom:5pt">
+		[ <?=$rs_company_postcode?> ]
+		<br>
+		<?=$rs_company_address1?> <?=$rs_company_address2?>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+	<tr>
+		<td width=100 height=22 align=center>
+		전화번호
+		</td>
+		<td width=1 background="../../image/dot.gif">
+		</td>
+		<td style="padding-left:5pt">
+		<?=$rs_company_telephone?>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+	<tr>
+		<td width=100 height=22 align=center>
+		팩스번호
+		</td>
+		<td width=1 background="../../image/dot.gif">
+		</td>
+		<td style="padding-left:5pt">
+		<?=$rs_company_fax?>
+		</td>
+	</tr>
+	</table>
+	</td>
+</tr>
+</table>
+<br>
+<div align=right><a href="javascript:self.close()" onFocus=this.blur() style="font-size=9pt">[ 창닫기 ]</a></div>
+<br>

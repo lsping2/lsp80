@@ -1,0 +1,84 @@
+<?
+
+require_once "../../../include/include.php";
+html_cache_disable();
+
+require_once "../../login/login_check.php";
+login_check( $PHP_SELF );
+
+$coupon_type = request( 'coupon_type', 'get' );
+
+?>
+<html>
+<head>
+<title><?$HTML->Title( 'Admin' )?></title>
+<?=$HTML->Metatag()?>
+<link rel="stylesheet" href="../../admin_style.css" type="text/css">
+
+</head>
+<body>
+<b><font style="font-size:9pt">* 쿠폰 정보 - ( Manufacture )</font></b>
+
+<br><br>
+
+<form name=register action=coupon_register_exec.php method=post target="coupon_hidden_frame">
+
+<table border=0 cellpadding=0 cellspacing=1 bgcolor="#ADAD5C">
+<tr>
+	<td>
+	<table border=0 cellpadding=0 cellspacing=0 bgcolor="#FFFFFF">
+	<tr height=30>
+		<td width=100 align=center>
+		제작사 : 
+		</td>
+		<td width=500 colspan=3 style="padding:5 5 5 5">
+<?
+
+$db = new MYSQL;
+
+$query = "
+			SELECT	manufacture_code ,
+					manufacture_name
+			FROM	product_manufacture_code
+			WHERE	use_status = 'Yes'
+			ORDER BY	 manufacture_name ASC
+";
+$db->query( $query );
+
+?>
+		<table border=0 cellpadding=0 cellspacing=0>
+		<tr>
+<? FOR( $loop=0; $loop<$db->total_record(); $loop++ ) : ?>
+<?
+	$db->fetch();
+	$rs_manufacture_code	= $db->result( 'manufacture_code' );
+	$rs_manufacture_name	= $db->result( 'manufacture_name' );
+?>
+	<td width=250>
+	<a href="coupon_register_step_end.html?coupon_type=manufacture&manufacture_code=<?=$rs_manufacture_code?>" style="line-height:13pt"><?=$loop+1?>. <?=$rs_manufacture_name?></a>
+	</td>
+<? IF( ( $loop + 1 ) % 2 == 0 ) : ?></tr><tr><? ENDIF ?>
+<? ENDFOR ?>
+		</tr>
+		</table>
+		</td>
+	</tr>
+	</table>
+	</td>
+</tr>
+</table>
+<table border=0 width=620>
+<tr>
+	<td>
+	<input type=button value="   돌아가기   " onClick="history.back()">
+	</td>
+</tr>
+</table>
+
+
+</form>
+<br>
+
+
+</body>
+</html>

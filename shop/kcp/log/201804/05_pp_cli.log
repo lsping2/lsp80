@@ -1,0 +1,5 @@
+0405-161549 - 20180 - SR42Y45GE14fREMd - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2018040516134108]+log_level=[3]
+0405-161549 - 20180 - SR42Y45GE14fREMd - MSG : PG_서버_접속__정상
+0405-161549 - 20180 - SR42Y45GE14fREMd - MSG : PG_서버_요청_전문_전송__정상
+0405-161550 - 20180 - SR42Y45GE14fREMd - MSG : PG_서버_응답_전문_수신__정상
+0405-161550 - 20180 - SR42Y45GE14fREMd - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y45GE14fREMdpay_method=PACAorder_no=2018040516134108card_cd=CCLGcard_name=신한카드acqu_cd=CCLGacqu_name=신한카드card_no=9420650000000101mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2018040516134108tno=18345482060986amount=126800card_mny=126800coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20180405161549van_apptime=20180405161549app_no=01329676bizx_numb=0013425574quota=00noinf=Npg_txid=0405161549MP01CFOJBQ000000001268000001329676use_point=0res_tax_flag=TG01res_tax_mny=115272res_free_mny=0res_vat_mny=11528partcanc_yn=Ycard_bin_type_01=1card_bin_type_02=1join_cd=0000]
