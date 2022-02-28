@@ -1,0 +1,84 @@
+<?
+
+function a()
+{
+	echo 5;
+	return 2;
+}
+
+echo "a" . a() . "b";
+
+
+
+
+echo  "<br>";
+
+//////////////////////////////////////////////////////////////
+
+$X = "X";
+$O = "O";
+
+for ( $loop=0;$loop<8;$loop++ )
+{
+	for( $loop2=0; $loop2<7-$loop; $loop2++)
+	{
+		echo $X;
+	}
+	for( $loop2=7-$loop; $loop2<7; $loop2++)
+	{
+		echo $O;
+	}
+
+			echo "<br>";				
+}
+
+
+
+echo "<br>";
+echo "<br>";
+//////////////////////////////////////////////////////////////
+for($loop=0;$loop<8;$loop++)
+{
+  
+
+  for($loop2=0;$loop2<7-$loop;$loop2++)
+  {
+      echo $X;
+  } 
+
+    for($loop2=0;$loop2<1+$loop;$loop2++)
+  {
+       echo $O;
+  } 
+echo "<br>";
+}
+
+
+echo "<br>";
+echo "<br>";
+//////////////////////////////////////////////////////////////
+
+
+
+
+$O = "O";
+for($loop=0;$loop<7;$loop++)
+{
+  
+
+    for($loop2=0;$loop2<7-$loop;$loop2++)
+  {
+        ?> &nbsp;<?
+  } 
+
+   for($loop2=7-$loop;$loop2<7;$loop2++)
+  {
+     echo $O;
+  } 
+echo "<br>";
+}
+?>
+
+
+
+

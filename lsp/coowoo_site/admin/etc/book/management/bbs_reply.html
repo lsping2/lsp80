@@ -1,0 +1,134 @@
+<?
+require_once "../../../../include/include.php";
+
+
+require_once "../../../login/login_check.php";
+login_check( $PHP_SELF );
+
+html_cache_disable();
+
+?>
+<html>
+<head>
+<title><?$HTML->Title( 'IntranetBBS' )?></title>
+<link rel="stylesheet" href="../../../admin_style.css" type="text/css">
+<script language=javascript>
+<!--
+
+	function empty( data )
+	{
+		if( !data ) return true;
+
+		for( i=0; i<data.length; i++ )
+		{
+			if( data.substring( i, i+1 ) != ' ' )
+				return false;
+		}
+		return true;
+	}
+
+	function checkForm()
+	{
+
+		form = document.infoForm;
+
+		if( empty( form.subject.value ) )
+		{
+			alert( '제목을 입력하세요.' );
+			form.subject.focus();
+			return void(0);
+		}
+
+		form.submit();
+	}
+
+-->
+</script>
+</head>
+<?
+
+$bbs_uid		= request( 'bbs_uid', 'get' );
+$table			= request( 'table' , 'get' );
+$page			= request( 'page', 'get' );
+$search_field	= request( 'search_field', 'get' );
+$search_key		= stripcslashes( request( 'search_key', 'get' ) );
+
+$db = new mysql();
+$query = "
+			SELECT	b.bbs_uid ,
+					ui.user_id ,
+					ui.user_name ,
+					ui.user_no ,
+					b.subject ,
+					b.comment ,
+					date_format( b.reg_date, '%Y-%m-%d %H:%i' ) as reg_date
+			FROM	{$table} as b ,
+					coowoo.user_info as ui
+			WHERE	b.user_id = ui.user_id
+			AND		b.bbs_uid = '$bbs_uid'
+";
+
+$db->query( $query );
+$db->fetch();
+
+$bbs_uid		= $db->result( 'bbs_uid' );
+$user_uid		= $db->result( 'user_uid' );
+$user_name	= htmlspecialchars( $db->result( 'user_name' ) );
+$subject		= htmlspecialchars( $db->result( 'subject' ) );
+$comment	= htmlspecialchars( $db->result( 'comment' ) );
+$real_filename	= htmlspecialchars( $db->result( 'real_filename' ) );
+$filesize		= $db->result( 'filesize' );
+$reg_date	= $db->result( 'reg_date' );
+
+?>
+<body onSubmit="return checkForm( this )">
+<form name=infoForm action="bbs_reply_exec.php" method=post enctype="multipart/form-data">
+<table border=0 cellpadding=0 cellspacing=2 bgcolor=#8080FF>
+<tr>
+	<td>
+	<table border=0 cellpadding=0 cellspacing=0>
+	<tr>
+		<td width=100 height=24 align=center bgcolor=#FAFAFA>
+		제목
+		</td>
+		<td width=450 bgcolor=#FAFAFA>
+		<input type=text name=subject style="font-family:굴림체; font-size:9pt" size=50 class=input_text value="<?=$subject?>">
+		</td>
+	</tr>
+	<tr>
+		<td colspan=2 height=1 background=image/dot.gif>
+		</td>
+	</tr>
+	<tr>
+		<td height=300 align=center bgcolor=#FAFAFA>
+		내용
+		</td>
+		<td bgcolor=#FAFAFA>
+		<?
+			$comment = "\n\n\n\n\n::\n:: {$user_name}님의 글입니다. ({$reg_date})\n::\n::  \"$subject\"\n::\n::  " . ereg_replace( "\n", "::  ", $comment ) . "\n::";
+		?>
+		<textarea name=comment style="font-family:굴림체; font-size:9pt" rows=20 cols=68 class=input_text><?=$comment?></textarea>
+		</td>
+	</tr>
+	</table>
+	</td>
+</tr>
+</table>
+<table width=550 border=0 cellpadding=0 cellspacing=2>
+<tr>
+	<td height=30>
+	<a href="javascript:window.history.back()" onFocus="this.blur()">[돌아가기]</a>
+	</td>
+	<td align=right>
+	<a href="javascript:checkForm()" onFocus="this.blur()">[답변완료]</a>
+	</td>
+</tr>
+</table>
+<input type=hidden name=bbs_uid value="<?=$bbs_uid?>">
+<input type=hidden name=table value="<?=$table?>">
+<input type=hidden name=page value="<?=$page?>">
+<input type=hidden name=search_field value="<?=$search_field?>">
+<input type=hidden name=search_key value="<?=htmlspecialchars( $search_key )?>">
+</form>
+</body>
+</html>

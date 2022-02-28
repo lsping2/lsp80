@@ -1,0 +1,5 @@
+1229-112546 - 17102 - SR42YCTBPkA3H92N - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[07010000]+ordr_idxx=[2016122911030363]+log_level=[3]
+1229-112546 - 17102 - SR42YCTBPkA3H92N - MSG : PG_서버_접속__정상
+1229-112546 - 17102 - SR42YCTBPkA3H92N - MSG : PG_서버_요청_전문_전송__정상
+1229-112546 - 17102 - SR42YCTBPkA3H92N - MSG : PG_서버_응답_전문_수신__정상
+1229-112546 - 17102 - SR42YCTBPkA3H92N - MSG : TX_ENDED - res=[res_cd=RC66res_msg=현금 영수증 발급 불가 가맹점]

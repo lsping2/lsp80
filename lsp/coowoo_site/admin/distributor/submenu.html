@@ -1,0 +1,169 @@
+<?
+
+require_once "../../include/include.php";
+
+?>
+<html>
+<head>
+<title><?$HTML->Title( 'Admin' )?></title>
+<link rel="stylesheet" href="../admin_style.css" type="text/css">
+<script language=javascript>
+<!--
+
+function menu(id) {
+  if (document.all[id].style.display == "none") {
+    document.all[id].style.display = "";
+  } else {
+    document.all[id].style.display = "none";
+  }
+}
+
+-->
+</script>
+</head>
+<body style="margin-top:0pt; margin-bottom:5pt; margin-left:5pt; margin-right:5pt;">
+	<table height=100% border=0 cellpadding=0 cellspacing=2 bgcolor=#DDDDDD>
+	<tr>
+		<td bgcolor=#EFEFEF valign=top style="padding-left:5pt">
+		<br>
+<table width=150 border=0 cellpadding=0 cellspacing=0 border=0>
+<tr>
+	<td>
+	+ <a href="#" onClick="javascript:menu('menu1')" onfocus="this.blur()">대리점 정보</a>
+	<div id=menu1>
+	<table width=90% align=right border=0 cellpadding=0 cellspacing=0 border=0>
+	<tr>
+		<td height=8>
+		</td>
+	</tr>
+	<tr>
+		<td height=18>
+		- <a href="info/seller.html" target="html_screen" onfocus="this.blur()">국내대리점</a>
+		</td>
+	</tr>
+	<tr>
+		<td height=18>
+		- <a href="info/seller_foreign.html" target="html_screen" onfocus="this.blur()">해외대리점</a>
+		</td>
+	</tr>
+	<tr>
+		<td height=8>
+		</td>
+	</tr>
+	</table>
+	</div>
+	</td>
+</tr>
+<tr>
+	<td height=8>
+	</td>
+</tr>
+<tr>
+	<td>
+	+ <a href="#" onClick="javascript:menu('menu1')" onfocus="this.blur()">국내대리점 다운로드</a>
+	<div id=menu1>
+	<table width=90% align=right border=0 cellpadding=0 cellspacing=0 border=0>
+	<tr>
+		<td height=8>
+		</td>
+	</tr>
+	<tr>
+		<td>
+		<span style="font-family:tahoma; font-size:8pt"><b>&lt; Manual &gt;</b></span>
+		</td>
+	</tr>
+	<tr>
+		<td height=18>
+		- <a href="download/download_list.html?manufacture=ndisc&seller_id=topic" target="html_screen" onfocus="this.blur()">NDisc</a>
+		</td>
+	</tr>
+	<tr>
+		<td height=18>
+		- <a href="download/download_list.html?manufacture=daj&seller_id=topic" target="html_screen" onfocus="this.blur()">DAJ</a>
+		</td>
+	</tr>
+	<tr>
+		<td height=18>
+		- <a href="download/download_list.html?manufacture=mixa&seller_id=timespace" target="html_screen" onfocus="this.blur()">MIXA</a>
+		</td>
+	</tr>
+	<tr>
+		<td height=18>
+		- <a href="download/download_list.html?manufacture=naturalimage&seller_id=topic" target="html_screen" onfocus="this.blur()">Natural Image</a>
+		</td>
+	</tr>
+	<tr>
+		<td height=18>
+		- <a href="download/download_list.html?manufacture=ion&seller_id=topic" target="html_screen" onfocus="this.blur()">ION</a>
+		</td>
+	</tr>
+	<tr>
+		<td height=18>
+		- <a href="download/download_list.html?manufacture=samil&seller_id=topic" target="html_screen" onfocus="this.blur()">SAMIL</a>
+		</td>
+	</tr>
+	<tr>
+		<td height=18>
+		- <a href="download/download_list.html?manufacture=magnifoto&seller_id=topic" target="html_screen" onfocus="this.blur()">MAGNIFOTO</a>
+		</td>
+	</tr>
+	<tr>
+		<td height=18>
+		- <a href="download/download_list.html?manufacture=sixcolor&seller_id=topic" target="html_screen" onfocus="this.blur()">SIXCOLOR</a>
+		</td>
+	</tr>
+	<tr>
+		<td height=8>
+		</td>
+	</tr>
+	<tr>
+		<td>
+		<span style="font-family:tahoma; font-size:8pt"><b>&lt; Link Service &gt;</b></span>
+		</td>
+	</tr>
+	<tr>
+		<td height=18>
+		- <a href="download/link_download_list.html" target="html_screen" onfocus="this.blur()">NDisc , DAJ</a>
+		</td>
+	</tr>
+	<tr>
+		<td height=8>
+		</td>
+	</tr>
+	</table>
+	</div>
+	</td>
+</tr>
+<tr>
+	<td height=8>
+	</td>
+</tr>
+<tr>
+	<td>
+	+ <a href="#" onClick="javascript:menu('menu1')" onfocus="this.blur()">해외대리점 다운로드</a>
+	<div id=menu1>
+	<table width=90% align=right border=0 cellpadding=0 cellspacing=0 border=0>
+	<tr>
+		<td height=8>
+		</td>
+	</tr>
+	<tr>
+		<td height=18>
+		- <a href="download_foreign/download_list.html?manufacture=ndisc&seller_id=profile" target="html_screen" onfocus="this.blur()">NDisc</a>
+		</td>
+	</tr>
+	</table>
+	</div>
+	</td>
+</tr>
+
+<tr>
+	<td height=50>
+	</td>
+</tr>
+</table>
+	</td>
+	</tr>
+</table>
+</body>
+</html>

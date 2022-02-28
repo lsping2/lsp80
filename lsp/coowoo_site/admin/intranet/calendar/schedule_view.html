@@ -1,0 +1,273 @@
+<?
+
+require_once "../../../include/include.php";
+html_cache_disable();
+require_once "../../login/login_check.php";
+login_check();
+
+$httpvar = make_httpvar();
+
+?>
+<html>
+<head>
+<title><?$HTML->Title( 'Admin' )?></title>
+<?=$HTML->Metatag()?>
+<link rel="stylesheet" href="../../admin_style.css" type="text/css">
+<script language=javascript>
+
+window.resizeTo( 700, 500 )
+
+<!--
+
+	function deleteSchedule( uid )
+	{
+		confirmStr = "일정을 삭제하시겠습니까?  ";
+		if( confirm( confirmStr ) )
+		{
+			schedule_hidden_frame.location.href="schedule_delete_exec.php?uid=" + uid;
+		}
+	}
+
+	function deleteScheduleReply( reply_uid )
+	{
+		confirmStr = "답변을 삭제하시겠습니까?  ";
+		if( confirm( confirmStr ) )
+		{
+			schedule_hidden_frame.location.href="schedule_reply_delete_exec.php?reply_uid=" + reply_uid;
+		}
+	}
+
+-->
+</script>
+</head>
+
+<body>
+
+<?
+
+$uid = request( 'uid' , 'get' );
+
+$db = new MYSQL;
+
+// 조회수 증가
+$query = "
+		UPDATE intranet.schedule SET read_count = read_count + 1 WHERE uid = '$uid'
+";
+$db->query( $query );
+
+$query = "
+				SELECT		sc.fid ,
+							sc.to_user_name ,
+							ui.user_name ,
+							sc.schedule_date ,
+							sc.subject ,
+							sc.comment ,
+							sc.importance ,
+							sc.real_filename1 ,
+							sc.tmp_filename1 ,
+							sc.filesize1 ,
+							sc.real_filename2 ,
+							sc.tmp_filename2 ,
+							sc.filesize2 ,
+							sc.reg_date
+				FROM		intranet.schedule sc ,
+							intranet.user_info as ui
+				WHERE		ui.user_uid = sc.from_user_uid
+				AND			sc.uid = '$uid'
+";
+$db->query( $query );
+$db->fetch();
+
+$rs_fid			= $db->result( 'fid' );
+$rs_to_user_name	= $db->result( 'to_user_name' );
+$rs_user_name	= $db->result( 'user_name' );
+$rs_schedule_date	= $db->result( 'schedule_date' );
+$rs_subject		= htmlspecialchars( $db->result( 'subject' ) );
+$rs_comment		= $db->result( 'comment' );
+$rs_importance	= $db->result( 'importance' );
+$rs_real_filename1	= $db->result( 'real_filename1' );
+$rs_tmp_filename1	= $db->result( 'tmp_filename1' );
+$rs_filesize1		= $db->result( 'filesize1' );
+$rs_real_filename2	= $db->result( 'real_filename2' );
+$rs_tmp_filename2	= $db->result( 'tmp_filename2' );
+$rs_filesize2		= $db->result( 'filesize2' );
+$rs_reg_date		= $db->result( 'reg_date' );
+
+
+?>
+
+<table border=0 width=610>
+<tr>
+	<td align=center>
+		<b>일정 보기</b>
+	</td>
+</tr>
+</table>
+<br>
+<table border=0 cellpadding=0 cellspacing=1 bgcolor=#ADAD5C>
+<tr>
+	<td>
+	<table border=0 cellpadding=0 cellspacing=0 bgcolor=#FFFFFF>
+	<tr height=20>
+		<td width=100 align=center>
+		수신
+		</td>
+		<td width=1 background="../../image/dot2.gif">
+		</td>
+		<td width=500 style="padding-left: 10pt">
+		<? IF( strlen($rs_to_user_name) >30 ) : ?>
+			  전체
+		<? ELSE :?>
+			<?=$rs_to_user_name?>
+		<? ENDIF ?>
+		</td>
+	</tr>
+	<tr>
+		<td height=1 colspan=3 background="../../image/dot2.gif">
+	</tr>
+	<tr height=20>
+		<td align=center>
+		제목
+		</td>
+		<td width=1 background="../../image/dot2.gif">
+		</td>
+		<td style="padding-left: 10pt">
+		<?
+			switch( $rs_importance )
+			{
+				case 'Middle'	:
+								$color = "#3333CC";
+								break;
+				case 'High'	:
+								$color = "#FF2424";
+								break;
+				default		:	$color = "#000000";
+			}
+		?>
+		<font color="<?=$color?>"><?=$rs_subject?></font>
+		</td>
+	</tr>
+<? IF( $rs_real_filename1 ) : ?>
+	<tr>
+		<td height=1 colspan=3 background="../../image/dot2.gif">
+	</tr>
+	<tr height=25>
+		<td align=center>
+		첨부파일1
+		</td>
+		<td width=1 background="../../image/dot2.gif">
+		</td>
+		<td style="padding-left: 10pt">
+		<a href="download.php?filename=<?=$rs_real_filename1?>&tmp_filename=<?=$rs_tmp_filename1?>&filesize=<?=$rs_filesize1?>"><?=$rs_real_filename1?></a> ( <?=my_filesize( $rs_filesize1 )?> )
+		</td>
+	</tr>
+<? ENDIF ?>
+<? IF( $rs_real_filename2 ) : ?>
+	<tr>
+		<td height=1 colspan=3 background="../../image/dot2.gif">
+	</tr>
+	<tr height=25>
+		<td align=center>
+		첨부파일2
+		</td>
+		<td width=1 background="../../image/dot2.gif">
+		</td>
+		<td style="padding-left: 10pt">
+		<a href="download.php?filename=<?=$rs_real_filename2?>&tmp_filename=<?=$rs_tmp_filename2?>&filesize=<?=$rs_filesize2?>"><?=$rs_real_filename2?></a> ( <?=my_filesize( $rs_filesize2 )?> )
+		</td>
+	</tr>
+<? ENDIF ?>
+	<tr>
+		<td height=1 colspan=3 background="../../image/dot2.gif">
+	</tr>
+	<tr height=20>
+		<td width=100 align=center style="padding: 5 0 5 0">
+		<?=$rs_user_name?>
+		<table height=5><tr><td></td></tr></table>
+		<?=$rs_reg_date?>
+		</td>
+		<td width=1 background="../../image/dot2.gif">
+		</td>
+		<td width=500 style="padding: 10 10 10 10">
+		<?=nl2br( $rs_comment )?>
+		</td>
+	</tr>
+	</table>
+	</td>
+</tr>
+</table>
+<table width=620 border=0 cellpadding=0 cellspacing=0>
+<tr>
+	<td height=25>
+	<input type=button value="   돌아가기   " style="font-family:tahoma; font-size:8pt" onClick="history.back()">
+	</td>
+	<td align=right>
+	<input type=button value="   답변   " style="font-family:tahoma; font-size:8pt" onClick="window.open('schedule_reply.html?uid=<?=$uid?>','_self')">
+	<input type=button value="   수정   " style="font-family:tahoma; font-size:8pt" onClick="window.open('schedule_modify.html?uid=<?=$uid?>','_self')">
+	<input type=button value="   삭제   " style="font-family:tahoma; font-size:8pt" onClick="deleteSchedule( <?=$uid?> )">
+	</td>
+</tr>
+</table>
+<br>
+<?
+
+$query = "
+		SELECT	sr.reply_uid ,
+				sr.reply_fid ,
+				ui.user_name ,
+				sr.reply_comment ,
+				sr.reply_reg_date
+		FROM	intranet.schedule_reply as sr ,
+				intranet.user_info as ui
+		WHERE	ui.user_uid = sr.reply_user_uid
+		AND		reply_fid = '$rs_fid'
+		ORDER BY reply_reg_date ASC
+";
+$db->query( $query );
+
+?>
+
+<? FOR( $loop=0; $loop<$db->total_record(); $loop++ ) : ?>
+<?
+	$db->fetch();
+	$rs_reply_uid			= $db->result( 'reply_uid' );
+	$rs_reply_fid			= $db->result( 'reply_fid' );
+	$rs_user_name		= $db->result( 'user_name' );
+	$rs_reply_comment		= $db->result( 'reply_comment' );
+	$rs_reply_reg_date		= $db->result( 'reply_reg_date' );
+?>
+<table height=5><tr><td></td></tr></table>
+<table border=0 cellpadding=0 cellspacing=1 bgcolor=#C5C58B>
+<tr>
+	<td>
+	<table border=0 cellpadding=0 cellspacing=0 bgcolor=#FFFFFF>
+	<tr height=20>
+		<td width=100 align=center style="padding: 5 0 5 0">
+		<?=$rs_user_name?>
+		<table height=5><tr><td></td></tr></table>
+		<?=$rs_reply_reg_date?>
+		</td>
+		<td width=1 background="../../image/dot2.gif">
+		</td>
+		<td width=500 style="padding: 10 10 10 10">
+		<?=nl2br( $rs_reply_comment )?>
+		</td>
+	</tr>
+	</table>
+	</td>
+</tr>
+</table>
+<table width=620 border=0 cellpadding=0 cellspacing=0>
+<tr height=25>
+	<td align=right>
+	<input type=button value="   수정   " style="font-family:tahoma; font-size:8pt" onClick="window.open('schedule_reply_modify.html?uid=<?=$uid?>&reply_uid=<?=$rs_reply_uid?>','_self')">
+	<input type=button value="   삭제   " style="font-family:tahoma; font-size:8pt" onClick="deleteScheduleReply( <?=$rs_reply_uid?> )">
+	</td>
+</tr>
+</table>
+<? ENDFOR ?>
+
+
+<iframe name=schedule_hidden_frame width=0 height=0></iframe>
+</body>
+</html>

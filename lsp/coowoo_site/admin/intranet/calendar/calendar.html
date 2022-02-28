@@ -1,0 +1,663 @@
+<?
+/*
+제목 : 근태관리,공지 및 업무일지 통합
+설명 : 기념일,근태관리,공지사항 내용 통합
+
+제작 : lsp80
+제작일 : 2007년 04월 04일
+업데이트: 2007년 04월 05일  코드 간결화작업
+                 
+*/
+
+require_once "../../../include/include.php";
+html_cache_disable();
+require_once "../../login/login_check.php";
+login_check();
+
+?>
+<html>
+<head>
+<META http-equiv="content-type" content="text/html; charset=euc-kr">
+<link rel="stylesheet" href="../../admin_style.css" type="text/css">
+</head>
+<body>
+<?
+
+$year		= request( 'year' , 'get' );
+$month		= request( 'month' , 'get' );
+$dst_user_id	= request( 'dst_user_id' , 'get' );
+
+( $year ) ? $year = $year : $year=date("Y"); 
+( $month ) ? $month = $month : $month=date("m");
+
+$before_year		= $year-3;
+$after_year		= $year+3;
+
+$before_month		= $month-3;
+if($before_month<=0)	   $before_month=1;
+$after_month			= $month+3;
+if($after_month>12)	$after_month=12;
+
+$last_day = date("t",mktime(0,0,0,$month,1,$year));
+$first_day = date("w",mktime(0,0,0,$month,1,$year));
+
+$today = date( "Y-m-d" );
+
+$db = new MYSQL;
+$db2 = new MYSQL;
+
+$query = "
+			SELECT	user_uid ,
+					user_id
+			FROM	intranet.user_info
+			WHERE	use_status = 'Yes'
+			AND		user_id = '$SUserID'
+";
+$db->query($query);
+$db->fetch();
+
+$rs_user_uid		= $db->result( 'user_uid' );
+$rs_user_id		= $db->result( 'user_id' );
+
+?>
+<script language="javascript">
+	function change()
+	{
+		var month = frm.sel_month.value;
+		var year  = frm.sel_year.value;
+	 
+		location.href = '?month='+ month +'&year='+ year; 
+	}
+
+	function memorial( working_date)
+	{
+		
+		window.open( "schedule_memorial.html?user_uid=<?=$rs_user_uid?>&working_date=" + working_date , "_register","scrollbars=yes, width=420, height=340" );
+		
+
+	}
+
+	function notice( working_date )
+	{
+		window.open( "schedule_notice.html?user_uid=<?=$rs_user_uid?>&working_date=" + working_date , "_notice","scrollbars=yes, width=420, height=340" );
+	}
+	
+	function schedule( working_date )
+	{
+		window.open( "schedule.html?working_date=" + working_date , "_memo","scrollbars=yes, width=640, height=540" );
+	}
+
+	
+	function memorial_view( working_date, user_uid)
+	{
+		window.open( "schedule_memorial_view.html?working_date=" +working_date +"&user_uid=" + user_uid , "_brank","width=420, height=330 , LEFT=200,TOP=10'" );
+	}
+	
+	function notice_view( working_date, bbs_uid)
+	{
+		window.open( "schedule_notice_view.html?working_date=" +working_date +"&bbs_uid=" + bbs_uid , "_brank","width=420, height=330 , LEFT=200,TOP=10'" );
+	}
+
+</script>
+
+
+
+	<table width=1040 border=0 cellpadding=0 cellspacing=1 bgcolor=#A4A4A4>
+	<tr height=16>
+		<td width=140 align=center bgcolor=#CDCDCD>
+		<font style="font-family:tahoma; font-size:8pt" color=#FFFFFF><b>DATE</b></font>
+		</td>
+		<td width=100 align=center bgcolor=#CDCDCD>
+		<font style="font-family:tahoma; font-size:8pt" color=#FFFFFF><b>TO</b></font>
+		</td>
+		<td width=100 align=center bgcolor=#CDCDCD>
+		<font style="font-family:tahoma; font-size:8pt" color=#FFFFFF><b>FROM</b></font>
+		</td>
+		<td width=550 align=center bgcolor=#CDCDCD>
+		<font style="font-family:tahoma; font-size:8pt" color=#FFFFFF><b>TITLE</b></font>
+		</td>
+		<td width=100 align=center bgcolor=#CDCDCD>
+		&nbsp;
+		</td>
+	</tr>
+	</table>
+	<table width=1040 border=0 cellpadding=0 cellspacing=1 bgcolor=#A4A4A4>
+	<tr bgcolor="#FFFFFF">
+		<td>
+		<?
+			$query = "
+					SELECT	sc.uid ,
+							sc.to_user_name ,
+							ui.user_name ,
+							sc.schedule_date ,
+							sc.subject ,
+							sc.comment ,
+							sc.importance ,
+							DATE_FORMAT( sc.reg_date, '%Y-%m-%d'  ) as reg_date
+					FROM	intranet.schedule_top as sc ,
+							intranet.user_info ui
+					WHERE	ui.user_uid = sc.from_user_uid
+					ORDER BY sc.reg_date ASC
+			";
+			$db->query( $query );
+			$total_record = $db->total_record();
+		?>
+
+		<table width=100% border=0 cellpadding=0 cellspacing=0>
+		<tr>
+			<td>
+		<? IF( $total_record ) : ?>
+			<table border=0 cellpadding=0 cellspacing=0>
+		<? ENDIF ?>
+
+		<? FOR( $loop2=0; $loop2<$total_record; $loop2++ ) : ?>
+		<?
+			$db->fetch();
+			$rs_uid				= $db->result( 'uid' );
+			$rs_to_user_name		= $db->result( 'to_user_name' );
+			$rs_from_user_name	= $db->result( 'user_name' );
+			$rs_schedule_date		= $db->result( 'schedule_date' );
+			$rs_subject			= htmlspecialchars( $db->result( 'subject' ) );
+			$rs_comment			= $db->result( 'comment' );
+			$rs_importance		= $db->result( 'importance' );
+			$rs_reg_date			= $db->result( 'reg_date' );
+		?>
+			<tr>
+				<td width=147 align=center>
+				<?=$rs_reg_date?>
+				</td>
+				<td width=1 background="../../image/dot.gif"></td>
+				<td width=101 align=center>
+				<? IF( '전체' == $rs_to_user_name ) : ?>
+				<?=str_replace( '/', '<br>', $rs_to_user_name )?>
+				<? ELSE : ?>
+				<font color=#006633>
+				<?=str_replace( '/', '<br>', $rs_to_user_name )?></font>
+				<? ENDIF ?>
+				</td>
+				<td width=1 background="../../image/dot.gif"></td>
+				<td width=104 align=center>
+				<?=$rs_from_user_name?>
+				</td>
+				<td width=1 background="../../image/dot.gif"></td>
+				<td width=574>
+				&nbsp;
+				<?
+					switch( $rs_importance )
+					{
+						case 'Middle'	:
+										$color = "#3333CC";
+										break;
+						case 'High'	:
+										$color = "#F20000";
+										break;
+						default		:	$color = "#666666";
+					}
+				?>
+				<a href="schedule_top_view.html?<?=$httpvar?>&uid=<?=$rs_uid?>"><font color="<?=$color?>"><?=$rs_subject?></font></a>
+				</a>
+				</td>
+				<td width=1 background="../../image/dot.gif"></td>
+			</tr>
+		<? IF( $loop2 != $total_record - 1 ) : ?>
+			<tr>
+				<td colspan=7 height=1 background="../../image/dot.gif">
+				</td>
+			</tr>
+		<? ENDIF ?>
+		<? ENDFOR ?>	
+		<? IF( $total_record ) : ?>
+			</table>
+		<? ELSE : ?>
+		&nbsp;
+		<? ENDIF ?>
+			</td>
+			<td align=center width=104>
+<? $schedule_date = "{$year}-" . sprintf( "%02d" , $month ) . "-" . sprintf( "%02d" , $day ); ?> 
+
+			<a href="schedule_top_write.html?<?=$httpvar?>&schedule_date=<?=$schedule_date?>"><font style="font-size:8pt">WRITE</font></a>
+			</td>
+		</tr>
+		</table>
+		</td>
+	</tr>
+	</table>
+
+
+
+
+<table width=1040 border=0 cellpadding=0 cellspacing=0 height=35>
+<tr>
+	<td>
+	<span style="font-family:바탕; font-size:15pt; font-weight:bold">이미지쿠우 일정표</span>
+	</td>
+	<td align=right>
+<form name=frm  action=<?=$PHP_SELF?>>
+	<select name="sel_year" onChange=change() style="font-family:verdana; font-size:11pt; font-weight:bold">
+	<? FOR($loop=$before_year;$loop<=$after_year;$loop++) : ?>
+		<? IF( $loop == $year ) : ?>
+			<option value=<?=$loop?> selected><?=$loop?></option>
+		<? ELSE : ?>
+			<option value=<?=$loop?>><?=$loop?></option>
+		<? ENDIF ?>
+	<? ENDFOR ?>
+	</select>
+
+	<font color=#7D7D7D>년</font>
+	<select name="sel_month" onChange=change() style="font-family:verdana; font-size:11pt; font-weight:bold">
+	<?
+
+	 FOR($loop=1;$loop<=12;$loop++)
+	{
+	?>
+	<? IF($loop==$month) :?>
+		<option value=<?=$loop?> selected><?=$loop?></option>
+	<?ELSE:?>
+		<option value=<?=$loop?>><?=$loop?></option>
+	<?ENDIF?>
+	<?
+	}
+	?>
+	</select>
+	<font color=#7D7D7D>월</font>
+	</td>
+</tr>
+</table>
+</form>
+
+<table border=0 bgcolor=#DBDBDB>
+<tr>
+	<td>
+		<table border=0 leftmargin=0 topmargin=0 cellpadding=2 cellspacing=1> 
+		<tr height=25>
+			<td bgcolor=#FFFFFF align="center"><span style="font-family:tahoma; font-size:8pt; color=#FF0000"><b>Sunday</b></span></td>
+			<td bgcolor=#FFFFFF align="center"><span style="font-family:tahoma; font-size:8pt;"><b>Monday</b></span></td>
+			<td bgcolor=#FFFFFF align="center"><span style="font-family:tahoma; font-size:8pt;"><b>Tuesday</b></span></td>
+			<td bgcolor=#FFFFFF align="center"><span style="font-family:tahoma; font-size:8pt;"><b>Wednesday</b></span></td>
+			<td bgcolor=#FFFFFF align="center"><span style="font-family:tahoma; font-size:8pt;"><b>Thursday</b></span></td>
+			<td bgcolor=#FFFFFF align="center"><span style="font-family:tahoma; font-size:8pt;"><b>Friday</b></span></td>
+			<td bgcolor=#FFFFFF align="center"><span style="font-family:tahoma; font-size:8pt;"><b>Saturday</b></span></td>
+		</tr>
+		<tr>
+
+		<?
+
+			for($loop=0 ; $loop<$first_day ; $loop++)
+			{
+				echo "<td bgcolor=#FFFFFF>&nbsp;</td>";
+			}
+
+			for($loop=1 ; $loop<=$last_day ; $loop++)
+			{
+				 $week_day		= date( "w", mktime( 0, 0, 0, $month, $loop, $year ) );
+				 $working_date	= "{$year}-" . sprintf( "%02d-%02d", $month,$loop ); 
+
+				// 현재일을 음력날자로 가져옴
+				$query = "
+						SELECT	lunar_date
+						FROM	intranet.lunar2solar
+						WHERE	solar_date = '$working_date'
+				";
+				$db2->query( $query );
+				$db2->fetch();
+				$working_date_lunar = $db2->result( 'lunar_date' );
+
+				$query = "
+						SELECT	*
+						FROM	intranet.calendar_memorial_day
+						WHERE	working_date = '$working_date'
+						AND		color = 'RED'
+				";
+				$db2->query( $query );
+
+
+		?>
+			<td valign=top  bgcolor=#FFFFFF> 
+			
+<!--  달력 한칸 start---->
+				
+<table border=0 cellpadding=0 cellspacing=0>
+<tr onMouseOver=this.style.backgroundColor="#EFEFEF" onMouseOut=this.style.backgroundColor="" <? IF ( $today ==$working_date ) : ?>bgcolor=#EFEFEF<? ENDIF ?>>
+	<td height=110 valign=top>
+
+	<table border=0 width=145 cellpadding=0 cellspacing=0>
+	<tr>
+		<td align=top>
+		<table width=100% border=0  cellpadding=0 cellspacing=0>
+		<tr>
+			<td>
+				<? IF ( $today ==$working_date ) : ?>
+				<font color=#3399FF><b><?=$loop?></b></font>
+				<? ELSEIF( 0 == $week_day OR $db2->total_record() ) : ?>
+						<span style="color:#E80000; font-weight:bold"><?=$loop?></span>
+				<? ELSEIF( 6 == $week_day ) : ?>
+						<span style="color:#00BB00; font-weight:bold"><?=$loop?></span>
+				<? ELSE : ?>
+						<?=$font?><?=$loop?><?=$font2?>
+				<? ENDIF ?>		
+
+				<? IF( 0 == $week_day OR 3 == $week_day ) : ?>
+				<?
+					$query = "
+							SELECT	DATE_FORMAT( lunar_date, '%m/%d' ) as lunar_date ,
+									ganji
+							FROM	intranet.lunar2solar
+							WHERE	solar_date = '$working_date'
+					";
+					$db2->query( $query );
+					$db2->fetch();
+					$rs_lunar_date	= $db2->result( 'lunar_date' );
+					$rs_ganji			= $db2->result( 'ganji' );
+				?>
+				<span style="font-family:tahoma; font-size:8pt; color=#AAAAAA">( <?=$rs_lunar_date?> )</span>
+				<? ENDIF ?>
+			</td>
+			<td align=center>
+			
+				<table border=0  cellpadding=0 cellspacing=0>
+				<tr>
+					<td>
+
+					<?	
+						list( $year, $month, $day )  = explode( "-" , $working_date);
+						list( $year_lunar, $month_lunar, $day_lunar ) = explode( "-", $working_date_lunar );
+
+						$query = "
+									SELECT	user_uid ,
+											color ,
+											comment ,
+											repeat ,
+											lunar2solar  
+									FROM	 intranet.calendar_memorial_day     
+									WHERE
+										( IF(repeat ='Yearly' ,DATE_FORMAT( working_date, '%m-%d' ) = '$month-$day'  ,0)  AND lunar2solar = 'solar' )
+									OR	( IF(repeat ='Monthly' ,DATE_FORMAT( working_date, '%d' ) = '$day'  ,0)  AND lunar2solar = 'solar' )
+									OR	( working_date ='$working_date'  AND lunar2solar = 'solar' )	
+									OR	( IF(repeat ='Yearly' ,DATE_FORMAT( working_date, '%m-%d' ) = '{$month_lunar}-{$day_lunar}'  ,0)  AND lunar2solar = 'lunar' )
+									OR	( IF(repeat ='Monthly' ,DATE_FORMAT( working_date, '%d' ) = '$day_lunar'  ,0)  AND lunar2solar = 'lunar' )
+									OR	( working_date ='$working_date_lunar'  AND lunar2solar = 'lunar'  )
+						";
+						$db->query($query);
+					?>
+
+					<? FOR( $loop2=0; $loop2<$db->total_record(); $loop2++ ) : ?>
+					<?
+						$db->fetch(); 
+						$rs_user_uid	= $db->result( 'user_uid' );
+						$rs_color 		= $db->result( 'color' );
+						$rs_comment	= $db->result( 'comment' );
+						$rs_lunar2solar= $db->result( 'lunar2solar' );
+					?>
+
+						<table border=0 cellpadding=0 cellspacing=0>
+						<tr>
+							<td align=center><a href="#" onClick="memorial_view( '<?=$working_date?>' , '<?=$rs_user_uid?>' ); return false;"><span style="color:<?=$rs_color?>; font-size:8pt; font-familly:tahoma" ><?=substr_kr(htmlspecialchars($rs_comment ),15,"..")?></span></a></td>
+						</tr>
+						<? if ( $loop2 != $db->total_record()-1 ) : ?>
+						<tr>
+							<td height=1 background="../../image/dot.gif"></td>
+						</tr>
+						<? endif ?>
+						</table>
+
+					<? ENDFOR ?>
+					</td>
+				</tr>
+				</table>
+			</td>
+		</tr>
+		</table>
+		</td>
+	</tr>
+
+	<tr>
+		<td height=1 bgcolor=#DDDDDD></td>
+	</tr>
+	<tr>
+		<td height=1></td>
+	</tr>
+<?	
+	
+	 $query = "
+				SELECT	bbs_uid ,
+						user_id , 
+						color ,
+						comment ,
+						repeat ,
+						lunar2solar  
+				FROM	 intranet.calendar_notice    
+				WHERE	IF(repeat ='Yearly' ,DATE_FORMAT( working_date, '%m-%d' ) = '$month-$day'  ,0)  
+				OR		IF(repeat ='Monthly' ,DATE_FORMAT( working_date, '%d' ) = '$day'  ,0)  
+				OR		working_date ='$working_date'
+				
+	";
+	$db->query($query);
+
+?>
+<? FOR( $loop2=0; $loop2<$db->total_record(); $loop2++ ) : ?>
+<?
+	$db->fetch(); 
+	$rs_bbs_uid	= $db->result( 'bbs_uid' );
+	$rs_color 		= $db->result( 'color' );
+	$rs_comment	= $db->result( 'comment' );
+?>
+	<tr>
+		<td>&nbsp;<a href="#" onClick="notice_view( '<?=$working_date?>' , '<?=$rs_bbs_uid?>' ); return false;"><font color=<?=$rs_color?> face=tahoma><?=substr_kr(htmlspecialchars($rs_comment),22,"..")?></font></a></td>
+	</tr>
+<? if ( $loop2 != $db->total_record()-1 ) : ?>
+	<tr>
+		<td height=1 background="../../image/dot.gif"></td>
+	</tr>
+<? endif ?>
+<? ENDFOR ?>
+<? if ( $db->total_record() ) :?>
+	<tr>
+		<td height=1 bgcolor=#DDDDDD></td>
+	</tr>
+<? endif ?>
+
+
+
+<?
+
+
+
+
+
+$arr_status = array('12','10','30','35','40');
+$arr_txt       = array('당직','야근','휴무','휴가','격월차');
+
+?>
+<? FOR($loop3=0; $loop3<count($arr_status); $loop3++) : ?>
+
+<?
+
+if( $dst_user_id ) $sub_query = "AND user_id = '$dst_user_id'";
+
+   $query = "
+		SELECT	user_id
+		FROM	intranet.calendar_duty 
+		WHERE	working_date ='$working_date'
+		AND		status_code = '$arr_status[$loop3]'
+		$sub_query
+";
+$db->query($query);
+?>
+	<? IF( $db->total_record() ) : ?>
+	<tr>
+		<td>
+		<table border=0 width=100% cellpadding=2 cellspacing=0>
+		<tr>
+			<td width=40 align=center>
+			
+			<? IF ( $arr_txt[0] ==  $arr_txt[$loop3] ) : ?>
+				<span style="color:#AAAAAA"><?=$arr_txt[$loop3]?></span>
+			<? ELSEIF( $arr_txt[1] ==  $arr_txt[$loop3] ) : ?>
+				<span style="color:#AAAAAA"><?=$arr_txt[$loop3]?></span>
+			<? ELSEIF( $arr_txt[2] ==  $arr_txt[$loop3] ) : ?>
+				<span style="color:#FFA2A2"><?=$arr_txt[$loop3]?></span>
+			<? ELSEIF( $arr_txt[3] ==  $arr_txt[$loop3] ) : ?>
+				<span style="color:#FFA2A2"><?=$arr_txt[$loop3]?></span>
+			<? ELSEIF( $arr_txt[4] ==  $arr_txt[$loop3] ) : ?>
+				<span style="color:#FFA2A2"><?=$arr_txt[$loop3]?></span>
+			<? ENDIF ?>
+
+			</td>
+			<td>
+	<? FOR( $loop2=0; $loop2<$db->total_record(); $loop2++ ) : ?>
+	<? 
+		$db->fetch();  
+		$rs_user_id	= $db->result( 'user_id' );
+
+
+
+		$query = "
+					SELECT	user_name
+					FROM	intranet.user_info
+					WHERE	user_id = '$rs_user_id'
+		";
+		$db2->query($query);
+		$db2->fetch();
+		$rs_user_name	= $db2->result( 'user_name' );
+	?>
+	<? IF ( $rs_user_name ) : ?>
+				<table border=0 width=100% cellpadding=0 cellspacing=0>
+				<tr>
+					<td align=center><span style="color:#000000"><?=$rs_user_name?></span></td>
+				</tr>
+				</table>
+	<? ENDIF?>
+	<? ENDFOR?>
+
+			</td>
+		</tr>
+		</table>
+		</td>
+	</tr>
+	<tr>
+		<td height=1 bgcolor=#DDDDDD>
+		</td>
+	</tr>
+	<? ENDIF ?>
+
+
+
+<? ENDFOR ?>
+
+
+
+	</table>
+	
+	
+
+	<tr>
+		
+		<td align=center>
+		<a href="#"><img src="../schedule/images/btn_1.gif" border="0" align="absmiddle" onClick="javascript:memorial( '<?=$working_date?>' ,'<?=$working_date_lunar?>', '<?=$rs_lunar2solar?>' )" style="cursor:hand"></a>
+				<a href="javascript:notice( '<?=$working_date?>' )"><img src="../schedule/images/btn_2.gif" border="0" align="absmiddle"></a>
+				<a href="javascript:schedule( '<?=$working_date?>' )"><img src="../schedule/images/btn_3.gif" border="0" align="absmiddle"></a>
+		</td>
+	</tr>
+	</table>
+<!--  달력 한칸 end---->
+
+
+
+			 </td>
+	
+			<? IF($week_day == 6) : ?>
+				</tr><tr>
+			<? ENDIF?>
+<?
+		} // end of for($loop=1 ; $loop<=$last_day ; $loop++)
+
+
+	for($loop=$week_day ; $loop<6 ; $loop++)
+	{
+		echo "<td bgcolor=#FFFFFF>&nbsp;</td>";
+	}
+
+?>
+				
+		</tr>
+		</table>
+	</td>
+</table>
+<table width=1050 border=0 cellpadding=0 cellspacing=0>
+<tr>
+	<td align=right>
+
+<?
+
+$query = "
+			SELECT	user_name ,
+					user_uid ,
+					user_id
+			FROM	intranet.user_info
+			WHERE	use_status = 'Yes'
+			AND		user_sort  != 1
+			ORDER BY user_sort ASC
+			
+
+		";
+$db->query($query);
+
+?>
+		<table border=0 align=right leftmargin=0 topmargin=0 cellpadding=3 cellspacing=0>
+		<tr>
+			<td>
+			<? IF( $dst_user_id ) : ?>
+				<a href="calendar.html?year=<?=$year?>&month=<?=$month?>">전체보기</a>
+				&nbsp;&nbsp;&nbsp;&nbsp;
+			<? ENDIF ?>
+	<? FOR( $loop=0; $loop<$db->total_record(); $loop++ ) : ?>
+	<?
+		$db->fetch();
+		$rs_user_uid		= $db->result( 'user_uid' );
+		$rs_user_id		= $db->result( 'user_id' );
+		$rs_user_name	= $db->result( 'user_name' );
+
+		$current_month = $year . "-" . sprintf( "%02d", $month ); 
+
+		$query = "
+					SELECT	count(*)
+					FROM	intranet.calendar_duty 
+					WHERE	working_date LIKE '{$current_month}%'
+					AND		user_id = '$rs_user_id'
+					AND		status_code = '12'
+					GROUP BY user_id
+		";
+		$db2->query($query);
+		$db2->fetch();
+		$rs_duty_count = $db2->is_count();
+
+		$query = "
+					SELECT	count(*)
+					FROM	intranet.calendar_duty 
+					WHERE	working_date LIKE '{$current_month}%'
+					AND		user_id = '$rs_user_id'
+					AND		status_code = '10'
+					GROUP BY user_id
+		";
+		$db2->query($query);
+		$db2->fetch();
+		$rs_night_count = $db2->is_count();
+
+	?>
+			<? IF( $rs_user_id == $dst_user_id ) : ?>
+			<b><?=$rs_user_name?></b>
+			<? ELSE : ?>
+			<a href="calendar2.html?year=<?=$year?>&month=<?=$month?>&dst_user_id=<?=$rs_user_id?>"><?=$rs_user_name?></a>
+			<? ENDIF ?>
+			<span style="color:#AAAAAA">[<?=(int)$rs_duty_count?>/<?=(int)$rs_night_count?>]</span>
+	<? ENDFOR ?>
+			</td>
+		</table>
+	</td>
+</tr>
+</table>
+
+
+
+</body>
+</html>

@@ -1,0 +1,180 @@
+<?
+
+require_once "../../../include/include.php";
+html_cache_disable();
+require_once "../../login/login_check.php";
+login_check();
+
+$SUserName = request( 'S_USER_NAME'        , 'session' );
+
+$schedule_date = request( 'schedule_date' , 'get' );
+$httpvar = make_httpvar();
+
+?>
+<html>
+<head>
+<title><?$HTML->Title( 'Admin' )?></title>
+<?=$HTML->Metatag()?>
+<link rel="stylesheet" href="../../admin_style.css" type="text/css">
+<script language=javascript>
+<!--
+	function CheckForm()
+	{
+		form = document.register;
+
+		if( !form.subject.value )
+		{
+			alert( '제목을 입력하세요.' );
+			form.subject.focus();
+			return false;
+		}
+
+		if( !form.comment.value )
+		{
+			alert( '내용을 입력하세요.' );
+			form.comment.focus();
+			return false;
+		}
+
+		return true;
+	}
+-->
+</script>
+</head>
+
+<body>
+
+<table border=0 width=610>
+<tr>
+	<td align=center>
+	<b>일정 작성</b>
+	</td>
+</tr>
+</table>
+<br>
+<form name=register action="schedule_top_write_exec.php" method=post onSubmit="return CheckForm()" target="schedule_hidden_frame"  enctype="multipart/form-data">
+<input type=hidden name=schedule_date value="<?=$schedule_date?>">
+<table border=0 cellpadding=0 cellspacing=1 bgcolor=#C5C58B>
+<tr>
+	<td>
+	<table border=0 cellpadding=0 cellspacing=0 bgcolor=#FFFFFF>
+	<tr height=25>
+		<td width=100 align=center>
+		중요도
+		</td>
+		<td width=1 background="../../image/dot2.gif">
+		</td>
+		<td width=500 style="padding-left: 5pt" style="padding: 5 5 5 5">
+		<input type=radio name=importance value="Normal" checked> 일반
+		<input type=radio name=importance value="Middle"> <font color=#3333CC><b>중요</b></font>
+		<input type=radio name=importance value="High"> <font color=#FF2424><b>매우중요</b></font>
+		</td>
+	</tr>
+	<tr>
+		<td height=1 colspan=3 background="../../image/dot2.gif">
+	</tr>
+	<tr height=25>
+		<td width=100 align=center>
+		수신
+		</td>
+		<td width=1 background="../../image/dot2.gif">
+		</td>
+		<td width=500 style="padding-left: 5pt" style="padding: 5 5 5 5">
+<?
+
+$db = new MYSQL;
+
+$query = "
+		SELECT	user_name
+		FROM	intranet.user_info
+		WHERE	use_status = 'Yes'
+		ORDER BY user_sort ASC
+";
+$db->query( $query );
+
+?>
+		<input type=checkbox name=to[] value="전체" checked>전체 <br>
+<? FOR( $loop=0; $loop<$db->total_record(); $loop++ ) : ?>
+<?
+	$db->fetch();
+	$rs_user_name = $db->result( 'user_name' );
+?>
+	<input type=checkbox name=to[] value="<?=$rs_user_name?>"><?=$rs_user_name?>
+<? ENDFOR ?>
+		</td>
+	</tr>
+	<tr>
+		<td height=1 colspan=3 background="../../image/dot2.gif">
+	</tr>
+	<tr height=30>
+		<td align=center>
+		제목
+		</td>
+		<td width=1 background="../../image/dot2.gif">
+		</td>
+		<td style="padding-left: 5pt">
+		<input type=text name=subject size=80 class="outline">
+		</td>
+	</tr>
+
+	<tr>
+		<td height=1 colspan=3 background="../../image/dot2.gif">
+	</tr>
+	<tr height=25>
+		<td align=center>
+		첨부파일1
+		</td>
+		<td width=1 background="../../image/dot2.gif">
+		</td>
+		<td style="padding-left: 5pt">
+		<input type=file name=file1 size=65 class="outline">
+		</td>
+	</tr>
+	<tr>
+		<td height=1 colspan=3 background="../../image/dot2.gif">
+	</tr>
+	<tr height=25>
+		<td align=center>
+		첨부파일2
+		</td>
+		<td width=1 background="../../image/dot2.gif">
+		</td>
+		<td style="padding-left: 5pt">
+		<input type=file name=file2 size=65 class="outline">
+		</td>
+	</tr>
+	<tr>
+		<td height=1 colspan=3 background="../../image/dot2.gif">
+	</tr>
+
+	<tr height=300>
+		<td align=center>
+		<?=$SUserName?>
+		</td>
+		<td width=1 background="../../image/dot2.gif">
+		</td>
+		<td width=500 style="padding: 5 5 5 8">
+		<textarea name=comment cols=78 rows=20 class=underline></textarea>
+		</td>
+	</tr>
+	</table>
+	</td>
+</tr>
+</table>
+<table width=615 border=0 cellpadding=0 cellspacing=0>
+<tr>
+	<td height=25>
+	<input type=button value="   돌아가기   " style="font-family:tahoma; font-size:8pt" onClick="history.back()">
+	</td>
+	<td align=right>
+	<input type=submit value="   작성완료   " style="font-family:tahoma; font-size:8pt">
+	</td>
+</tr>
+</table>
+</form>
+
+
+</body>
+</html>
+
+<iframe name=schedule_hidden_frame width=0 height=0></iframe>

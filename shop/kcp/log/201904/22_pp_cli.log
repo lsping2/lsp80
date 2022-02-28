@@ -1,0 +1,5 @@
+0422-114347 - 23157 - SR42Y4MBga8Lm1PA - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2019041921260368]+log_level=[3]
+0422-114347 - 23157 - SR42Y4MBga8Lm1PA - MSG : PG_서버_접속__정상
+0422-114347 - 23157 - SR42Y4MBga8Lm1PA - MSG : PG_서버_요청_전문_전송__정상
+0422-114349 - 23157 - SR42Y4MBga8Lm1PA - MSG : PG_서버_응답_전문_수신__정상
+0422-114349 - 23157 - SR42Y4MBga8Lm1PA - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y4MBga8Lm1PApay_method=PACAorder_no=2019041921260368card_cd=CCBCcard_name=BC카드acqu_cd=CCBCacqu_name=BC카드card_no=9440450000009910mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2019041921260368tno=19742290246246amount=540000card_mny=540000coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20190422114348van_apptime=20190422114348app_no=63539074bizx_numb=712151936quota=00noinf=Npg_txid=0422114348MNK4FDBLDHEH0000005400000063539074res_tax_flag=TG01res_tax_mny=490909res_free_mny=0res_vat_mny=49091partcanc_yn=Ycard_bin_type_01=0card_bin_type_02=1card_bin_bank_cd=0045isp_issuer_cd=BC00isp_issuer_nm=비씨카드isp_partner_cd=000100454602014join_cd=0000]

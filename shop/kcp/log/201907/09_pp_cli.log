@@ -1,0 +1,5 @@
+0709-101225 - 13154 - SR42Y79ABXU0BMQL - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2019070910094957]+log_level=[3]
+0709-101225 - 13154 - SR42Y79ABXU0BMQL - MSG : PG_서버_접속__정상
+0709-101225 - 13154 - SR42Y79ABXU0BMQL - MSG : PG_서버_요청_전문_전송__정상
+0709-101226 - 13154 - SR42Y79ABXU0BMQL - MSG : PG_서버_응답_전문_수신__정상
+0709-101226 - 13154 - SR42Y79ABXU0BMQL - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y79ABXU0BMQLpay_method=PACAorder_no=2019070910094957card_no=3565430000004292mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2019070910094957cert_no=19440259841168tno=19440259841168amount=25300card_mny=25300coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20190709101226van_apptime=20190709101226app_no=16238379bizx_numb=00993758697quota=00noinf=Npg_txid=0709101226MNK4FIFXCD000000000253000016238379res_tax_flag=TG01res_tax_mny=23000res_free_mny=0res_vat_mny=2300partcanc_yn=Ycard_bin_type_01=0card_bin_type_02=0join_cd=0000card_cd=CCHNcard_name=하나카드acqu_cd=CCKEacqu_name=하나카드(외환)]

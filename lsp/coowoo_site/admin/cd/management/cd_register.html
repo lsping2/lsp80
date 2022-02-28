@@ -1,0 +1,770 @@
+<?
+
+require_once "../../../include/include.php";
+
+require_once "../../login/login_check.php";
+login_check( $PHP_SELF );
+
+$product_class			= request( 'product_class' , 'get' );
+$manufacture_code		= request( 'manufacture_code' , 'get' );
+$license_code			= request( 'license_code' , 'get' );
+$data_folder_no		= request( 'data_folder_no' , 'get' );
+$money_code			= request( 'money_code' , 'get' );
+$cost				= request( 'cost', 'get' );
+$cd_sell_price			= request( 'cd_sell_price', 'get' );
+$vcd_sell_price		= request( 'vcd_sell_price', 'get' );
+$virtual_quantity_use	= request( 'virtual_quantity_use' , 'get' );
+$info1				= htmlspecialchars( request( 'info1' , 'get' ) );
+$info2				= htmlspecialchars( request( 'info2' , 'get' ) );
+$info3				= htmlspecialchars( request( 'info3' , 'get' ) );
+$info4				= htmlspecialchars( request( 'info4' , 'get' ) );
+$info5				= htmlspecialchars( request( 'info5' , 'get' ) );
+$info6				= htmlspecialchars( request( 'info6' , 'get' ) );
+$spec				= htmlspecialchars( request( 'spec' , 'get' ) );
+$cd_sell_status		= request( 'cd_sell_status' , 'get' );
+$vcd_sell_status		= request( 'vcd_sell_status' , 'get' );
+$single_sell_status		= request( 'single_sell_status' , 'get' );
+$cd_info				= htmlspecialchars( request( 'cd_info' , 'get' ) );
+$cd_warning			= htmlspecialchars( request( 'cd_warning' , 'get' ) );
+$cd_keyword			= htmlspecialchars( request( 'cd_keyword' , 'get' ) );
+$use_status			= request( 'use_status' , 'get' );
+
+$db = new mysql();
+
+?>
+<html>
+<head>
+<title><?$HTML->Title( 'Admin' )?></title>
+<?=$HTML->Metatag()?>
+<link rel="stylesheet" href="../../admin_style.css" type="text/css">
+<script language=javascript>
+<!--
+
+	function digit(c)
+	{
+		return ((c >= "0") && (c <= "9"));
+	}
+
+	function digitCheck( data, input_pos )
+	{	
+		for( i=0; i<data.length; i++)
+		{
+			var ch = data.charAt( i );
+			if( false == digit( ch ) )
+			{ 
+				alert("숫자로만 입력해 주세요.");
+				input_pos.focus();
+				input_pos.select();
+				return false;
+			}
+		}
+		return true;
+	}
+
+	function empty( data )
+	{
+		if( !data ) return true;
+
+		for( i=0; i<data.length; i++ )
+		{
+			if( data.substring( i, i+1 ) != ' ' )
+				return false;
+		}
+		return true;
+	}
+
+	function checkForm( form )
+	{
+		if( empty( form.cd_order_no.value ) )
+		{
+			alert( '시디 주문번호를 입력하세요.' );
+			form.cd_order_no.focus();
+			return false;
+		}
+
+		if( empty( form.manufacture_code.value ) )
+		{
+			alert( '제작사가 없습니다.' );
+			return false;
+		}
+
+		if( empty( form.license_code.value ) )
+		{
+			alert( '라이센스가 없습니다.' );
+			return false;
+		}
+
+		return true;
+	}
+
+-->
+</script>
+</head>
+<body>
+<b><font size=3>* 시디 등록</font></b>
+<form name=register action="cd_register_exec.php" method=post onSubmit="return checkForm( this )" enctype="multipart/form-data" target="cd_hidden_frame">
+<table border=0 cellpadding=0 cellspacing=3 border=0 bgcolor="#CDCD9A">
+<tr>
+	<td>
+	<table border=0 cellpadding=0 cellspacing=0 border=0 bgcolor="#FFFFFF">
+	<tr>
+		<td align=center width=120 height=25>
+		CD 주문번호
+		</td>
+		<td width=3 bgcolor="#CDCD9A">
+		</td>
+		<td width=450 style="padding-left:5px">
+		<input type=text name=cd_order_no size=15 maxlength=20>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+	<tr>
+		<td align=center height=25>
+		제품이름(한글)
+		</td>
+		<td width=3 bgcolor="#CDCD9A">
+		</td>
+		<td width=450 style="padding-left:5px">
+		<input type=text name=name_kr size=40 maxlength=50>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+	<tr>
+		<td align=center height=25>
+		제품이름(영문)
+		</td>
+		<td width=3 bgcolor="#CDCD9A">
+		</td>
+		<td width=450 style="padding-left:5px">
+		<input type=text name=name_eg size=40 maxlength=50>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+	<tr>
+		<td align=center height=25>
+		제품분류
+		</td>
+		<td width=3 bgcolor="#CDCD9A">
+		</td>
+		<td width=450 style="padding-left:5px">
+		해외제품 <input type=radio name=product_class value='foreign' <? if( 'foreign' == $product_class OR !$product_class ) echo 'checked'; ?>>
+		국내제품 <input type=radio name=product_class value='internal' <? if( 'internal' == $product_class ) echo 'checked'; ?>>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+	<tr>
+		<td align=center height=25>
+		CD 판매여부
+		</td>
+		<td width=3 bgcolor="#CDCD9A">
+		</td>
+		<td style="padding-left:5px">
+		예 <input type=radio name=cd_sell_status value='Yes' <? if( 'Yes' == $cd_sell_status OR !$cd_sell_status ) echo 'checked'; ?>>
+		아니오 <input type=radio name=cd_sell_status value='No' <? if( 'No' == $cd_sell_status ) echo 'checked'; ?>>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+	<tr>
+		<td align=center height=25>
+		V-CD 판매여부
+		</td>
+		<td width=3 bgcolor="#CDCD9A">
+		</td>
+		<td style="padding-left:5px">
+		예 <input type=radio name=vcd_sell_status value='Yes' <? if( 'Yes' == $vcd_sell_status OR !$vcd_sell_status ) echo 'checked'; ?>>
+		아니오 <input type=radio name=vcd_sell_status value='No' <? if( 'No' == $vcd_sell_status ) echo 'checked'; ?>>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+<!--
+	<tr>
+		<td align=center height=25>
+		싱글이미지 판매여부
+		</td>
+		<td width=3 bgcolor="#CDCD9A">
+		</td>
+		<td style="padding-left:5px">
+		예 <input type=radio name=single_sell_status value='Yes' <? if( 'Yes' == $single_sell_status OR !$single_sell_status ) echo 'checked'; ?>>
+		아니오 <input type=radio name=single_sell_status value='No' <? if( 'No' == $single_sell_status ) echo 'checked'; ?>>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+-->
+	<tr>
+		<td align=center height=25>
+		제작사
+		</td>
+		<td width=3 bgcolor="#CDCD9A">
+		</td>
+		<td width=450 style="padding-left:5px">
+<?
+
+$query = "
+			SELECT	manufacture_code ,
+					manufacture_name
+			FROM	product_manufacture_code
+			WHERE	use_status = 'Yes'
+			ORDER BY manufacture_name ASC
+";
+$db->query( $query );
+
+?>
+	<? if( $db->total_record() ) : ?>
+		<select name=manufacture_code>
+	<? for( $loop=0; $loop<$db->total_record(); $loop++ ) : ?>
+	<?
+
+		$db->fetch();
+		$rs_manufacture_code = $db->result( 'manufacture_code' );
+		$rs_manufacture_name = $db->result( 'manufacture_name' );
+
+	?>
+		<? if( $manufacture_code == $rs_manufacture_code ) : ?>
+		<option value='<?=$rs_manufacture_code?>' selected><?=$rs_manufacture_name?></option>
+		<? else : ?>
+		<option value='<?=$rs_manufacture_code?>'><?=$rs_manufacture_name?></option>
+		<? endif ?>
+	<? endfor ?>
+		</select>
+<? else : ?>
+		<font color="#FF9966">등록된 제작사가 없습니다.</font>
+		<input type=hidden name=manufacture_code>
+<? endif ?>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+
+		</td>
+	</tr>
+	<tr>
+		<td align=center height=25>
+		라이센스
+		</td>
+		<td width=3 bgcolor="#CDCD9A">
+		</td>
+		<td width=450 style="padding-left:5px">
+<?
+
+$query = "
+			SELECT	license_code ,
+					license_name
+			FROM	product_license_code
+			WHERE	use_status = 'Yes'
+			ORDER BY license_name ASC
+";
+$db->query( $query );
+
+?>
+	<? if( $db->total_record() ) : ?>
+		<select name=license_code>
+	<? for( $loop=0; $loop<$db->total_record(); $loop++ ) : ?>
+	<?
+
+		$db->fetch();
+		$rs_license_code = $db->result( 'license_code' );
+		$rs_license_name = $db->result( 'license_name' );
+
+	?>
+		<? if( $license_code == $rs_license_code ) : ?>
+		<option value='<?=$rs_license_code?>' selected><?=$rs_license_name?></option>
+		<? else : ?>
+		<option value='<?=$rs_license_code?>'><?=$rs_license_name?></option>
+		<? endif ?>
+	<? endfor ?>
+		</select>
+<? else : ?>
+		<font color="#FF9966">등록된 라이센스가 없습니다.</font>
+		<input type=hidden name=license_code>
+<? endif ?>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+
+		</td>
+	</tr>
+	<tr>
+		<td align=center height=25>
+		데이터 폴더
+		</td>
+		<td width=3 bgcolor="#CDCD9A">
+		</td>
+		<td width=450 style="padding-left:5px">
+<?
+
+$query = "
+			SELECT	data_folder_no ,
+					data_folder_name
+			FROM	data_folder
+			WHERE	use_status = 'Yes'
+			ORDER BY data_folder_name ASC
+";
+$db->query( $query );
+
+?>
+	<? if( $db->total_record() ) : ?>
+		<select name=data_folder_no>
+	<? for( $loop=0; $loop<$db->total_record(); $loop++ ) : ?>
+	<?
+
+		$db->fetch();
+		$rs_data_folder_no = $db->result( 'data_folder_no' );
+		$rs_data_folder_name = $db->result( 'data_folder_name' );
+
+	?>
+		<? if( $data_folder_no == $rs_data_folder_no ) : ?>
+		<option value='<?=$rs_data_folder_no?>' selected>/storage/<?=$rs_data_folder_name?>&nbsp;</option>
+		<? else : ?>
+		<option value='<?=$rs_data_folder_no?>'>/storage/<?=$rs_data_folder_name?>&nbsp;</option>
+		<? endif ?>
+	<? endfor ?>
+		</select>
+<? else : ?>
+		<font color="#FF9966">등록된 폴더가 없습니다.</font>
+		<input type=hidden name=data_folder_no>
+<? endif ?>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+
+		</td>
+	</tr>
+	<tr>
+		<td align=center height=25>
+		CD 자켓이미지
+		</td>
+		<td width=3 bgcolor="#CDCD9A">
+		</td>
+		<td width=450 style="padding-left:5px">
+		<input type=file name=jacket_pic size=50>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+	<tr>
+		<td align=center height=25>
+		원가
+		</td>
+		<td width=3 bgcolor="#CDCD9A">
+		</td>
+		<td width=450 style="padding-left:5px">
+		<input type=text name=cost size=12 value="<?=$cost?>" onblur="return digitCheck( this.value, register.cost );">
+<?
+
+$query = "
+			SELECT	money_code ,
+					money_name ,
+					money_sign ,
+					money_exchange 
+			FROM	product_money_code
+			WHERE	use_status = 'Yes'
+";
+$db->query( $query );
+
+?>
+<? if( $db->total_record() ) : ?>
+		<select name=money_code style="font-size:9pt">
+	<? for( $loop=0; $loop<$db->total_record(); $loop++ ) : ?>
+	<?
+
+		$db->fetch();
+		$rs_money_code = $db->result( 'money_code' );
+		$rs_money_name = $db->result( 'money_name' );
+		$rs_money_sign = $db->result( 'money_sign' );
+
+	?>
+		<? if( $money_code == $rs_money_code ) : ?>
+		<option value='<?=$rs_money_code?>' selected><?=$rs_money_name?><?if($rs_money_sign):?>(<?=$rs_money_sign?>)<?endif?></option>
+		<? else : ?>
+		<option value='<?=$rs_money_code?>'><?=$rs_money_name?><?if($rs_money_sign):?>(<?=$rs_money_sign?>)<?endif?></option>
+		<? endif ?>
+	<? endfor ?>
+		</select>
+<? else : ?>
+		<font color="#FF9966">등록된 화폐가 없습니다.</font>
+		<input type=hidden name=money_code>
+<? endif ?>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+	<tr>
+		<td align=center height=25>
+		CD 판매가
+		</td>
+		<td width=3 bgcolor="#CDCD9A">
+		</td>
+		<td width=450 style="padding-left:5px">
+		<input type=text name=cd_sell_price size=12 value="<?=$cd_sell_price?>" onblur="return digitCheck( this.value, register.cd_sell_price );"> 원
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+	<tr>
+		<td align=center height=25>
+		V-CD 판매가
+		</td>
+		<td width=3 bgcolor="#CDCD9A">
+		</td>
+		<td width=450 style="padding-left:5px">
+		<input type=text name=vcd_sell_price size=12 value="<?=$vcd_sell_price?>" onblur="return digitCheck( this.value, register.vcd_sell_price );"> 원
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+	<tr>
+		<td align=center height=25>
+		가상재고
+		</td>
+		<td width=3 bgcolor="#CDCD9A">
+		</td>
+		<td style="padding-left:5px">
+		예 <input type=radio name=virtual_quantity_use value='Yes' <? if( 'Yes' == $virtual_quantity_use OR !$virtual_quantity_use ) echo 'checked'; ?>>
+		아니오 <input type=radio name=virtual_quantity_use value='No' <? if( 'No' == $virtual_quantity_use ) echo 'checked'; ?>>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+	<tr>
+		<td align=center height=25>
+		실재고
+		</td>
+		<td width=3 bgcolor="#CDCD9A">
+		</td>
+		<td width=450 style="padding-left:5px">
+		<input type=text name=real_quantity size=12 onblur="return digitCheck( this.value, register.real_quantity );"> 개
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+	<tr>
+		<td align=center height=25>
+		CD 할인률
+		</td>
+		<td width=3 bgcolor="#CDCD9A">
+		</td>
+		<td width=450 style="padding-left:5px">
+		<table height=100% border=0 cellpadding=0 cellspacing=0>
+		<tr>
+			<td width=140>
+			<input type=text name=cd_discount_rate size=12 onblur="return digitCheck( this.value, register.cd_discount_rate );"> %
+			</td>
+			<td width=3 bgcolor="#CDCD9A">
+			</td>
+			<td width=100 align=center>
+			CD 할인가
+			</td>
+			<td width=3 bgcolor="#CDCD9A">
+			</td>
+			<td style="padding-left:5px">
+			<input type=text name=cd_discount_price size=12 onblur="return digitCheck( this.value, register.cd_discount_price );"> 원
+			</td>
+		</tr>
+		</table>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+	<tr>
+		<td align=center height=25>
+		CD 적립률
+		</td>
+		<td width=3 bgcolor="#CDCD9A">
+		</td>
+		<td width=450 style="padding-left:5px">
+		<table height=100% border=0 cellpadding=0 cellspacing=0>
+		<tr>
+			<td width=140>
+			<input type=text name=cd_mileage_rate size=12 onblur="return digitCheck( this.value, register.cd_mileage_rate );"> %
+			</td>
+			<td width=3 bgcolor="#CDCD9A">
+			</td>
+			<td width=100 align=center>
+			CD 적립가
+			</td>
+			<td width=3 bgcolor="#CDCD9A">
+			</td>
+			<td style="padding-left:5px">
+			<input type=text name=cd_mileage_price size=12 onblur="return digitCheck( this.value, register.cd_mileage_price );"> 원
+			</td>
+		</tr>
+		</table>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+	<tr>
+		<td align=center height=25>
+		VCD 할인률
+		</td>
+		<td width=3 bgcolor="#CDCD9A">
+		</td>
+		<td width=450 style="padding-left:5px">
+		<table height=100% border=0 cellpadding=0 cellspacing=0>
+		<tr>
+			<td width=140>
+			<input type=text name=vcd_discount_rate size=12 onblur="return digitCheck( this.value, register.vcd_discount_rate );"> %
+			</td>
+			<td width=3 bgcolor="#CDCD9A">
+			</td>
+			<td width=100 align=center>
+			VCD 할인가
+			</td>
+			<td width=3 bgcolor="#CDCD9A">
+			</td>
+			<td style="padding-left:5px">
+			<input type=text name=vcd_discount_price size=12 onblur="return digitCheck( this.value, register.vcd_discount_price );"> 원
+			</td>
+		</tr>
+		</table>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+	<tr>
+		<td align=center height=25>
+		VCD 적립률
+		</td>
+		<td width=3 bgcolor="#CDCD9A">
+		</td>
+		<td width=450 style="padding-left:5px">
+		<table height=100% border=0 cellpadding=0 cellspacing=0>
+		<tr>
+			<td width=140>
+			<input type=text name=vcd_mileage_rate size=12 onblur="return digitCheck( this.value, register.vcd_mileage_rate );"> %
+			</td>
+			<td width=3 bgcolor="#CDCD9A">
+			</td>
+			<td width=100 align=center>
+			VCD 적립가
+			</td>
+			<td width=3 bgcolor="#CDCD9A">
+			</td>
+			<td style="padding-left:5px">
+			<input type=text name=vcd_mileage_price size=12 onblur="return digitCheck( this.value, register.vcd_mileage_price );"> 원
+			</td>
+		</tr>
+		</table>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+	<tr>
+		<td align=center height=25>
+		파일모드
+		</td>
+		<td width=3 bgcolor="#CDCD9A">
+		</td>
+		<td width=450 style="padding-left:5px">
+		<table height=100% border=0 cellpadding=0 cellspacing=0>
+		<tr>
+			<td width=140>
+			<input type=text name=info1 size=20 value="<?=$info1?>">
+			</td>
+			<td width=3 bgcolor="#CDCD9A">
+			</td>
+			<td width=100 align=center>
+			파일형식
+			</td>
+			<td width=3 bgcolor="#CDCD9A">
+			</td>
+			<td style="padding-left:5px">
+			<input type=text name=info2 size=30 value="<?=$info2?>">
+			</td>
+		</tr>
+		</table>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+	<tr>
+		<td align=center height=25>
+		컷수
+		</td>
+		<td width=3 bgcolor="#CDCD9A">
+		</td>
+		<td width=450 style="padding-left:5px">
+		<table height=100% border=0 cellpadding=0 cellspacing=0>
+		<tr>
+			<td width=140>
+			<input type=text name=info3 size=20 value="<?=$info3?>">
+			</td>
+			<td width=3 bgcolor="#CDCD9A">
+			</td>
+			<td width=100 align=center>
+			컷당평균용량
+			</td>
+			<td width=3 bgcolor="#CDCD9A">
+			</td>
+			<td style="padding-left:5px">
+			<input type=text name=info4 size=30 value="<?=$info4?>">
+			</td>
+		</tr>
+		</table>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+	<tr>
+		<td align=center height=25>
+		해상도
+		</td>
+		<td width=3 bgcolor="#CDCD9A">
+		</td>
+		<td width=450 style="padding-left:5px">
+		<table height=100% border=0 cellpadding=0 cellspacing=0>
+		<tr>
+			<td width=140>
+			<input type=text name=info5 size=20 value="<?=$info5?>">
+			</td>
+			<td width=3 bgcolor="#CDCD9A">
+			</td>
+			<td width=100 align=center>
+			출력사이즈
+			</td>
+			<td width=3 bgcolor="#CDCD9A">
+			</td>
+			<td style="padding-left:5px">
+			<input type=text name=info6 size=30 value="<?=$info6?>">
+			</td>
+		</tr>
+		</table>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+	<tr>
+		<td align=center height=25>
+		사양
+		</td>
+		<td width=3 bgcolor="#CDCD9A">
+		</td>
+		<td width=450 style="padding-left:5px">
+		<input type=text name=spec size=40 value="<?=$spec?>">
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+	<tr>
+		<td align=center height=25>
+		상품정보
+		</td>
+		<td width=3 bgcolor="#CDCD9A">
+		</td>
+		<td style="padding-left:5px; padding-top:5px; padding-bottom:5px;">
+		<textarea name=cd_info rows=5 cols=71><?=$cd_info?></textarea>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+	<tr>
+		<td align=center height=25>
+		경고사항
+		</td>
+		<td width=3 bgcolor="#CDCD9A">
+		</td>
+		<td style="padding-left:5px; padding-top:5px; padding-bottom:5px;">
+		<textarea name=cd_warning rows=5 cols=71><?=$cd_warning?></textarea>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+<!--
+	<tr>
+		<td align=center height=25>
+		검색키워드
+		</td>
+		<td width=3 bgcolor="#CDCD9A">
+		</td>
+		<td style="padding-left:5px; padding-top:5px; padding-bottom:5px;">
+		<textarea name=cd_keyword rows=5 cols=71 style="font-size:9pt"></textarea>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+-->
+	<tr>
+		<td align=center height=25>
+		사용여부
+		</td>
+		<td width=3 bgcolor="#CDCD9A">
+		</td>
+		<td style="padding-left:5px">
+		예 <input type=radio name=use_status value='Yes' <? if( 'Yes' == $use_status OR !$use_status ) echo 'checked'; ?>>
+		아니오 <input type=radio name=use_status value='No' <? if( 'No' == $use_status ) echo 'checked'; ?>>
+		</td>
+	</tr>
+	</table>
+	</td>
+</tr>
+</table>
+<table width=600 border=0>
+	<tr>
+		<td height=50 align=center>
+		<input type=submit value="   등록   " style="font-size:9pt">
+		<input type=button value="돌아가기" style="font-size:9pt" onClick="javascript:window.history.back()">
+		</td>
+	</tr>
+</table>
+</form>
+
+<iframe name=cd_hidden_frame border=0 width=0 height=0></iframe>
+</body>
+</html>

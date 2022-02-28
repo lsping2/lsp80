@@ -1,0 +1,5 @@
+1120-140741 - 20862 - SR42YBKE6L1HPMJI - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2016112014043014]+log_level=[3]
+1120-140741 - 20862 - SR42YBKE6L1HPMJI - MSG : PG_서버_접속__정상
+1120-140741 - 20862 - SR42YBKE6L1HPMJI - MSG : PG_서버_요청_전문_전송__정상
+1120-140742 - 20862 - SR42YBKE6L1HPMJI - MSG : PG_서버_응답_전문_수신__정상
+1120-140742 - 20862 - SR42YBKE6L1HPMJI - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42YBKE6L1HPMJIpay_method=PACAorder_no=2016112014043014card_cd=CCLGcard_name=신한카드acqu_cd=CCLGacqu_name=신한카드card_no=4220160000004429mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2016112014043014tno=16955793249772amount=425000card_mny=425000coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20161120140742van_apptime=20161120140742app_no=26117553bizx_numb=0013425574quota=00noinf=Npg_txid=1120140742MP01FJ0100IC0000004250000026117553res_tax_flag=TG01res_tax_mny=386363res_free_mny=0res_vat_mny=38637partcanc_yn=Ycard_bin_type_01=0card_bin_type_02=0join_cd=0000]

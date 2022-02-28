@@ -1,0 +1,87 @@
+<?
+
+require_once "../../../include/include.php";
+html_cache_disable();
+require_once "../../login/login_check.php";
+login_check( $PHP_SELF );
+
+$httpvar = make_httpvar();
+
+
+
+$schedule_date		= request( 'schedule_date','get' );
+$diary_no				= request( 'diary_no' , 'get' );
+
+
+
+?>
+<html>
+<head>
+<title><?$HTML->Title( 'Admin' )?></title>
+<?=$HTML->Metatag()?>
+<link rel="stylesheet" href="../../admin_style.css" type="text/css">
+<script language=javascript>
+<!--
+	function CheckForm()
+	{
+		form = document.register;
+
+		
+		if( !form.comment.value )
+		{
+			alert( '내용을 입력하세요.' );
+			form.comment.focus();
+			return false;
+		}
+
+		return true;
+	}
+
+
+
+
+
+
+-->
+</script>
+</head>
+
+<body>
+<form name=register action="schedule_team_reply_exec.php" method="post">
+<table width=100% height=300  border=0 cellpadding=0 cellspacing=2 bgcolor=#EFEFEF>
+	<tr>
+		<td align=center  bgcolor="#FAFAFA" height=25 colspan=2><b>업무일지 답변 게시판</b></td>
+	</tr>
+
+
+
+	<tr>
+		<td bgcolor=#FFFFFF align=center><?=$SUserName?></td>
+		<td  valign=top bgcolor=#FFFFFF>
+			<center><textarea rows=20 cols=102 name="comment" ><?=$rs_comment ?></textarea></center>
+		</td>
+	</tr>
+</table>
+
+
+
+<table  cellpadding=0 cellspacing=0>
+<tr>
+	<td>
+		<a href="javascript: self.close()" onFocus=this.blur() style="font-size=10pt">[ 창닫기 ]</a>
+	</td>
+	<td width=445>&nbsp;</td>
+	<td valign=right>
+		<a href="javascript:this.register.submit()" onFocus=this.blur() style="font-size=10pt">[ 답변등록 ]</a>
+	</td>
+</tr>
+</table>
+
+
+<input type=hidden name=schedule_date value="<?=$schedule_date?>">
+<input type=hidden name=diary_no value="<?=$diary_no?>">	
+
+
+</form>
+</body>
+</html>

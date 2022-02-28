@@ -1,0 +1,98 @@
+<?
+
+require_once "../../../include/include.php";
+html_cache_disable();
+require_once "../../login/login_check.php";
+login_check();
+
+$bbs_uid 		= request( 'bbs_uid' , 'get' );
+$working_date	= request( 'working_date' , 'get' );
+
+?>
+<html>
+<head>
+<title></title>
+<link rel="stylesheet" href="../../admin_style.css" type="text/css">
+<script language=javascript>
+function CheckForm( form )
+{
+
+	if( !form.comment.value )
+	{
+		alert( '내용을  입력해 주세요.' );
+		form.comment.focus();
+		return false;
+	}
+	
+	return true;
+}
+</script>
+
+</head>
+<body>
+
+<?
+$db = new MYSQL;
+
+$query = "
+			SELECT	DATE_FORMAT( lunar_date, '%m/%d' ) as lunar_date ,
+					ganji
+			FROM	intranet.lunar2solar
+			WHERE	solar_date = '$working_date'
+	";
+$db->query( $query );
+$db->fetch();
+$rs_lunar_date	= $db->result( 'lunar_date' );
+
+?>
+<form name=register action="notice_modify_exec.php" method=post onSubmit="return CheckForm(this)">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr>
+	<td colspan=2>
+	<table  border=0 width=390 height=285 cellpadding=0 cellspacing=2 bgcolor=#EFEFEF >
+	<tr>
+			<td height=20 align="center">
+			<?
+				list( $year, $month, $day ) = explode( "-" , $working_date );
+			?>
+				<span style=" font-size:10pt"><?=$year?>년 <?=$month?>월 <?=$day?>일 </span>
+				<span style="font-family:tahoma; font-size:8pt; color=#A5A5A5">( <?=$rs_lunar_date?> )</span> 공지사항
+
+			</td>
+	</tr>
+<?
+$query = "
+			SELECT	comment ,
+					user_id 
+			FROM	intranet.calendar_notice
+			WHERE	bbs_uid = '$bbs_uid'
+			
+		";
+$db->query($query);
+$db->fetch();
+$rs_comment		= $db->result( 'comment' );
+$rs_user_id		= $db->result( 'user_id' );
+?>
+	<tr bgcolor=#FFFFFF>
+		<td align="center">
+			<textarea rows=15 cols=70 name="comment" class=underline><?=$rs_comment ?></textarea>
+		</td>
+	</tr>
+	</table>
+	</td>
+</tr>
+</table>
+
+<table border=0 width=380>
+<tr><td height=5></td></tr>
+<? if ( $rs_user_id == $s_user_id ) : ?>
+<tr>
+	<td align=right><input type=submit value=" 수정 " class=btn_kr></td>
+</tr>
+<? endif ?>
+</table>
+
+<input type=hidden name=bbs_uid value=<?=$bbs_uid?>>
+</form>
+</body>
+</html>

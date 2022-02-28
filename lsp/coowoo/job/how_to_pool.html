@@ -1,0 +1,22 @@
+< 사이트 폭주 >
+
+* top (프로세스 확인)
+    
+    - processes값이 300정도 될경우 
+    
+    - ps -axwl | grep httpd
+
+    - df -h ( 도중에 멈치는경우  멈치는 번호에 이상 )
+               ( 용량확인 )
+	       - usr 이 용량이 초과일경우 --> mysql 이나 apache 이상으로 간주
+
+
+
+
+
+*  /usr/local/apache2/logs
+
+     - ll -h
+    
+    - coowoo.com_access_log 를 삭제후 아파치 데몬 restart
+

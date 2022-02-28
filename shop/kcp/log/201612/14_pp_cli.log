@@ -1,0 +1,5 @@
+1214-080953 - 11089 - SR42YC9K742f298R - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2016121408043619]+log_level=[3]
+1214-080953 - 11089 - SR42YC9K742f298R - MSG : PG_서버_접속__정상
+1214-080953 - 11089 - SR42YC9K742f298R - MSG : PG_서버_요청_전문_전송__정상
+1214-080954 - 11089 - SR42YC9K742f298R - MSG : PG_서버_응답_전문_수신__정상
+1214-080954 - 11089 - SR42YC9K742f298R - MSG : TX_ENDED - res=[res_cd=CC61res_msg=거래금액 한도초과res_en_msg=The card holder has exceeded his or her credit limit.trace_no=SR42YC9K742f298Rpay_method=PACAorder_no=2016121408043619trade_seq=16979013058832card_cd=CCLGcard_name=신한카드]
