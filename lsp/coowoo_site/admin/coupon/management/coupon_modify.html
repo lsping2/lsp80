@@ -1,0 +1,373 @@
+<?
+
+require_once "../../../include/include.php";
+html_cache_disable();
+
+require_once "../../login/login_check.php";
+login_check( $PHP_SELF );
+
+$coupon_no			= request( 'coupon_no', 'get' );
+
+$db = new MYSQL;
+$db2 = new MYSQL;
+
+$query = "
+		SELECT	coupon_no ,
+				coupon_title ,
+				coupon_img_name ,
+				coupon_img_realname ,
+				coupon_type ,
+				manufacture_code ,
+				category_class ,
+				category_no ,
+				product_class ,
+				product_order_no ,
+				discount_rate ,
+				discount_price ,
+				mileage_rate ,
+				mileage_price ,
+				use_month ,
+				use_week ,
+				use_day ,
+				date_start ,
+				date_end ,
+				date_record
+		FROM	coupon.coupon
+		WHERE	coupon_no = '$coupon_no'
+";
+$db->query( $query );
+
+
+	$db->fetch();
+	$rs_coupon_no			= $db->result( 'coupon_no' );
+	$rs_coupon_title			= $db->result( 'coupon_title' );
+	$rs_coupon_img_name		= $db->result( 'coupon_img_name' );
+	$rs_coupon_img_realname	= $db->result( 'coupon_img_realname' );
+	$rs_coupon_type			= $db->result( 'coupon_type' );
+	$rs_manufacture_code		= $db->result( 'manufacture_code' );
+	$rs_category_class			= $db->result( 'category_class' );
+	$rs_category_no			= $db->result( 'category_no' );
+	$rs_product_class			= $db->result( 'product_class' );
+	$rs_product_order_no		= $db->result( 'product_order_no' );
+	$rs_discount_rate			= $db->result( 'discount_rate' );
+	$rs_discount_price			= $db->result( 'discount_price' );
+	$rs_mileage_rate			= $db->result( 'mileage_rate' );
+	$rs_mileage_price			= $db->result( 'mileage_price' );
+	$rs_use_month			= $db->result( 'use_month' );
+	$rs_use_week				= $db->result( 'use_week' );
+	$rs_use_day				= $db->result( 'use_day' );
+	$rs_date_start				= $db->result( 'date_start' );
+	$rs_date_end				= $db->result( 'date_end' );
+	$rs_date_recode			= $db->result( 'date_recode' );
+
+	if( 'all' == $rs_coupon_type )
+	{
+		$txt_coupon_type = "전체";
+		$txt_coupon_etc = "전체";
+	}
+	elseif( 'manufacture' == $rs_coupon_type )
+	{
+		$txt_coupon_type = "제작사";
+
+		$query = "
+					SELECT	manufacture_name
+					FROM	coowoo.product_manufacture_code
+					WHERE	manufacture_code = '$rs_manufacture_code'
+		";
+		$db2->query( $query );
+		$db2->fetch();
+		$rs_manufacture_name = $db2->result( 'manufacture_name' );
+
+		$txt_coupon_etc = $rs_manufacture_name;
+	}
+	elseif( 'category' == $rs_coupon_type )
+	{
+		$txt_coupon_type = "분류";
+
+		switch( $rs_category_class )
+		{
+			case 'single'	:	$class_name = "싱글이미지";
+							$table = "single_category";
+							$start = 3;
+							break;
+			case 'cd'		:	$class_name = "CD";
+							$table = "cd_category";
+							$start = 3;
+							break;
+			case 'illust'	:	$class_name = "일러스트";
+							$table = "cd_category";
+							$start = 9;
+							break;
+			case 'package'	:	$class_name = "클립아트 & 팩키지";
+							$table = "cd_category";
+							$start = 6;
+							break;
+		}
+
+		$query = "
+				SELECT	category_gid ,
+						category_thread ,
+						category_name
+				FROM	$table
+				WHERE	category_no = '$rs_category_no'
+		";
+		$db2->query( $query );
+		$db2->fetch();
+		$rs_category_gid		= $db2->result( 'category_gid' );
+		$rs_category_thread	= $db2->result( 'category_thread' );
+
+
+		$txt_coupon_etc = "[ $class_name ] ";
+		for( $loop2=$start; $loop2<=strlen( $rs_category_thread ); $loop2+=3 )
+		{
+			$category_thread = substr( $rs_category_thread , 0, $loop2 );
+			
+			$query = "
+					SELECT	category_name
+					FROM	$table
+					WHERE	category_gid = '$rs_category_gid'
+					AND		category_thread = '$category_thread'
+			";
+			$db2->query( $query );
+			$db2->fetch();
+			$rs_category_name = $db2->result( 'category_name' );
+		
+			$txt_coupon_etc .= $rs_category_name;
+			if( $loop2 != strlen( $rs_category_thread ) )
+			{
+				$txt_coupon_etc .= "&nbsp;&gt&nbsp;";
+			}
+		}
+
+
+	}
+	elseif( 'product_class' == $rs_coupon_type )
+	{
+		$txt_coupon_type = "제품종류";
+		switch( $rs_product_class )
+		{
+			case 'single'	:	$class_name = "싱글이미지";
+							break;
+			case 'cd'		:	$class_name = "CD";
+							break;
+			case 'vcd'		:	$class_name = "VCD";
+							break;
+		}
+		$txt_coupon_etc = $class_name;
+	}
+	elseif( 'product' == $rs_coupon_type )
+	{
+		$txt_coupon_type = "제품";
+		switch( $rs_product_class )
+		{
+			case 'single'	:	$class_name = "싱글이미지";
+							break;
+			case 'cd'		:	$class_name = "CD";
+							break;
+			case 'vcd'		:	$class_name = "VCD";
+							break;
+		}
+		$txt_coupon_etc = $class_name . "- $rs_product_order_no";
+	}
+
+	if( $rs_discount_rate )
+	{
+		$txt_contents = $rs_discount_rate . "% 할인";
+	}
+	elseif( $rs_discount_price )
+	{
+		$txt_contents = number_format( $rs_discount_price ) . "원 할인";
+	}
+	elseif( $rs_mileage_rate )
+	{
+		$txt_contents = $rs_mileage_rate . "% 적립";
+	}
+	elseif( $rs_mileage_price )
+	{
+		$txt_contents = number_format( $rs_mileage_price ) . "원 적립";
+	}
+
+	$coupon_dir = $SERVER_CONFIG['coupon_dir'];
+
+?>
+<html>
+<head>
+<title><?$HTML->Title( 'Admin' )?></title>
+<?=$HTML->Metatag()?>
+<link rel="stylesheet" href="../../admin_style.css" type="text/css">
+
+</head>
+<body>
+<b><font style="font-size:9pt">* 쿠폰 수정</font></b>
+
+<br><br>
+
+<form name=register action=coupon_modify_exec.php method=post enctype="multipart/form-data" target="coupon_hidden_frame">
+
+<table border=0 cellpadding=0 cellspacing=1 bgcolor="#ADAD5C">
+<tr>
+	<td>
+	<table border=0 cellpadding=0 cellspacing=0 bgcolor="#FFFFFF">
+	<tr height=30>
+		<td width=100 align=right style="padding-right:5pt">
+		쿠폰 대상 : 
+		</td>
+		<td width=500 colspan=3>
+		<?=$txt_coupon_etc?>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=4 height=1 background="../../image/dot.gif">
+	</tr>
+	<tr height=30>
+		<td width=100 align=right style="padding-right:5pt">
+		쿠폰 이름 : 
+		</td>
+		<td width=500 colspan=3>
+		<input type=text size=92 name=coupon_title style="font-size:9pt" class=outline value="<?=$rs_coupon_title?>">
+		</td>
+	</tr>
+	<tr>
+		<td colspan=4 height=1 background="../../image/dot.gif">
+	</tr>
+	<tr height=30>
+		<td width=100 align=right style="padding-right:5pt">
+		쿠폰 이미지 : 
+		</td>
+		<td width=500 colspan=3>
+		<input type=file size=73 name=coupon_img style="font-size:9pt" class=outline><br>
+		<?=$rs_coupon_img_realname?>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=4 height=1 background="../../image/dot.gif">
+	</tr>
+	<tr height=30>
+		<td width=100 align=right style="padding-right:5pt">
+		할인률 : 
+		</td>
+		<td width=160>
+		<input type=text size=20 name=discount_rate style="font-size:9pt" class=outline value="<?=$rs_discount_rate?>"> %
+		</td>
+		<td width=100 align=right style="padding-right:5pt">
+		할인가 : 
+		</td>
+		<td width=240>
+		<input type=text size=20 name=discount_price style="font-size:9pt" class=outline value="<?=$rs_discount_price?>"> 원
+		</td>
+	</tr>
+	<tr>
+		<td colspan=4 height=1 background="../../image/dot.gif">
+	</tr>
+	<tr height=30>
+		<td width=100 align=right style="padding-right:5pt">
+		적립률 : 
+		</td>
+		<td width=160>
+		<input type=text size=20 name=mileage_rate style="font-size:9pt" class=outline value="<?=$rs_mileage_rate?>"> %
+		</td>
+		<td width=100 align=right style="padding-right:5pt">
+		적립가 : 
+		</td>
+		<td width=240>
+		<input type=text size=20 name=mileage_price style="font-size:9pt" class=outline value="<?=$rs_mileage_price?>"> 원
+		</td>
+	</tr>
+	<tr>
+		<td colspan=4 height=1 background="../../image/dot.gif">
+	</tr>
+	<tr height=30>
+		<td width=100 align=right style="padding-right:5pt">
+		쿠폰 사용일 : 
+		</td>
+		<td width=500 colspan=3>
+		&nbsp;
+		발행일로부터
+		<input type=text size=5 name=use_month value="<?=$rs_use_month?>" class=outline> 개월
+		<input type=text size=5 name=use_week value="<?=$rs_use_week?>" class=outline> 주
+		<input type=text size=5 name=use_day value="<?=$rs_use_day?>" class=outline> 일
+
+		</td>
+	</tr>
+	<tr>
+		<td colspan=4 height=1 background="../../image/dot.gif">
+	</tr>
+	<tr height=30>
+		<td align=right style="padding-right:5pt">
+		쿠폰 시작일 :
+		</td>
+		<td>
+        <?
+
+        $today_year     = date( 'Y', time() );
+	$date_start = explode( "-" , $rs_date_start );
+
+        ?>
+
+                        <select name=from_year>
+        <? for( $loop=2004; $loop<=$today_year+3; $loop++ ) : ?>
+                        <option value=<?=$loop?> <? if( $date_start[0] == $loop ) echo "selected"; ?>><?=$loop?></option>
+        <? endfor ?>
+                        </select>년
+                        <select name=from_month>
+        <? for( $loop=1; $loop<=12; $loop++ ) : ?>
+                        <option value=<?=$loop?> <? if( $date_start[1] == $loop ) echo "selected"; ?>><?=$loop?></option>
+        <? endfor ?>
+                        </select>월
+                        <select name=from_day>
+        <? for( $loop=1; $loop<=31; $loop++ ) : ?>
+                        <option value=<?=$loop?> <? if( $date_start[2] == $loop ) echo "selected"; ?>><?=$loop?></option>
+        <? endfor ?>
+                        </select>월
+		</td>
+		<td align=right style="padding-right:5pt">
+		쿠폰 종료일 :
+		</td>
+		<td>
+        <?
+
+	$date_end = explode( "-" , $rs_date_end );
+
+        ?>
+
+                        <select name=to_year>
+        <? for( $loop=2004; $loop<=$today_year+3; $loop++ ) : ?>
+                        <option value=<?=$loop?> <? if( $date_end[0] == $loop ) echo "selected"; ?>><?=$loop?></option>
+        <? endfor ?>
+                        </select>년
+                        <select name=to_month>
+        <? for( $loop=1; $loop<=12; $loop++ ) : ?>
+                        <option value=<?=$loop?> <? if( $date_end[1] == $loop ) echo "selected"; ?>><?=$loop?></option>
+        <? endfor ?>
+                        </select>월
+                        <select name=to_day>
+        <? for( $loop=1; $loop<=31; $loop++ ) : ?>
+                        <option value=<?=$loop?> <? if( $date_end[2] == $loop ) echo "selected"; ?>><?=$loop?></option>
+        <? endfor ?>
+                        </select>월
+
+	</tr>
+	</table>
+	</td>
+</tr>
+</table>
+<table border=0 width=640>
+<tr>
+	<td>
+	<input type=button value="   돌아가기   " onClick="history.back()" class=btn_kr>
+	</td>
+	<td align=right>
+	<input type=submit value="      수정      " class=btn_kr>
+	</td>
+</tr>
+</table>
+
+<input type=hidden name=coupon_no value="<?=$coupon_no?>">
+
+</form>
+<br>
+
+<iframe name=coupon_hidden_frame width=0 height=0></iframe>
+
+</body>
+</html>

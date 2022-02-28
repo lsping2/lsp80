@@ -1,0 +1,1116 @@
+<html>
+<head>
+<title>실시간시세</title>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-kr">
+<style>
+td,body,span { font-size : 9pt ; font-family: '돋움','verdana','arial', 'sans-serif'; }
+
+a.link.kosdaq {
+    COLOR: #7F7F7F; TEXT-DECORATION: underline;
+}
+
+a.active.kosdaq {
+    COLOR: #7F7F7F; TEXT-DECORATION: none;
+}
+
+a.visited.kosdaq {
+    COLOR: #7F7F7F; TEXT-DECORATION: underline;
+}
+a.hover.kosdaq {
+ COLOR:#7F7F7F; TEXT-DECORATION: underline;
+}
+TD.title_defult {  
+    background-color: #81ACC6;
+}
+
+TD.title_defult2 {  
+    background-color: #7ec978;
+}
+
+TD.body_a {  
+    background-color: #C3CACC;
+}
+
+TD.body_b {  
+    background-color: #EEF9F9;
+}
+
+TD.kdaqTitle2Bg {  
+    background-color: #F6F7E4;
+}
+
+TD.body_1 {  
+    background-color: #EFEFEF;
+    font-size: 9pt;
+}
+
+TD.body_0 {  
+    background-color: #FFFFFF;
+    font-size: 9pt;
+}
+
+
+.FONT_title_defult{
+    color: #FFFFFF; 
+    font-size:9pt; 
+    font-family:"돋움"
+}
+
+.FONT_Title2Col{
+    color: #000000; 
+    font-size:9pt; 
+    font-family:"돋움"
+}
+
+.FONT_body_0{
+    color: #000000; 
+    font-size:9pt; 
+    font-family:"돋움"
+}
+
+.FONT_body_1{
+    color: #000000; 
+    font-size:9pt; 
+    font-family:"돋움"
+}
+</style>
+<OBJECT id="httpObj" classid="clsid:CDF26594-A9E2-4E41-87F9-6E79DD38CFE3" codebase="http://kftc.inckorea.net/AutoTrustHTTP.cab#version=1,0,1,1" width=0 height=0 align=center hspace=0 vspace=0>
+	<Param name="CheckControl" value="True">
+	<Param name="ASync" value="True">
+	<Param name="RequestURL" value="http://asp1.krx.co.kr/servlet/krx.asp.XMLSise?code=123410">
+	<Param name="HTTPMethod" value="GET">
+</OBJECT>
+<script src='http://asp1.krx.co.kr/inc/js/asp_chart.js'></script>
+<script language="javascript">
+<!--
+
+//stockinfo 051-662-2504
+// oonreadystatechange funcion 설정해제
+	function SetNULLFunction()
+	{
+		if (httpObj != null){
+			httpObj.OnReadyStateChange = document.getElementById("NULL");
+		}
+	}
+
+	// onreadystatechange functon 설정
+	function SetFunction() {
+		if (httpObj != null){
+			httpObj.OnReadyStateChange = MyOnReadyStatChange;
+		}
+	}
+	
+	//xml data 요청
+	function SendRequest() {
+		if (httpObj != null){
+			//httpObj.OnReadyStateChange = MyOnReadyStatChange;  //여기에 지정해도 무방함
+			//gpDisp.innerHTML = "<img src='http://asp1.krx.co.kr/servlet/krx.asp.SiseInfoServlet?code=해당단축코드&width=200&panelBGColor=ffffff&defaultFontColor=000000&myComGrpHeight=100'><br><img src='http://asp1.krx.co.kr/servlet/krx.asp.DTRmainServlet?code=해당단축코드&width=200&panelBGColor=ffffff&defaultFontColor=000000&myComGrpHeight=100'>";
+			onChart(200, 205, '123410');
+			httpObj.DoRequest();
+		}
+	}
+
+	// onreadystatechange funcion 이 이function 으로 설정된 경우 작동
+	var dipDate;//날짜시간처리
+	function MyOnReadyStatChange() {
+        var nReadyState = httpObj.ReadyState;
+        if (4 == nReadyState){
+            if (httpObj.Status != 200){
+                alert("Error Code: " + httpObj.Status + "\r\n" + httpObj.StatusText);
+            }
+            else{
+                var contentType = httpObj.getResponseHeader("Content-Type");
+                if (contentType.length < 8 || contentType.substring(0, 8) != "text/xml") {
+                    alert("잘못된 데이터입니다. 오랫동안 사용하지 않아 세션이 종료되었거나, 서버오류입니다!");
+                    return;
+                }
+                var xmlDoc = httpObj.ResponseXML;
+				var cDate =  document.getElementById("createDate")
+                dipDate = xmlDoc.selectSingleNode("stockprice").getAttribute("querytime");
+                parseNode(xmlDoc);
+	            setTimeout(SendRequest, 10000);
+            }
+		}
+	}
+	
+
+
+
+    function parseNode(xmlDoc){
+
+        /*
+            주가정보 : TBL_StockInfo
+            호가 : TBL_Hoga
+            시간대별체결가 : TBL_TimeConclude
+            회원사별거래 : TBL_AskPrice
+            일자별시세 : TBL_DailyStock
+         */
+
+        var node = xmlDoc.selectSingleNode("stockprice/TBL_StockInfo");
+        if (node != null) parseStastistics(node);
+        node = xmlDoc.selectSingleNode("stockprice/TBL_Hoga");
+        if (node !=null) parseNogoPrice(node);
+        node = xmlDoc.selectSingleNode("stockprice/TBL_TimeConclude");
+        if (node != null) parseStatusPDay(node);
+        
+        node = xmlDoc.selectSingleNode("stockprice/TBL_DailyStock");
+        if (node != null) parseCallPrice(node);
+
+        node = xmlDoc.selectSingleNode("stockprice/TBL_AskPrice");
+        if (node != null) parseDealPMemberCorp(node);
+
+		var node = xmlDoc.selectSingleNode("stockprice/stockInfo");
+        if (node != null) parseJisu(node);
+        
+    }
+
+    function parseDealPMemberCorp(dealNode){
+        var statusPDayTbl = document.getElementById("TBL_AskPrice");
+        if (statusPDayTbl != null){
+            var childNodes = dealNode.selectNodes("AskPrice");
+            //<AskPrice member_memdoMem='미래에셋증권'  member_memdoVol='1,110'  member_memsoMem='대우증권'  member_mesuoVol='2,000'/> 
+            //var nodeLength = 5;
+            var nodeLength = childNodes.length;
+            for(var i=0; i< nodeLength ; i++){    
+            
+                statusPDayTbl.rows(i+3).cells(0).innerText = childNodes[i].getAttribute("member_memdoMem");
+                statusPDayTbl.rows(i+3).cells(1).innerText = childNodes[i].getAttribute("member_memdoVol");
+                statusPDayTbl.rows(i+3).cells(2).innerText = childNodes[i].getAttribute("member_memsoMem");
+                statusPDayTbl.rows(i+3).cells(3).innerText = childNodes[i].getAttribute("member_mesuoVol");
+            }
+            
+        }
+    }
+
+    function markTypeset(sval,sval1){
+        //sval  등락기호
+        //sval1 등락값
+        //return;
+        // 1: 상한
+        // 2: 상승
+        // 3: 보합
+        // 4: 하한
+        // 5: 하락
+        //▼↓↑▲0
+        var rtnVal="";
+        if (sval == 1) {
+            rtnVal = "<font color='#ff0000'>↑ "+sval1+"</font>";
+        }else if (sval ==2) {
+            rtnVal = "<font color='#ff0000'>▲ "+sval1+"</font>";
+        }else if (sval == 3) {
+            rtnVal = sval1;
+        }else if (sval == 4) {
+            rtnVal = "<font color='#0066FF'>↓ "+sval1+"</font>";
+        }else{
+            rtnVal = "<font color='#0066FF'>▼ "+sval1+"</font>";
+
+        }
+        //alert(rtnVal);
+        return rtnVal;
+    }
+
+    function parseStastistics(TBL_StockInfo){
+        var staticsticTbl = document.getElementById("stockInfo");
+        if (staticsticTbl != null){
+            //JongName//종목명    
+            //CurJuka//현재가        
+            //DungRak//전일대비    
+            //PrevJuka//전일종가    
+            //Volume//거래량        
+            //Money//거래대금    
+            //StartJuka//시가        
+            //HighJuka//고가        
+            //LowJuka//저가        
+            //High52//52주 최고    
+            //Low52//52주 최저    
+            //UpJuka//상한가        
+            //DownJuka//하한가        
+            //Per//PER            
+            //Amount//상장주식수    
+            //FaceJuka//액면가
+    
+            staticsticTbl.rows(0).cells(1).innerText = TBL_StockInfo.getAttribute("JongName");
+            staticsticTbl.rows(0).cells(3).innerText = TBL_StockInfo.getAttribute("CurJuka");
+
+            staticsticTbl.rows(1).cells(1).innerHTML = markTypeset(TBL_StockInfo.getAttribute("DungRak"),TBL_StockInfo.getAttribute("Debi"));
+            
+            staticsticTbl.rows(1).cells(3).innerText = TBL_StockInfo.getAttribute("PrevJuka");
+            staticsticTbl.rows(2).cells(1).innerText = TBL_StockInfo.getAttribute("Volume");
+            staticsticTbl.rows(2).cells(3).innerText = TBL_StockInfo.getAttribute("Money");
+            staticsticTbl.rows(3).cells(1).innerText = TBL_StockInfo.getAttribute("StartJuka");
+            staticsticTbl.rows(4).cells(1).innerText = TBL_StockInfo.getAttribute("HighJuka");
+            staticsticTbl.rows(4).cells(3).innerText = TBL_StockInfo.getAttribute("LowJuka");
+            staticsticTbl.rows(5).cells(1).innerText = TBL_StockInfo.getAttribute("High52");
+            staticsticTbl.rows(5).cells(3).innerText = TBL_StockInfo.getAttribute("Low52");
+            staticsticTbl.rows(6).cells(1).innerText = TBL_StockInfo.getAttribute("UpJuka");
+            staticsticTbl.rows(6).cells(3).innerText = TBL_StockInfo.getAttribute("DownJuka");
+            staticsticTbl.rows(7).cells(1).innerText = TBL_StockInfo.getAttribute("Per");
+            staticsticTbl.rows(8).cells(1).innerText = TBL_StockInfo.getAttribute("Amount");
+            staticsticTbl.rows(8).cells(3).innerText = TBL_StockInfo.getAttribute("FaceJuka"); 
+
+        }
+    }
+
+    function parseNogoPrice(TBL_Hoga){
+        var negoPriceTbl = document.getElementById("TBL_Hoga");
+        if (negoPriceTbl != null){
+            //alert(TBL_Hoga.getAttribute("medoJan0"));
+            //var childNodes = negoPriceNode.selectNodes("TBL_Hoga");
+            //"medoJan" + i + "='" + medojan + "' medoHoka" + i + "='" + medohoka + "' mesuJan" + i + "='" + mesujan + "' mesuHoka" + i + "='" + mesuhoka + "' ";
+            //var nodeLength = 10;
+                negoPriceTbl.rows(2).cells(0).innerText = TBL_Hoga.getAttribute("medoJan0");
+                negoPriceTbl.rows(2).cells(1).innerText = TBL_Hoga.getAttribute("medoHoka0");
+                negoPriceTbl.rows(3).cells(0).innerText = TBL_Hoga.getAttribute("medoJan1");
+                negoPriceTbl.rows(3).cells(1).innerText = TBL_Hoga.getAttribute("medoHoka1");
+                negoPriceTbl.rows(4).cells(0).innerText = TBL_Hoga.getAttribute("medoJan2");
+                negoPriceTbl.rows(4).cells(1).innerText = TBL_Hoga.getAttribute("medoHoka2");
+                negoPriceTbl.rows(5).cells(0).innerText = TBL_Hoga.getAttribute("medoJan3");
+                negoPriceTbl.rows(5).cells(1).innerText = TBL_Hoga.getAttribute("medoHoka3");
+                negoPriceTbl.rows(6).cells(0).innerText = TBL_Hoga.getAttribute("medoJan4");
+                negoPriceTbl.rows(6).cells(1).innerText = TBL_Hoga.getAttribute("medoHoka4");
+
+                negoPriceTbl.rows(7).cells(2).innerText = TBL_Hoga.getAttribute("mesuJan0");
+                negoPriceTbl.rows(7).cells(1).innerText = TBL_Hoga.getAttribute("mesuHoka0");
+                negoPriceTbl.rows(8).cells(1).innerText = TBL_Hoga.getAttribute("mesuJan1");
+                negoPriceTbl.rows(8).cells(0).innerText = TBL_Hoga.getAttribute("mesuHoka1");
+                negoPriceTbl.rows(9).cells(1).innerText = TBL_Hoga.getAttribute("mesuJan2");
+                negoPriceTbl.rows(9).cells(0).innerText = TBL_Hoga.getAttribute("mesuHoka2");
+                negoPriceTbl.rows(10).cells(1).innerText= TBL_Hoga.getAttribute("mesuJan3");
+                negoPriceTbl.rows(10).cells(0).innerText= TBL_Hoga.getAttribute("mesuHoka3");
+                negoPriceTbl.rows(11).cells(1).innerText= TBL_Hoga.getAttribute("mesuJan4");
+                negoPriceTbl.rows(11).cells(0).innerText= TBL_Hoga.getAttribute("mesuHoka4");
+                
+        }
+    }
+
+    function parseStatusPDay(statusPDayNode){
+        var statusPDayTbl = document.getElementById("TBL_TimeConclude");
+        if (statusPDayTbl != null){
+        //TBL_TimeConclude time=  negoprice= diff= sellprice= buyprice= amount=
+            var childNodes = statusPDayNode.selectNodes("TBL_TimeConclude");
+            //var nodeLength = 10;
+            var nodeLength = childNodes.length;
+            
+            for(var i=0; i< nodeLength; i++){
+                statusPDayTbl.rows(i+2).cells(0).innerText = childNodes[i].getAttribute("time");
+                statusPDayTbl.rows(i+2).cells(1).innerText = childNodes[i].getAttribute("negoprice");
+
+                statusPDayTbl.rows(i+2).cells(2).innerHTML = markTypeset(childNodes[i].getAttribute("Dungrak"),childNodes[i].getAttribute("Debi"));
+
+//                statusPDayTbl.rows(i+2).cells(2).innerText = childNodes[i].getAttribute("diff");
+                statusPDayTbl.rows(i+2).cells(3).innerText = childNodes[i].getAttribute("sellprice");
+                statusPDayTbl.rows(i+2).cells(4).innerText = childNodes[i].getAttribute("buyprice");
+                statusPDayTbl.rows(i+2).cells(5).innerText = childNodes[i].getAttribute("amount");
+                //null처리를 해야 한다.
+            }
+            
+        }
+
+    }
+
+    function parseCallPrice(TBL_DailyStock){
+        var statusPDayTbl = document.getElementById("TBL_DailyStock");
+        if (statusPDayTbl != null){
+        //day_Date= day_EndPrice= day_Dungrak= day_getDebi= day_Start= day_High= day_Low= day_Volume= day_getAmount= /> 
+            var childNodes = TBL_DailyStock.selectNodes("DailyStock");
+            var nodeLength = childNodes.length;
+            for(var i=0; i<nodeLength; i++){
+                statusPDayTbl.rows(i+2).cells(0).innerText = childNodes[i].getAttribute("day_Date");
+                statusPDayTbl.rows(i+2).cells(1).innerText = childNodes[i].getAttribute("day_EndPrice"); 
+
+                statusPDayTbl.rows(i+2).cells(2).innerHTML = markTypeset(childNodes[i].getAttribute("day_Dungrak"),childNodes[i].getAttribute("day_getDebi"));
+
+//                statusPDayTbl.rows(i+2).cells(2).innerText = childNodes[i].getAttribute("day_Dungrak");
+                statusPDayTbl.rows(i+2).cells(3).innerText = childNodes[i].getAttribute("day_Start");
+                statusPDayTbl.rows(i+2).cells(4).innerText = childNodes[i].getAttribute("day_High");
+                statusPDayTbl.rows(i+2).cells(5).innerText = childNodes[i].getAttribute("day_Low");
+                statusPDayTbl.rows(i+2).cells(6).innerText = childNodes[i].getAttribute("day_Volume");
+                statusPDayTbl.rows(i+2).cells(7).innerText = childNodes[i].getAttribute("day_getAmount");
+                //statusPDayTbl.rows(i+2).cells(8).innerText = childNodes[i].getAttribute("day_getAmount");
+                //null처리를 해야 한다.
+            }
+        }
+
+    }
+
+
+
+	function parseJisu(stockInfo){
+        var staticsticTbl = document.getElementById("stockInfo2");
+        if (staticsticTbl != null){
+				var buho1;
+				var buho2;
+				if ( stockInfo.getAttribute("kosdaqJisuBuho") == '2')
+				{
+					buho1 = "△";
+				}else{
+					buho1 = "▽";
+				}
+
+				if ( stockInfo.getAttribute("krx100buho") == '2')
+				{
+					buho2 = "△";
+				}else{
+					buho2 = "▽";
+				}
+            staticsticTbl.rows(0).cells(1).innerText = buho1  + stockInfo.getAttribute("kosdaqJisu"); //코스닥 종합지수
+			staticsticTbl.rows(1).cells(1).innerText =  stockInfo.getAttribute("kosdaqJisuDebi"); //코스닥 전일대비
+
+			staticsticTbl.rows(0).cells(3).innerText = buho2 + stockInfo.getAttribute("krx100Jisu"); //KRX100지수
+			staticsticTbl.rows(1).cells(3).innerText = stockInfo.getAttribute("krx100Debi"); //전일대비
+          
+
+        }
+    }
+
+
+
+var preSval = 1; //깜박임을 줄이기 위해
+function change_id(sval) {
+    if (preSval != sval) {
+        if (sval == 1) {            
+                a.innerHTML = "<IMG SRC='http://asp1.krx.co.kr/reference/images/tap_01_on.gif' BORDER='0' onClick='change_id(1);' style='cursor:hand;'><IMG SRC='http://asp1.krx.co.kr/reference/images/tap_02_off.gif' BORDER='0' onClick='change_id(2);' style='cursor:hand;'><IMG SRC='http://asp1.krx.co.kr/reference/images/tap_03_off.gif' BORDER='0' onClick='change_id(3);' style='cursor:hand;'><IMG SRC='http://asp1.krx.co.kr/reference/images/tap_04_off.gif' BORDER='0' onClick='change_id(4);' style='cursor:hand;'>";
+                timeByConclude.style.visibility = "hidden";
+                dailyStock.style.visibility = "hidden";
+                askPrice.style.visibility = "visible";
+                coTrade.style.visibility = "hidden";
+        
+        }else if (sval == 2){
+            a.innerHTML = "<IMG SRC='http://asp1.krx.co.kr/reference/images/tap_01_off.gif' BORDER='0' onClick='change_id(1);' style='cursor:hand;'><IMG SRC='http://asp1.krx.co.kr/reference/images/tap_02_on.gif' BORDER='0' onClick='change_id(2);' style='cursor:hand;'><IMG SRC='http://asp1.krx.co.kr/reference/images/tap_03_off.gif' BORDER='0' onClick='change_id(3);' style='cursor:hand;'><IMG SRC='http://asp1.krx.co.kr/reference/images/tap_04_off.gif' BORDER='0' onClick='change_id(4);' style='cursor:hand;'>";
+            timeByConclude.style.visibility = "visible";
+            dailyStock.style.visibility = "hidden";
+            askPrice.style.visibility = "hidden";
+            coTrade.style.visibility = "hidden";
+        }else if (sval == 3){
+            a.innerHTML = "<IMG SRC='http://asp1.krx.co.kr/reference/images/tap_01_off.gif' BORDER='0' onClick='change_id(1);' style='cursor:hand;'><IMG SRC='http://asp1.krx.co.kr/reference/images/tap_02_off.gif' BORDER='0' onClick='change_id(2);' style='cursor:hand;'><IMG SRC='http://asp1.krx.co.kr/reference/images/tap_03_on.gif' BORDER='0' onClick='change_id(3);' style='cursor:hand;'><IMG SRC='http://asp1.krx.co.kr/reference/images/tap_04_off.gif' BORDER='0' onClick='change_id(4);' style='cursor:hand;'>";
+            timeByConclude.style.visibility = "hidden";
+            dailyStock.style.visibility = "hidden";
+            askPrice.style.visibility = "hidden";
+            coTrade.style.visibility = "visible";
+        }else{
+            a.innerHTML = "<IMG SRC='http://asp1.krx.co.kr/reference/images/tap_01_off.gif' BORDER='0' onClick='change_id(1);' style='cursor:hand;'><IMG SRC='http://asp1.krx.co.kr/reference/images/tap_02_off.gif' BORDER='0' onClick='change_id(2);' style='cursor:hand;'><IMG SRC='http://asp1.krx.co.kr/reference/images/tap_03_off.gif' BORDER='0' onClick='change_id(3);' style='cursor:hand;'><IMG SRC='http://asp1.krx.co.kr/reference/images/tap_04_on.gif' BORDER='0' onClick='change_id(4);' style='cursor:hand;'>";
+            timeByConclude.style.visibility = "hidden";
+            dailyStock.style.visibility = "visible";
+            askPrice.style.visibility = "hidden";
+            coTrade.style.visibility = "hidden";
+        }
+        preSval = sval;
+    }
+}
+
+
+-->
+</script>
+</head>
+<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onload="SetFunction();SendRequest()">
+
+<!-- 여기부~~~~~~~~~터-->
+<table width="620" border="0" cellspacing="0" cellpadding="0">
+	<tr> 
+		<td width="215" height= "252" align="center" background="http://asp1.krx.co.kr/reference/images/graph_bg.gif" id="gpDisp"> 
+			&nbsp;
+		</td>
+		<td width="405" align ="right" id=juka valign="top">
+			<table width=390 border=0 cellspacing=0 cellpadding=0 bgcolor="EEF9F9">
+				<tr>
+					<td height='2' bgColor='E4D3C9'></td>
+				</tr>
+				<tr>
+					<td height='2'></td>
+				</tr>
+				<tr>
+					<td align="center" valign="center" height="210">
+						<table width=380 border=0 cellspacing=1 cellpadding=1 id=stockInfo>
+							<tr>
+								<td width='20%' height= 22 align=center class="title_defult"><font class="FONT_title_defult">종목명</font></td>
+								<td width='30%' height= 22 align=center class="body_a"></td>
+								<td width='20%' height= 22 align=center class="title_defult"><font class="FONT_title_defult">현재가</font></td>
+								<td width='30%' height= 22 align=right class="body_a"></td>
+							</tr>
+							<tr>
+								<td width='20%' height= 22 align=center class="title_defult"><font class="FONT_title_defult">전일대비</font></td>
+								<td width='30%' height= 22 align=right class="body_b">&nbsp;</td>
+								<td width='20%' height= 22 align=center class="title_defult"><font class="FONT_title_defult">전일종가</font></td>
+								<td width='30%' height= 22 align=right class="body_b"></td>
+							</tr>
+							<tr>
+								<td width='20%' height= 22 align=center class="title_defult"><font class="FONT_title_defult">거래량</font></td>
+								<td width='30%' height= 22 align=right class="body_a"></td>
+								<td width='20%' height= 22 align=center class="title_defult"><font class="FONT_title_defult">거래대금</font></td>
+								<td width='30%' height= 22 align=right class="body_a"></td>
+							</tr>
+							<tr>
+								<td width='20%' height= 22 align=center class="title_defult"><font class="FONT_title_defult">시가</font></td>
+								<td width='30%' height= 22 align=right class="body_b"></td>
+								<td width='20%' height= 22 align=center class="body_b">&nbsp;</td>
+								<td width='30%' height= 22 align=right class="body_b">&nbsp;</td>
+							</tr>
+							<tr>
+								<td width='20%' height= 22 align=center class="title_defult"><font class="FONT_title_defult">고가</font></td>
+								<td width='30%' height= 22 align=right class="body_a"></td>
+								<td width='20%' height= 22 align=center class="title_defult"><font class="FONT_title_defult">저가</font></td>
+								<td width='30%' height= 22 align=right class="body_a"></td>
+							</tr>
+							<tr>
+								<td width='20%' height= 22 align=center class="title_defult"><font class="FONT_title_defult">52주 최고</font></td>
+								<td width='30%' height= 22 align=right class="body_b"></td>
+								<td width='20%' height= 22 align=center class="title_defult"><font class="FONT_title_defult">52주 최저</font></td>
+								<td width='30%' height= 22 align=right class="body_b"></td></tr>
+								<tr><td width='20%' height= 22 align=center class="title_defult"><font class="FONT_title_defult">상한가</font></td>
+								<td width='30%' height= 22 align=right class="body_a"></td>
+								<td width='20%' height= 22 align=center class="title_defult"><font class="FONT_title_defult">하한가</font></td>
+								<td width='30%' height= 22 align=right class="body_a"></td>
+							</tr>
+							<tr>
+								<td width='20%' height= 22 align=center class="title_defult"><font class="FONT_title_defult">PER</font></td>
+								<td width='30%' height= 22 align=right class="body_b"></td>
+								<td width='20%' height= 22 align=center class="body_b">&nbsp;</td>
+								<td width='30%' height= 22 align=right class="body_b">&nbsp;</td>
+							</tr>
+							<tr>
+								<td width='20%' height= 22 align=center class="title_defult"><font class="FONT_title_defult">상장주식수</font></td>
+								<td width='30%' height= 22 align=right class="body_a"></td>
+								<td width='20%' height= 22 align=center class="title_defult"><font class="FONT_title_defult">액면가</font></td>
+								<td width='30%' height= 22 align=right class="body_a"></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td height='20' id=timezone align=right></td>
+				</tr>
+
+			</table>                                                                                            
+		</td>
+	</tr>
+	<tr> 
+		<td width="615" align="right" colspan="2">
+			<table width="100%" border="0" cellspacing="0" cellpadding="0">
+				<tr> 
+					<td width="100%" align="right" id="a">
+						<IMG SRC='http://asp1.krx.co.kr/reference/images/tap_01_on.gif' BORDER='0' onClick='change_id(1);' style="cursor:hand;"><IMG SRC='http://asp1.krx.co.kr/reference/images/tap_02_off.gif' BORDER='0' onClick='change_id(2);' style="cursor:hand;"><IMG SRC='http://asp1.krx.co.kr/reference/images/tap_03_off.gif' BORDER='0' onClick='change_id(3);' style="cursor:hand;"><IMG SRC='http://asp1.krx.co.kr/reference/images/tap_04_off.gif' BORDER='0' onClick='change_id(4);' style="cursor:hand;">
+					</td>
+				</tr>
+				<tr> 
+					<td width="100%" height="340" align="center" valign="top">
+						<table width="100%" height="100%" cellspacing="0" cellpadding="0" style="border-left:1px solid CCCCCC;border-right:1px solid CCCCCC;border-bottom:1px solid CCCCCC;">
+
+							<tr>
+								<td height="60" valign="top">
+									<table width="100%" cellspacing="0" cellpadding="0">
+										<tr>
+											<td>
+												<table width="100%"cellspacing="0" cellpadding="0" style="border-top:1px solid CCCCCC;">
+													<tr>
+														<td>&nbsp;</td>
+													</tr>
+												</table>
+
+											</td>
+											<td width="374"></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+
+							<tr> 
+								<td width="100%" align="center">
+								<!-- 코스닥 작업시작-->
+									<div id="timeByConclude" style="position:absolute; left:2px; top:285px; width:600px; height:310px; z-index:1;visibility:hidden">
+									<table cellspacing='0' cellpadding='0' width='600' align=center>
+										<tr>
+											<td>
+												<table width='610' border='0' cellspacing='1' cellpadding='2' align=center id=TBL_TimeConclude>
+													<tr>
+														<td height='1' bgColor='81ACC6' colspan='10'></td>
+													</tr>
+													<tr height='23'>
+														<td class="title_defult" align="center"><font class="FONT_title_defult">시간</font></td>
+														<td class="title_defult" align="center"><font class="FONT_title_defult">체결가</font></td>
+														<td class="title_defult" align="center"><font class="FONT_title_defult">전일대비</font></td>
+														<td class="title_defult" align="center"><font class="FONT_title_defult">매도호가</font></td>
+														<td class="title_defult" align="center"><font class="FONT_title_defult">매수호가</font></td>
+														<td class="title_defult" align="center"><font class="FONT_title_defult">체결량</font></td>
+													</tr>
+													<tr height='23'>
+														<td class="body_1" align='center'><font class="FONT_body_0"></font></td>
+														<td class="body_1" align='right'><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+														<td class="body_1" align='right'>
+															<table cellspacing='0' cellpadding='0' width='100%'>
+															<tr>
+																<td ALIGN=LEFT WIDTH=20>&nbsp;</td>
+																<td ALIGN=RIGHT ><font class="FONT_body_0"><font color="red"></font></font>&nbsp;&nbsp;</td>
+															</tr>
+															</table>
+														</td>
+														<td class="body_1" align='right'><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+														<td class="body_1" align='right'><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+														<td class="body_1" align='right'><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+													</tr>
+													<tr height='23'>
+														<td class="body_0" align='center'><font class="FONT_body_0"></font></td>
+														<td class="body_0" align='right'><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+														<td class="body_0" align='right'>
+															<table cellspacing='0' cellpadding='0' width='100%'>
+															<tr>
+																<td ALIGN=LEFT WIDTH=20>&nbsp;</td>
+																<td ALIGN=RIGHT ><font class="FONT_body_0"><font color="red"></font></font>&nbsp;&nbsp;</td>
+															</tr>
+															</table>
+														</td>
+														<td class="body_0" align='right'><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+														<td class="body_0" align='right'><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+														<td class="body_0" align='right'><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+													</tr>
+													<tr height='23'>
+														<td class="body_1" align='center'><font class="FONT_body_0"></font></td>
+														<td class="body_1" align='right'><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+														<td class="body_1" align='right'>
+															<table cellspacing='0' cellpadding='0' width='100%'>
+															<tr>
+																<td ALIGN=LEFT WIDTH=20>&nbsp;</td>
+																<td ALIGN=RIGHT ><font class="FONT_body_0"><font color="red"></font></font>&nbsp;&nbsp;</td>
+															</tr>
+															</table>
+														</td>
+														<td class="body_1" align='right'><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+														<td class="body_1" align='right'><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+														<td class="body_1" align='right'><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+													</tr>
+													<tr height='23'>
+														<td class="body_0" align='center'><font class="FONT_body_0"></font></td>
+														<td class="body_0" align='right'><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+														<td class="body_0" align='right'>
+															<table cellspacing='0' cellpadding='0' width='100%'>
+															<tr>
+																<td ALIGN=LEFT WIDTH=20>&nbsp;</td>
+																<td ALIGN=RIGHT ><font class="FONT_body_0"><font color="red"></font></font>&nbsp;&nbsp;</td>
+															</tr>
+															</table>
+														</td>
+														<td class="body_0" align='right'><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+														<td class="body_0" align='right'><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+														<td class="body_0" align='right'><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+													</tr>
+													<tr height='23'>
+														<td class="body_1" align='center'><font class="FONT_body_0"></font></td>
+														<td class="body_1" align='right'><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+														<td class="body_1" align='right'>
+															<table cellspacing='0' cellpadding='0' width='100%'>
+															<tr>
+																<td ALIGN=LEFT WIDTH=20>&nbsp;</td>
+																<td ALIGN=RIGHT ><font class="FONT_body_0"><font color="red"></font></font>&nbsp;&nbsp;</td>
+															</tr>
+															</table>
+														</td>
+														<td class="body_1" align='right'><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+														<td class="body_1" align='right'><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+														<td class="body_1" align='right'><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+													</tr>
+													<tr height='23'>
+														<td class="body_0" align='center'><font class="FONT_body_0"></font></td>
+														<td class="body_0" align='right'><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+														<td class="body_0" align='right'>
+															<table cellspacing='0' cellpadding='0' width='100%'>
+															<tr>
+																<td ALIGN=LEFT WIDTH=20>&nbsp;</td>
+																<td ALIGN=RIGHT ><font class="FONT_body_0"><font color="red"></font></font>&nbsp;&nbsp;</td>
+															</tr>
+															</table>
+														</td>
+														<td class="body_0" align='right'><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+														<td class="body_0" align='right'><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+														<td class="body_0" align='right'><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+													</tr>
+													<tr height='23'>
+														<td class="body_1" align='center'><font class="FONT_body_0"></font></td>
+														<td class="body_1" align='right'><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+														<td class="body_1" align='right'>
+															<table cellspacing='0' cellpadding='0' width='100%'>
+															<tr>
+																<td ALIGN=LEFT WIDTH=20>&nbsp;</td>
+																<td ALIGN=RIGHT ><font class="FONT_body_0"><font color="red"></font></font>&nbsp;&nbsp;</td>
+															</tr>
+															</table>
+														</td>
+														<td class="body_1" align='right'><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+														<td class="body_1" align='right'><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+														<td class="body_1" align='right'><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+													</tr>
+													<tr height='23'>
+														<td class="body_0" align='center'><font class="FONT_body_0"></font></td>
+														<td class="body_0" align='right'><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+														<td class="body_0" align='right'>
+															<table cellspacing='0' cellpadding='0' width='100%'>
+															<tr>
+																<td ALIGN=LEFT WIDTH=20>&nbsp;</td>
+																<td ALIGN=RIGHT ><font class="FONT_body_0"><font color="red"></font></font>&nbsp;&nbsp;</td>
+															</tr>
+															</table>
+														</td>
+														<td class="body_0" align='right'><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+														<td class="body_0" align='right'><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+														<td class="body_0" align='right'><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+													</tr>
+													<tr height='23'>
+														<td class="body_1" align='center'><font class="FONT_body_0"></font></td>
+														<td class="body_1" align='right'><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+														<td class="body_1" align='right'>
+															<table cellspacing='0' cellpadding='0' width='100%'>
+															<tr>
+																<td ALIGN=LEFT WIDTH=20>&nbsp;</td>
+																<td ALIGN=RIGHT ><font class="FONT_body_0"><font color="red"></font></font>&nbsp;&nbsp;</td>
+															</tr>
+															</table>
+														</td>
+														<td class="body_1" align='right'><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+														<td class="body_1" align='right'><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+														<td class="body_1" align='right'><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+													</tr>
+													<tr height='23'>
+														<td class="body_0" align='center'><font class="FONT_body_0"></font></td>
+														<td class="body_0" align='right'><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+														<td class="body_0" align='right'>
+															<table cellspacing='0' cellpadding='0' width='100%'>
+															<tr>
+																<td ALIGN=LEFT WIDTH=20>&nbsp;</td>
+																<td ALIGN=RIGHT ><font class="FONT_body_0"><font color="red"></font></font>&nbsp;&nbsp;</td>
+															</tr>
+															</table>
+														</td>
+														<td class="body_0" align='right'><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+														<td class="body_0" align='right'><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+														<td class="body_0" align='right'><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+													</tr>
+													<tr>
+														<td colspan="10" height='1' bgcolor="D0D0D0"></td>
+													</tr>
+
+												</table>
+											</td>
+										</tr>
+										<tr>
+											<td height="60" valign="center" align="center" background="http://asp1.krx.co.kr/reference/images/table_bg.gif">
+												<table width="90" height="20" border="0" cellspacing="0" cellpadding="0">
+													<tr>
+														<td align="center"><a href="http://km.krx.co.kr" target="_blank" class="kosdaq">코스닥시장 제공</a></td>
+													</tr>
+												</table>    
+											</td>
+										</tr>
+									</table>
+									</div>
+
+									<div id="dailyStock" style="position:absolute; left:3px; top:290px; width:468px; height:155px; z-index:1;visibility:hidden">
+									<table border="0" cellspacing="0" cellpadding="0" width='610'>
+										<tr>
+											<td>
+												<table width="610" height="265" border="0" cellspacing="1" cellpadding="2" align=center id=TBL_DailyStock>
+												<tr>
+													<td height="1" class="title_defult" colspan="8"></td>
+											  </tr> 
+											   <tr>
+													<td class="title_defult" align="center" height="22"><font class="FONT_title_defult">일자</font></td>
+													<td class="title_defult" align="center"><font class="FONT_title_defult">종가</font></td>
+													<td class="title_defult" align="center"><font class="FONT_title_defult">전일대비</font></td>
+													<td class="title_defult" align="center"><font class="FONT_title_defult">시가</font></td>
+													<td class="title_defult" align="center"><font class="FONT_title_defult">고가</font></td>
+													<td class="title_defult" align="center"><font class="FONT_title_defult">저가</font></td>
+													<td class="title_defult" align="center"><font class="FONT_title_defult">거래량</font></td>
+													<td class="title_defult" align="center"><font class="FONT_title_defult">거래대금</font></td>
+												</tr>
+
+												<tr>
+													<td class="body_1" align="center"><font class="FONT_body_1"></font></td>
+													<td class="body_1" align="right"><font class="FONT_body_1"></font>&nbsp;&nbsp</td>
+													<td class="body_1" align="right">
+														<table cellspacing="0" cellpadding="0" width="100%">
+														<tr>
+															<td ALIGN="LEFT" WIDTH="20">&nbsp;</td>
+															<td ALIGN="RIGHT"><font class="FONT_body_1"><font color="blue"></font></font>&nbsp;&nbsp;</td>
+														</tr>
+														</table>
+													</td>
+													<td class="body_1" align="right"><font class="FONT_body_1"></font>&nbsp;&nbsp</td>
+													<td class="body_1" align="right"><font class="FONT_body_1"></font>&nbsp;&nbsp</td>
+													<td class="body_1" align="right"><font class="FONT_body_1"></font>&nbsp;&nbsp</td>
+													<td class="body_1" align="right"><font class="FONT_body_1"></font>&nbsp;&nbsp</td>
+													<td class="body_1" align="right"><font class="FONT_body_1"></font>&nbsp;&nbsp</td>
+												</tr>
+
+												<tr>
+													<td class="body_0" align="center"><font class="FONT_body_0"></font></td>
+													<td class="body_0" align="right"><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+													<td class="body_0" align="right">
+														<table cellspacing="0" cellpadding="0" width="100%">
+														<tr>
+															<td ALIGN="LEFT" WIDTH="20">&nbsp;</td>
+															<td ALIGN="RIGHT"><font class="FONT_body_0"><font color="red"></font></font>&nbsp;&nbsp;</td>
+														</tr>
+														</table>
+													</td>
+													<td class="body_0" align="right"><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+													<td class="body_0" align="right"><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+													<td class="body_0" align="right"><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+													<td class="body_0" align="right"><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+													<td class="body_0" align="right"><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+												</tr>
+
+												<tr>
+													<td class="body_1" align="center"><font class="FONT_body_1"></font></td>
+													<td class="body_1" align="right"><font class="FONT_body_1"></font>&nbsp;&nbsp</td>
+													<td class="body_1" align="right">
+														<table cellspacing="0" cellpadding="0" width="100%">
+														<tr>
+															<td ALIGN="LEFT" WIDTH="20">&nbsp;</td>
+															<td ALIGN="RIGHT"><font class="FONT_body_1"><font color="blue"></font></font>&nbsp;&nbsp;</td>
+														</tr>
+														</table>
+													</td>
+													<td class="body_1" align="right"><font class="FONT_body_1"></font>&nbsp;&nbsp</td>
+													<td class="body_1" align="right"><font class="FONT_body_1"></font>&nbsp;&nbsp</td>
+													<td class="body_1" align="right"><font class="FONT_body_1"></font>&nbsp;&nbsp</td>
+													<td class="body_1" align="right"><font class="FONT_body_1"></font>&nbsp;&nbsp</td>
+													<td class="body_1" align="right"><font class="FONT_body_1"></font>&nbsp;&nbsp</td>
+												</tr>
+
+												<tr>
+													<td class="body_0" align="center"><font class="FONT_body_0"></font></td>
+													<td class="body_0" align="right"><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+													<td class="body_0" align="right">
+														<table cellspacing="0" cellpadding="0" width="100%">
+														<tr>
+															<td ALIGN="LEFT" WIDTH="20">&nbsp;</td>
+															<td ALIGN="RIGHT"><font class="FONT_body_0"><font color="blue"></font></font>&nbsp;&nbsp;</td>
+														</tr>
+														</table>
+													</td>
+													<td class="body_0" align="right"><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+													<td class="body_0" align="right"><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+													<td class="body_0" align="right"><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+													<td class="body_0" align="right"><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+													<td class="body_0" align="right"><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+												</tr>
+
+												<tr>
+													<td class="body_1" align="center"><font class="FONT_body_1"></font></td>
+													<td class="body_1" align="right"><font class="FONT_body_1"></font>&nbsp;&nbsp</td>
+													<td class="body_1" align="right">
+														<table cellspacing="0" cellpadding="0" width="100%">
+														<tr>
+															<td ALIGN="LEFT" WIDTH="20">&nbsp;</td>
+															<td ALIGN="RIGHT"><font class="FONT_body_1"><font color="blue"></font></font>&nbsp;&nbsp;</td>
+														</tr>
+														</table>
+													</td>
+													<td class="body_1" align="right"><font class="FONT_body_1"></font>&nbsp;&nbsp</td>
+													<td class="body_1" align="right"><font class="FONT_body_1"></font>&nbsp;&nbsp</td>
+													<td class="body_1" align="right"><font class="FONT_body_1"></font>&nbsp;&nbsp</td>
+													<td class="body_1" align="right"><font class="FONT_body_1"></font>&nbsp;&nbsp</td>
+													<td class="body_1" align="right"><font class="FONT_body_1"></font>&nbsp;&nbsp</td>
+												</tr>
+
+												<tr>
+													<td class="body_0" align="center"><font class="FONT_body_0"></font></td>
+													<td class="body_0" align="right"><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+													<td class="body_0" align="right">
+														<table cellspacing="0" cellpadding="0" width="100%">
+														<tr>
+															<td ALIGN="LEFT" WIDTH="20">&nbsp;</td>
+															<td ALIGN="RIGHT"><font class="FONT_body_0"><font color="blue"></font></font>&nbsp;&nbsp;</td>
+														</tr>
+														</table>
+													</td>
+													<td class="body_0" align="right"><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+													<td class="body_0" align="right"><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+													<td class="body_0" align="right"><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+													<td class="body_0" align="right"><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+													<td class="body_0" align="right"><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+												</tr>
+
+												<tr>
+													<td class="body_1" align="center"><font class="FONT_body_1"></font></td>
+													<td class="body_1" align="right"><font class="FONT_body_1"></font>&nbsp;&nbsp</td>
+													<td class="body_1" align="right">
+														<table cellspacing="0" cellpadding="0" width="100%">
+														<tr>
+															<td ALIGN="LEFT" WIDTH="20">&nbsp;<img src="http://asp1.kosdaqonline.com/images/icons/blank.gif"></td>
+															<td ALIGN="RIGHT"><font class="FONT_body_1"></font>&nbsp;&nbsp;</td>
+														</tr>
+														</table>
+													</td>
+													<td class="body_1" align="right"><font class="FONT_body_1"></font>&nbsp;&nbsp</td>
+													<td class="body_1" align="right"><font class="FONT_body_1"></font>&nbsp;&nbsp</td>
+													<td class="body_1" align="right"><font class="FONT_body_1"></font>&nbsp;&nbsp</td>
+													<td class="body_1" align="right"><font class="FONT_body_1"></font>&nbsp;&nbsp</td>
+													<td class="body_1" align="right"><font class="FONT_body_1"></font>&nbsp;&nbsp</td>
+												</tr>
+
+												<tr>
+													<td class="body_0" align="center"><font class="FONT_body_0"></font></td>
+													<td class="body_0" align="right"><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+													<td class="body_0" align="right">
+														<table cellspacing="0" cellpadding="0" width="100%">
+														<tr>
+															<td ALIGN="LEFT" WIDTH="20">&nbsp;</td>
+															<td ALIGN="RIGHT"><font class="FONT_body_0"><font color="red"></font></font>&nbsp;&nbsp;</td>
+														</tr>
+														</table>
+													</td>
+													<td class="body_0" align="right"><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+													<td class="body_0" align="right"><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+													<td class="body_0" align="right"><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+													<td class="body_0" align="right"><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+													<td class="body_0" align="right"><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+												</tr>
+
+												<tr>
+													<td class="body_1" align="center"><font class="FONT_body_1"></font></td>
+													<td class="body_1" align="right"><font class="FONT_body_1"></font>&nbsp;&nbsp</td>
+													<td class="body_1" align="right">
+														<table cellspacing="0" cellpadding="0" width="100%">
+														<tr>
+															<td ALIGN="LEFT" WIDTH="20">&nbsp;</td>
+															<td ALIGN="RIGHT"><font class="FONT_body_1"><font color="blue"></font></font>&nbsp;&nbsp;</td>
+														</tr>
+														</table>
+													</td>
+													<td class="body_1" align="right"><font class="FONT_body_1"></font>&nbsp;&nbsp</td>
+													<td class="body_1" align="right"><font class="FONT_body_1"></font>&nbsp;&nbsp</td>
+													<td class="body_1" align="right"><font class="FONT_body_1"></font>&nbsp;&nbsp</td>
+													<td class="body_1" align="right"><font class="FONT_body_1"></font>&nbsp;&nbsp</td>
+													<td class="body_1" align="right"><font class="FONT_body_1"></font>&nbsp;&nbsp</td>
+												</tr>
+
+												<tr>
+													<td class="body_0" align="center"><font class="FONT_body_0"></font></td>
+													<td class="body_0" align="right"><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+													<td class="body_0" align="right">
+														<table cellspacing="0" cellpadding="0" width="100%">
+														<tr>
+															<td ALIGN="LEFT" WIDTH="20">&nbsp;</td>
+															<td ALIGN="RIGHT"><font class="FONT_body_0"><font color="red"></font></font>&nbsp;&nbsp;</td>
+														</tr>
+														</table>
+													</td>
+													<td class="body_0" align="right"><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+													<td class="body_0" align="right"><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+													<td class="body_0" align="right"><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+													<td class="body_0" align="right"><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+													<td class="body_0" align="right"><font class="FONT_body_0"></font>&nbsp;&nbsp</td>
+												</tr>
+												<tr>
+													<td colspan="8" height='1' bgcolor="D0D0D0"></td>
+												</tr>
+
+											</table>
+											</td>
+										</tr>
+										<tr>
+											<td height="60" valign="center" align="center" background="http://asp1.krx.co.kr/reference/images/table_bg.gif">
+												<table width="90" height="20" border="0" cellspacing="0" cellpadding="0">
+													<tr>
+														<td align="center"><a href="http://km.krx.co.kr" target="_blank" class="kosdaq">코스닥시장 제공</a></td>
+													</tr>
+												</table>    
+											</td>
+										</tr>
+									</table>
+									</div>
+
+									<div id="askPrice" style="position:absolute; left:2px; top:295px; width:468px; height:155px; z-index:1">
+									<table border="0" cellspacing="0" cellpadding="0" width="612" height="321" background="http://asp1.krx.co.kr/reference/images/table_01_bg.jpg">
+										<tr>
+											<td valign="top" align="center">
+												<table width="335"  border="0" cellspacing="1" cellpadding="2" id=TBL_Hoga>
+													<tr>
+														<td colspan="3" height='1' class="title_defult"></td>
+													</tr>
+													<tr>
+														<td class="title_defult" align="center"><font class="FONT_title_defult">매도잔량</font></td>
+														<td class="title_defult" align="center"><font class="FONT_title_defult">호가</font></td>
+														<td class="title_defult" align="center"><font class="FONT_title_defult">매수잔량</font></td>
+													</tr>
+													<tr>
+														<td class="body_1" align="center"><font color="#404040" face="돋움" style="font-size:9pt;"  class="kdaqTd2Col"></font>&nbsp;&nbsp</td>
+														<td class="kdaqTitle2Bg" align="center" height="19"><font color="#404040" face="돋움" style="font-size:9pt;"  class="kdaqTitle2Col"></font></td>
+														<td rowspan=5 class="body_0" align="right"></td>
+													</tr>
+
+
+													<tr>
+														<td class="kdaqTd1Bg" align="center"><font color="#404040" face="돋움" style="font-size:9pt;"  class="kdaqTd1Col"></font>&nbsp;&nbsp</td>
+														<td class="kdaqTitle2Bg" align="center" height="19"><font color="#404040" face="돋움" style="font-size:9pt;"  class="kdaqTitle2Col"></font></td>
+													</tr>
+
+
+													<tr>
+
+														<td class="body_1"  align="center"><font color="#404040" face="돋움" style="font-size:9pt;"  class="kdaqTd2Col"></font>&nbsp;&nbsp</td>
+														<td class="kdaqTitle2Bg" align="center" height="19"><font color="#404040" face="돋움" style="font-size:9pt;"  class="kdaqTitle2Col"></font></td>
+													</tr>
+
+
+													<tr>
+
+														<td class="kdaqTd1Bg" align="center"><font color="#404040" face="돋움" style="font-size:9pt;"  class="kdaqTd1Col"></font>&nbsp;&nbsp</td>
+														<td class="kdaqTitle2Bg" align="center" height="19"><font color="#404040" face="돋움" style="font-size:9pt;"  class="kdaqTitle2Col"></font></td>
+													</tr>
+
+
+													<tr>
+
+														<td class="body_1"  align="center"><font color="#404040" face="돋움" style="font-size:9pt;"  class="kdaqTd2Col"></font>&nbsp;&nbsp</td>
+														<td class="kdaqTitle2Bg" align="center" height="19"><font color="#404040" face="돋움" style="font-size:9pt;"  class="kdaqTitle2Col"></font></td>
+													</tr>
+
+
+													<tr>
+
+														<td rowspan=5 class="kdaqTd1Bg" align="center"><font color="#404040" face="돋움" style="font-size:9pt;"  class="kdaqTd1Col"></font>&nbsp;&nbsp</td>
+
+														<td class="kdaqTitle2Bg" align="center" height="19"><font color="#404040" face="돋움" style="font-size:9pt;"  class="kdaqTitle2Col"></font></td>
+														<td class="kdaqTd1Bg" align="center"><font color="#404040" face="돋움" style="font-size:9pt;"  class="kdaqTd1Col"></font>&nbsp;&nbsp</td>
+													</tr>
+
+
+													<tr>
+														<td class="kdaqTitle2Bg" align="center" height="19"><font color="#404040" face="돋움" style="font-size:9pt;"  class="kdaqTitle2Col"></font></td>
+														<td class="body_1"  align="center"><font color="#404040" face="돋움" style="font-size:9pt;"  class="kdaqTd2Col"></font>&nbsp;&nbsp</td>
+													</tr>
+
+
+													<tr>
+														<td class="kdaqTitle2Bg" align="center" height="19"><font color="#404040" face="돋움" style="font-size:9pt;"  class="kdaqTitle2Col"></font></td>
+														<td class="kdaqTd1Bg" align="center"><font color="#404040" face="돋움" style="font-size:9pt;"  class="kdaqTd1Col"></font>&nbsp;&nbsp</td>
+													</tr>
+
+
+													<tr>
+														<td class="kdaqTitle2Bg" align="center" height="19"><font color="#404040" face="돋움" style="font-size:9pt;"  class="kdaqTitle2Col"></font></td>
+														<td class="body_1"  align="center"><font color="#404040" face="돋움" style="font-size:9pt;"  class="kdaqTd2Col"></font>&nbsp;&nbsp</td>
+													</tr>
+
+
+													<tr>
+														<td class="kdaqTitle2Bg" align="center" height="19"><font color="#404040" face="돋움" style="font-size:9pt;"  class="kdaqTitle2Col"></font></td>
+														<td class="kdaqTd1Bg" align="center"><font color="#404040" face="돋움" style="font-size:9pt;"  class="kdaqTd1Col"></font>&nbsp;&nbsp</td>
+													</tr>
+													<tr>
+														<td colspan="5" height='1' bgcolor="D0D0D0"></td>
+													</tr>
+												</table>
+											</td>
+										</tr>
+									</table>
+									</div>
+
+									<div id="coTrade" style="position:absolute; left:0px; top:295px; width:615px; height:310px; z-index:1;visibility:hidden">
+									<table border="0" cellspacing="0" cellpadding="0" width="613" height="321" background="http://asp1.krx.co.kr/reference/images/table_03_bg.jpg">
+										<tr>
+											<td height="50">&nbsp;</td>
+										</tr>
+										<tr>
+											<td valign="center" align="center">
+												<table width="300"  border="0" cellspacing="1" cellpadding="2" id=TBL_AskPrice>
+													<tr>
+														<td colspan="4" height='1' class="title_defult"></td>
+													</tr>
+													<tr>
+														<td colspan="2" class="title_defult" align="center" height="22"><font class="FONT_title_defult">매도 상위</font></td>
+														<td colspan="2" class="title_defult" align="center"><font class="FONT_title_defult">매수 상위</font></td>
+													</tr>
+													<tr>
+														<td class="kdaqTitle2Bg" align="center" height="22"><font class="FONT_Title2Col">증권사</font></td>
+														<td class="kdaqTitle2Bg" align="center"><font class="FONT_Title2Col">거래량</font></td>
+														<td class="kdaqTitle2Bg" align="center"><font class="FONT_Title2Col">증권사</font></td>
+														<td class="kdaqTitle2Bg" align="center"><font class="FONT_Title2Col">거래량</font></td>
+													</tr>
+
+													<tr>
+														<td class="kdaqTd1Bg" bgcolor=#FFFFFF align="center" height="19"><font color="#404040" face="굴림" style="font-size:9pt;" class="kdaqTd1Col">&nbsp;</font></td>
+														<td class="kdaqTd1Bg" bgcolor=#FFFFFF align="right"><font color="#404040" face="굴림" style="font-size:9pt;"  class="kdaqTd1Col">&nbsp;</font>&nbsp;&nbsp</td>
+														<td class="kdaqTd1Bg" bgcolor=#FFFFFF align="center" height="19"><font color="#404040" face="굴림" style="font-size:9pt;"  class="kdaqTd1Col">&nbsp;</font></td>
+														<td class="kdaqTd1Bg" bgcolor=#FFFFFF align="right"><font color="#404040" face="굴림" style="font-size:9pt;"  class="kdaqTd1Col">&nbsp;</font>&nbsp;&nbsp</td>
+													</tr>
+
+													<tr>
+														<td class="body_1"  align="center" height="19"><font color="#404040" face="굴림" style="font-size:9pt;"  class="kdaqTd2Col">&nbsp;</font></td>
+														<td class="body_1"  align="right"><font color="#404040" face="굴림" style="font-size:9pt;"  class="kdaqTd2Col">&nbsp;</font>&nbsp;&nbsp</td>
+														<td class="body_1"  align="center" height="19"><font color="#404040" face="굴림" style="font-size:9pt;"  class="kdaqTd2Col">&nbsp;</font></td>
+														<td class="body_1"  align="right"><font color="#404040" face="굴림" style="font-size:9pt;"  class="kdaqTd2Col">&nbsp;</font>&nbsp;&nbsp</td>
+													</tr>
+
+													<tr>
+														<td class="kdaqTd1Bg" bgcolor=#FFFFFF align="center" height="19"><font color="#404040" face="굴림" style="font-size:9pt;"  class="kdaqTd1Col">&nbsp;</font></td>
+														<td class="kdaqTd1Bg" bgcolor=#FFFFFF align="right"><font color="#404040" face="굴림" style="font-size:9pt;"  class="kdaqTd1Col">&nbsp;</font>&nbsp;&nbsp</td>
+														<td class="kdaqTd1Bg" bgcolor=#FFFFFF align="center" height="19"><font color="#404040" face="굴림" style="font-size:9pt;"  class="kdaqTd1Col">&nbsp;</font></td>
+														<td class="kdaqTd1Bg" bgcolor=#FFFFFF align="right"><font color="#404040" face="굴림" style="font-size:9pt;"  class="kdaqTd1Col">&nbsp;</font>&nbsp;&nbsp</td>
+													</tr>
+
+													<tr>
+														<td class="body_1"  align="center" height="19"><font color="#404040" face="굴림" style="font-size:9pt;"  class="kdaqTd2Col">&nbsp;</font></td>
+														<td class="body_1"  align="right"><font color="#404040" face="굴림" style="font-size:9pt;"  class="kdaqTd2Col">&nbsp;</font>&nbsp;&nbsp</td>
+														<td class="body_1"  align="center" height="19"><font color="#404040" face="굴림" style="font-size:9pt;"  class="kdaqTd2Col">&nbsp;</font></td>
+														<td class="body_1"  align="right"><font color="#404040" face="굴림" style="font-size:9pt;"  class="kdaqTd2Col">&nbsp;</font>&nbsp;&nbsp</td>
+													</tr>
+
+													<tr>
+														<td class="kdaqTd1Bg" bgcolor=#FFFFFF align="center" height="19"><font color="#404040" face="굴림" style="font-size:9pt;"  class="kdaqTd1Col">&nbsp;</font></td>
+														<td class="kdaqTd1Bg" bgcolor=#FFFFFF align="right"><font color="#404040" face="굴림" style="font-size:9pt;"  class="kdaqTd1Col">&nbsp;</font>&nbsp;&nbsp</td>
+														<td class="kdaqTd1Bg" bgcolor=#FFFFFF align="center" height="19"><font color="#404040" face="굴림" style="font-size:9pt;"  class="kdaqTd1Col">&nbsp;</font></td>
+														<td class="kdaqTd1Bg" bgcolor=#FFFFFF align="right"><font color="#404040" face="굴림" style="font-size:9pt;"  class="kdaqTd1Col">&nbsp;</font>&nbsp;&nbsp</td>
+													</tr>
+
+													<tr>
+														<td colspan="4" height='1' bgcolor="D0D0D0"></td>
+													</tr>
+												</table>
+											</td>
+										</tr>
+										<tr>
+												<td height="50" valign="center" align="center">
+													<table width="90" height="20" border="0" cellspacing="0" cellpadding="0">
+														<tr>
+															<td align="center"><a href="http://km.krx.co.kr" target="_blank" class="kosdaq">코스닥시장 제공</a></td>
+														</tr>
+													</table>    
+												</td>
+										</tr>
+									</table>
+
+									</div>
+									
+								</td>
+							</tr>
+						</table>
+
+
+						<table width=600 border=0 cellspacing=1 cellpadding=1 id=stockInfo2>
+									<tr>
+										<td width='20%' height= 22 align=center class="title_defult"><font class="FONT_title_defult">코스닥종합지수</font></td>
+										<td width='30%' height= 22 align=right class="body_a"></td>
+								
+										<td width='20%' height= 22 align=center class="title_defult2"><font class="FONT_title_defult">KRX100지수</font></td>
+										<td width='30%' height= 22 align=right class="body_a"></td>
+									</tr>
+
+									<tr>
+										<td width='20%' height= 22 align=center class="title_defult"><font class="FONT_title_defult">코스닥 전일대비</font></td>
+										<td width='30%' height= 22 align=right class="body_a"></td>
+								
+										<td width='20%' height= 22 align=center class="title_defult2"><font class="FONT_title_defult">전일대비</font></td>
+										<td width='30%' height= 22 align=right class="body_a"></td>
+									</tr>
+									</table>
+
+
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+</body>
+</html>
+

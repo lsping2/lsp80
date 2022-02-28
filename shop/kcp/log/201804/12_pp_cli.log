@@ -1,0 +1,20 @@
+0412-110832 - 27923 - SR42Y4CB6jC4C34P - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2018041211040782]+log_level=[3]
+0412-110832 - 27923 - SR42Y4CB6jC4C34P - MSG : PG_서버_접속__정상
+0412-110832 - 27923 - SR42Y4CB6jC4C34P - MSG : PG_서버_요청_전문_전송__정상
+0412-110835 - 27923 - SR42Y4CB6jC4C34P - MSG : PG_서버_응답_전문_수신__정상
+0412-110835 - 27923 - SR42Y4CB6jC4C34P - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=pay_method=PABKorder_no=2018041211040782tno=20180412812034app_time=20180412110836amount=64900bk_mny=64900coupon_mny=0res_tax_mny=59000res_free_mny=0res_vat_mny=5900res_tax_flag=TG01bk_tid=3896255bank_code=BK88bank_name=신한은행bank_com_type=0bank_com_code=88escw_yn=Yvan_apptime=20180412110836mcht_taxno=1138521083bizx_numb=20000042van_cd=VNKFmall_taxno=2178147771]
+0412-122239 -  7461 - SR42Y4CCL4BNLF15 - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2018041212192460]+log_level=[3]
+0412-122239 -  7461 - SR42Y4CCL4BNLF15 - MSG : PG_서버_접속__정상
+0412-122239 -  7461 - SR42Y4CCL4BNLF15 - MSG : PG_서버_요청_전문_전송__정상
+0412-122240 -  7461 - SR42Y4CCL4BNLF15 - MSG : PG_서버_응답_전문_수신__정상
+0412-122240 -  7461 - SR42Y4CCL4BNLF15 - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y4CCL4BNLF15pay_method=PACAorder_no=2018041212192460card_cd=CCBCcard_name=BC카드acqu_cd=CCBCacqu_name=BC카드card_no=9440390000006679mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2018041212192460tno=18732534057768amount=132000card_mny=132000coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20180412122240van_apptime=20180412122240app_no=37530143bizx_numb=780284397quota=00noinf=Npg_txid=0412122240MG34DFYB2UN40000001320000037530143res_tax_flag=TG01res_tax_mny=120000res_free_mny=0res_vat_mny=12000partcanc_yn=Ycard_bin_type_01=0card_bin_type_02=1card_bin_bank_cd=0039isp_issuer_cd=BC39isp_issuer_nm=경남비씨isp_partner_cd=000100393968113join_cd=0000]
+0412-122332 -  9309 - SR42Y4CCMB8KB5KK - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2018041212213239]+log_level=[3]
+0412-122332 -  9309 - SR42Y4CCMB8KB5KK - MSG : PG_서버_접속__정상
+0412-122332 -  9309 - SR42Y4CCMB8KB5KK - MSG : PG_서버_요청_전문_전송__정상
+0412-122334 -  9309 - SR42Y4CCMB8KB5KK - MSG : PG_서버_응답_전문_수신__정상
+0412-122334 -  9309 - SR42Y4CCMB8KB5KK - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y4CCMB8KB5KKpay_method=PACAorder_no=2018041212213239card_cd=CCLGcard_name=신한카드acqu_cd=CCLGacqu_name=신한카드card_no=9420650000006974mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2018041212213239tno=18732534064537amount=99000card_mny=99000coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20180412122333van_apptime=20180412122333app_no=17828826bizx_numb=0013425574quota=00noinf=Npg_txid=0412122333MP01EHYB3ZRQ0000000990000017828826use_point=0res_tax_flag=TG01res_tax_mny=90000res_free_mny=0res_vat_mny=9000partcanc_yn=Ycard_bin_type_01=1card_bin_type_02=1join_cd=0000]
+0412-165152 -  9599 - SR42Y4CGp36apBQa - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2018041216352303]+log_level=[3]
+0412-165152 -  9599 - SR42Y4CGp36apBQa - MSG : PG_서버_접속__정상
+0412-165152 -  9599 - SR42Y4CGp36apBQa - MSG : PG_서버_요청_전문_전송__정상
+0412-165153 -  9599 - SR42Y4CGp36apBQa - MSG : PG_서버_응답_전문_수신__정상
+0412-165153 -  9599 - SR42Y4CGp36apBQa - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y4CGp36apBQapay_method=PACAorder_no=2018041216352303card_cd=CCKMcard_name=KB국민카드acqu_cd=CCKMacqu_name=KB국민카드card_no=9436460000001905mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2018041216352303tno=18732536049170amount=310200card_mny=310200coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20180412165153van_apptime=20180412165153app_no=30001752bizx_numb=00013219101quota=00noinf=Npg_txid=0412165153MP01DDYKP2L20000003102000030001752res_tax_flag=TG01res_tax_mny=282000res_free_mny=0res_vat_mny=28200partcanc_yn=Ycard_bin_type_01=1card_bin_type_02=1card_bin_bank_cd=0341isp_partner_cd=00020404004727Ijoin_cd=0000]

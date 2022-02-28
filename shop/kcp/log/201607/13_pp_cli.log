@@ -1,0 +1,10 @@
+0713-103517 -  4963 - SR42Y7DAYAE5dcSd - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2016071310334872]+log_level=[3]
+0713-103517 -  4963 - SR42Y7DAYAE5dcSd - MSG : PG_서버_접속__정상
+0713-103517 -  4963 - SR42Y7DAYAE5dcSd - MSG : PG_서버_요청_전문_전송__정상
+0713-103518 -  4963 - SR42Y7DAYAE5dcSd - MSG : PG_서버_응답_전문_수신__정상
+0713-103518 -  4963 - SR42Y7DAYAE5dcSd - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y7DAYAE5dcSdpay_method=PACAorder_no=2016071310334872card_cd=CCBCcard_name=BC카드acqu_cd=CCBCacqu_name=BC카드card_no=9425200000004694mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2016071310334872tno=16445188510070amount=14000card_mny=14000coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20160713103518van_apptime=20160713103518app_no=40712907bizx_numb=780284397quota=00noinf=Npg_txid=0713103518MG34CF08BEAM0000000140000040712907res_tax_flag=TG01res_tax_mny=12727res_free_mny=0res_vat_mny=1273partcanc_yn=Ycard_bin_type_01=0card_bin_type_02=0isp_issuer_cd=BC20isp_issuer_nm=우리비씨isp_partner_cd=000100202059991join_cd=0000]
+0713-103704 -  6552 - 16445188510070   - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00200000]+ordr_idxx=[]+log_level=[3]
+0713-103704 -  6552 - 16445188510070   - MSG : PG_서버_접속__정상
+0713-103704 -  6552 - 16445188510070   - MSG : PG_서버_요청_전문_전송__정상
+0713-103705 -  6552 - 16445188510070   - MSG : PG_서버_응답_전문_수신__정상
+0713-103705 -  6552 - 16445188510070   - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=16445188510070  pay_method=PACAorder_no=2016071310334872card_cd=CCBCcard_name=BC카드acqu_cd=CCBCacqu_name=BC카드mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2016071310334872tno=16445188510070amount=14000card_mny=14000coupon_mny=0escw_yn=Ncanc_gubn=Bvan_cd=VNKCapp_time=20160713103706van_apptime=20160713103706canc_time=20160713103706app_no=40712907bizx_numb=780284397quota=00noinf=Npg_txid=0713103706MG34CF08BEAM0000000140000040712907]

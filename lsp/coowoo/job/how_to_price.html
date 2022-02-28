@@ -1,0 +1,43 @@
+(가격변동사항)
+
+1.싱글이미지관리 - 폴더목록
+2.가격변경 수정 
+
+#####################################
+
+
+1.어드민 -  코드관리 - 제작사 관리코드확인
+2.mysqladmin 에서 product_cd 테이블  코드로 검색.
+3.합계 확인
+
+
+4. ( cd 일 경우)
+UPDATE `product_cd` SET cd_sell_price = '565400' , cd_discount_rate = '0'
+WHERE 1 AND `manufacture_code` 
+LIKE '065' 
+
+또는 
+
+UPDATE  `product_cd` SET cd_sell_price = '338800' 
+WHERE 1 and cd_sell_price = '407000' AND `manufacture_code` 
+LIKE '057' 
+
+
+5. 합계확인
+
+
+< 싱글 가격변경 >
+
+이미지상세보기 -> 주황색 = Manual  ( 수동으로 입고시 )
+                      ->  남색  = AUTO ( 데이터 바로 입고시)
+
+
+1.싱글이미지관리 - 폴더목록  -> 가격표 (웹용 ~ 인쇄용(1MB ~60MB) 폴더개수 확인 ) 
+
+CD→싱글 등록 (수동) 
+
+
+
+
+
+

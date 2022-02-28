@@ -1,0 +1,313 @@
+<?
+
+require_once "../../../include/include.php";
+html_cache_disable();
+require_once "../../login/login_check.php";
+login_check( $PHP_SELF );
+
+$httpvar = make_httpvar();
+
+
+$working_date		= request('working_date','get');
+
+$team	= request( 'team' , 'get' );
+
+
+$db = new MYSQL;
+$db2 = new MYSQL;
+
+ 
+ $query = "
+				SELECT	bd.diary_no ,
+						bd.user_id ,
+						ui.user_name ,
+						bd.comment ,
+						bd.reg_date 
+				FROM	intranet.business_diary as bd
+				LEFT JOIN intranet.user_info as ui
+				ON		bd.user_id = ui.user_id
+				WHERE	bd.working_date  = '$working_date'
+				AND		bd.team  = '$team'
+				ORDER BY ui.user_sort ASC
+			
+	";
+$db->query( $query );
+
+$total_record = $db->total_record();
+
+?>
+<html>
+<head>
+<title><?$HTML->Title( 'Admin' )?></title>
+<?=$HTML->Metatag()?>
+<link rel="stylesheet" href="../../admin_style.css" type="text/css">
+<script language=javascript>
+
+
+window.resizeTo( 660, 630 )
+
+<!--
+
+	
+
+	function schedule_team_write( working_date )
+	{
+		window.open( "schedule_write_popup.html?team=<?=$team?>&working_date=" + working_date , "_brank","width=600, height=410" );
+	}
+
+
+
+	function team_write_view( diary_no , working_date )
+	{
+		
+			 window.open("team_write_view.html?diary_no=" + diary_no +  "&working_date=" +   working_date , "_brank" , "width=600, height=450");
+			return true;
+	}
+
+
+
+	function team_write_del( diary_no ,working_date  )
+	{
+		confirmString = "삭제하시겠습니까?";
+		if( confirm( confirmString ) )
+		{
+			location.href = "team_write_del.php?diary_no=" + diary_no + "&working_date=" +   working_date
+		}
+		
+		return void(0);	
+	}
+
+
+	function schedule_team_reply ( working_date , diary_no )
+	{
+		window.open( "schedule_write_reply.html?working_date=" + working_date + "&diary_no=" + diary_no , "_write","width=600, height=410" );
+	}
+
+
+	function team_reply_view(  user_id , diary_no )
+	{
+	
+		window.open("team_reply_view.html?diary_no=" + diary_no + "&user_id="+ user_id , "_view" , "width=600, height=410");
+	}
+
+	function reply_delete( reply_no )
+	{
+		confirmString = "삭제하시겠습니까?";
+		if( confirm( confirmString ) )
+		{
+			schedule_hidden_frame.location.href = "team_reply_delete_exec.php?reply_no=" + reply_no
+		}		
+	}	
+
+-->
+</script>
+</head>
+
+<body>
+
+<?
+
+	switch( $team )
+	{
+		case 'web' : $txt_team = "웹팀"; break;
+		case 'customer' : $txt_team = "고객지원팀"; break;
+		case 'product' : $txt_team = "제작팀"; break;
+	}
+
+
+$query = "
+			SELECT	DATE_FORMAT( lunar_date, '%m/%d' ) as lunar_date ,
+					ganji
+			FROM	intranet.lunar2solar
+			WHERE	solar_date = '$working_date'
+	";
+$db2->query( $query );
+$db2->fetch();
+$rs_lunar_date	= $db2->result( 'lunar_date' );
+
+
+?>
+<table   border=0 cellpadding=0 cellspacing=2 bgcolor=#EFEFEF>
+	<tr>
+		<td align=center  bgcolor="#FAFAFA" height=25 colspan=2><b><?=$txt_team?> 업무일지  <?=$working_date	?> </b><span style="font-family:tahoma; font-size:8pt; color=#AAAAAA">( <?=$rs_lunar_date?> )</span></td>
+	</tr>
+
+
+	<tr>
+		
+		<td  valign=top bgcolor=#FFFFFF>
+			
+
+
+
+		<? FOR( $loop=0; $loop<$total_record; $loop++ ) : ?>
+			<table width=100%>
+			<tr>
+				<td height=5 bgcolor=#DDDDDD>
+				</td>
+			</tr>
+			</table>
+			<table width=600 border=0 cellpadding=0 cellspacing=0>
+		<?
+
+		$db->fetch();
+
+		 $rs_diary_no		= $db->result( 'diary_no' );
+		 $rs_user_name	= $db->result( 'user_name' );
+		 $rs_comment 		= $db->result( 'comment' );
+		 $rs_reg_date		= $db->result( 'reg_date' );
+
+		?>
+
+			<tr>
+				<td width=80 align=center>
+				<b><?=$rs_user_name ?></b>
+				</td>
+				<td width=1 bgcolor="#EFEFEF"></td>
+				<td width=500 style="padding-left:10pt">
+					<table border=0 width=100% height=100%>
+					<tr>
+						<td><?=nl2br( $rs_comment )?></td>
+					</tr>
+					</table>
+				</td>
+
+				<td width=1 bgcolor="#EFEFEF"></td>
+
+				<td width=10% align=center>
+					<input type=button value=" 수정 " class=btn_kr onClick="team_write_view( '<?=$rs_diary_no?>' , '<?= $working_date	 ?>' );">
+					<input type=button value=" 삭제 " class=btn_kr onClick="team_write_del( '<?=$rs_diary_no?>' , '<?= $working_date	 ?>' );">
+				</td>
+			</tr>
+
+<!-- 댓글 -->
+			<tr>
+				<td colspan=5 height=1 bgcolor=#EEEEEE>
+
+				</td>
+			</tr>
+			<tr>
+				<td colspan=5>
+
+
+				<?
+
+					$query = "
+							SELECT	bdr.reply_no ,
+									bdr.comment ,
+									ui.user_id ,
+									ui.user_name ,
+									bdr.reg_date
+							FROM	intranet.business_diary_reply as bdr
+							LEFT JOIN intranet.user_info as ui
+							ON		bdr.user_id = ui.user_id
+							WHERE	bdr.diary_no = '$rs_diary_no'
+							ORDER BY bdr.reg_date ASC
+					";
+					$db2->query( $query );
+				?>
+
+				<table width=100% border=0 cellpadding=0 cellspacing=0>
+
+				<? FOR( $loop2=0; $loop2<$db2->total_record(); $loop2++ ) : ?>
+				<?
+					$db2->fetch();
+					$rs_reply_no		= $db2->result( 'reply_no' );
+					$rs_comment		= $db2->result( 'comment' );
+					$rs_user_id		= $db2->result( 'user_id' );
+					$rs_user_name	= $db2->result( 'user_name' );
+					$rs_reg_date		= $db2->result( 'reg_ddate' );
+				?>
+				<tr>
+					<td align=center width=85 height=20>
+					<?=$rs_user_name?>
+					</td>
+					<td width=10>
+					:
+					</td>
+					<td valign=bottom style="padding-left:5pt">
+					<table width=100% border=0 cellpadding=0 cellspacing=0>
+					<tr>
+						<td>
+						<?=$rs_comment?>
+						</td>
+						<td width=20>
+						<a href="#"><img src="images/cancel2.gif" onClick="reply_delete( '<?=$rs_reply_no?>' )" border=0></a>
+						</td>
+					</tr>
+					</table>
+					</td>
+				</tr>
+				<tr>
+					<td colspan=3 height=1 background="../../image/dot.gif"></td>
+				</tr>
+				<? ENDFOR ?>
+
+				</table>
+
+
+	<form name=reply action="schedule_team_reply_exec.php" method=post target="schedule_hidden_frame">
+				<table width=100% border=0 cellpadding=0 cellspacing=0>
+				<tr>
+					<td align=center width=85 height=20>
+					<?=$SUserName?>
+					</td>
+					<td width=10>
+					:
+					</td>
+					<td valign=bottom style="padding-left:5pt">
+					<input type=text style=width:440 class=inp  name=comment> <!-- class=outline -->
+					<input type=submit value=" 답변 " class=btn_kr>
+					</td>
+				</tr>
+				</table>
+				<input type=hidden name=diary_no value="<?=$rs_diary_no?>">
+				<input type=hidden name=working_date value="<?=$working_date?>">
+	</form>
+
+				</td>
+			</tr>
+			</table>
+		<? ENDFOR?>
+
+		<? IF( !$total_record ) : ?>
+			<table height=100% width=600 border=0 cellpadding=0 cellspacing=0>
+			<tr>
+				<td height=150 align=center>
+				<font color=#FF9966>등록된 업무일지가 없습니다.</font>
+				</td>
+			</tr>
+			</table>
+		<? ENDIF ?>
+
+
+
+
+
+		</td>
+	</tr>
+</table>
+
+<br>
+
+<table width=600 cellpadding=0 cellspacing=0 border=0>
+<tr>
+	<td>
+	<input type=button value="   돌아가기   " onClick="history.back()" class=btn_kr>
+	</td>
+	<td valign=right width=60>
+	<input type=button value="   업무일지 작성   " onClick="schedule_team_write( '<?=$working_date?>' )" class=btn_kr>
+	</td>
+</tr>
+</table>
+
+
+<input type=hidden name=schedule_date value="<?=$working_date	?>">
+
+
+
+
+<iframe name=schedule_hidden_frame border=0  width=0 height=0></iframe>
+
+</body>
+</html>

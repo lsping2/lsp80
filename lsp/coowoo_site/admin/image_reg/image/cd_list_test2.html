@@ -1,0 +1,592 @@
+<?
+
+require_once "../../../include/include.php";
+html_cache_disable();
+
+require_once "../../login/login_check.php";
+login_check( $PHP_SELF );
+
+$db = new mysql();
+$db2 = new mysql();
+$db3 = new mysql();
+$db4 = new mysql();
+
+$mdb = new mysql();
+$mdb2 = new mysql();
+
+?>
+<html>
+<head>
+<title><?$HTML->Title( 'Admin' )?></title>
+<?=$HTML->Metatag()?>
+<link rel="stylesheet" href="../../admin_style.css" type="text/css">
+<script language=javascript>
+<!--
+
+	function digit(c)
+	{
+		return ((c >= "0") && (c <= "9"));
+	}
+
+	function digitCheck( data, input_pos )
+	{	
+		for( i=0; i<data.length; i++)
+		{
+			var ch = data.charAt( i );
+			if( false == digit( ch ) )
+			{ 
+				alert("숫자로만 입력해 주세요.");
+				input_pos.focus();
+				input_pos.select();
+				return false;
+			}
+		}
+		return true;
+	}
+
+	function empty( data )
+	{
+		if( !data ) return true;
+
+		for( i=0; i<data.length; i++ )
+		{
+			if( data.substring( i, i+1 ) != ' ' )
+				return false;
+		}
+		return true;
+	}
+
+	function checkForm( form )
+	{
+		if( empty( form.search_key.value ) )
+		{
+			alert( '검색어를 입력하세요.' );
+			form.search_key.focus();
+			return false;
+		}
+
+		return true;
+	}
+
+	function deleteCD( cd_no )
+	{
+		confirmStr = "CD삭제는 연관된 DB자료에 영향을 미칠 수 있습니다.    \nCD를 정말로 삭제하시겠습니까?";
+		if( confirm( confirmStr ) )
+		{
+			window.open( 'cd_delete_exec.php?cd_no=' + cd_no, 'cd_hidden_frame' );
+			return true;
+		}
+		return false;
+	}
+
+	function download_view( cd_order_no )
+	{
+		window.open( "cd_download_view.html?cd_order_no=" +cd_order_no , "_brank","width=550, height=500 , scrollbars=yes, LEFT=200,TOP=10'" );
+	}
+
+-->
+</script>
+</head>
+<body>
+<b><font size=3>* CD목록</font></b>
+<?
+
+$search_field		= request( 'search_field' , 'get' );
+$search_key		= request( 'search_key' , 'get' );
+$prouct_class		= request( 'prouct_class' , 'get' );
+$sort			= request( 'sort' , 'get' );
+$orderby			= request( 'orderby' , 'get' );
+
+$location = "search_field={$search_field}&search_key={$search_key}&sort={$sort}&prouct_class={$prouct_class}";
+
+?>
+<form name=searchForm action=<?=$_SERVER["PHP_SELF"]?> method=get>
+
+<table width=800 border=0 cellpadding=0 cellspacing=0>
+<tr>
+	<td align=center>
+	<table border=0 cellpadding=0 cellspacing=1  bgcolor="#CDCD9A">
+	<tr>
+		<td>
+		<table border=0 cellpadding=0 cellspacing=4 bgcolor=#F0F0F0>
+		<tr>
+		<td width=100 align=right style="padding-right:5pt">
+		검색 : 
+		</td>
+		<td width=45 align=center>
+		<select name=search_field style="font-size:9pt">
+		<option value='ALL'<? if( $search_key AND 'ALL' == $search_field ) echo ' selected'; ?>>전체</option>
+		<option value='ORDER_NO'<? if( $search_key AND 'ORDER_NO' == $search_field ) echo ' selected'; ?>>주문번호</option>
+		<option value='NAME'<? if( $search_key AND 'NAME' == $search_field ) echo ' selected'; ?>>이름</option>
+		<option value='MANUFACTURE'<? if( $search_key AND 'MANUFACTURE' == $search_field ) echo ' selected'; ?>>제작사</option>
+		</select>
+		</td>
+		<td width=150>
+		<input type=text size=22 class=input_text name=search_key <? if( $search_key ) echo "value=\"$search_key\""; ?>>
+		</td>
+		<td width=190>
+		<input type=submit value="  검색  " class=btn_kr onFocus="this.blur()">
+	<? if( $search_key ) : ?>
+		<input type=button value="전체보기" class=btn_kr onFocus="this.blur()" onClick="window.open( '<?=$_SERVER["PHP_SELF"]?>', '_self' )">
+	<? elseif( $page > 1 ) : ?>
+		<input type=button value="처음으로" class=btn_kr onFocus="this.blur()" onClick="window.open( '<?=$_SERVER["PHP_SELF"]?>', '_self' )">
+	<? endif ?>
+		</td>
+		</tr>
+	
+		<tr>
+		<td align=right style="padding-right:5pt">
+		분류 : 
+		</td>
+		<td colspan=3>
+		<input type=radio name=prouct_class value="All" checked >전체    &nbsp;
+		<input type=radio name=prouct_class value="CD" <?if('CD'==$prouct_class) echo "checked";?> >CD
+		<input type=radio name=prouct_class value="VCD" <?if('VCD'==$prouct_class) echo "checked";?>>VCD
+		</td>
+		</tr>
+		<tr>
+		<td align=right style="padding-right:5pt">
+		정렬 : 
+		</td>
+		<td colspan=3>
+		<input type=radio name=sort value="reg_date" <?if('reg_date'==$sort OR !$sort) echo "checked";?>>등록일
+		<input type=radio name=sort value="thumb" <?if('thumb'==$sort) echo "checked";?>>이미지 컷수
+		<input type=radio name=sort value="download" <?if('download'==$sort) echo "checked";?> >다운로드 컷수
+		&nbsp;&nbsp;
+			<select name=orderby>
+			<option value="DESC" <?if('DESC'==$orderby) echo "selected";?>>내림차순</option>
+			<option value="ASC" <?if('ASC'==$orderby) echo "selected";?>>오름차순</option>
+			</select>
+		</td>
+		</tr>
+		</table>
+		</td>
+	</tr>
+	</table>
+	</td>
+</tr>
+</table>
+</form>
+
+<?
+
+// cd & vcd  여부
+$class_query ='';
+if( 'CD' == $prouct_class ) 
+{ 
+	$class_query  = "AND pc.vcd_sell_status='No'"; 
+}
+elseif( 'VCD' == $prouct_class  )
+{
+	$class_query  = "AND pc.cd_sell_status = 'No' "; 
+}
+
+
+
+
+$string = '';
+if( $search_key )
+{
+	switch( $search_field )
+	{
+		case 'ALL'				: $search_string = "전체"; break;
+		case 'ORDER_NO'		: $search_string = "주문번호"; break;
+		case 'NAME'			: $search_string = "이름"; break;
+		case 'MANUFACTURE'	: $search_string = "제조사"; break;
+	}
+	$string = "{$search_string} : {$search_key}";
+}
+
+
+$temporary_query = " 
+				CREATE  TEMPORARY TABLE temp_resut( 
+				cd_order_no varchar( 20 ) ,
+				name_eg varchar( 50 ),
+				name_kr varchar( 50 ),
+				cd_sell_status enum(  'Yes' ,'No' ) ,
+				vcd_sell_status enum(  'Yes' ,'No' ) ,
+				manufacture_name  varchar( 50 ),
+				thumb int( 11 ) , 
+				download int( 11 ) ,
+				reg_date datetime
+				)
+				TYPE=HEAP
+				";
+
+$mdb->query( $temporary_query );
+
+?>
+<table width=800 border="0" cellpadding="0" cellspacing="0">
+<tr> 
+	<td align=center>
+	<font color=#FF9966><?=$string?></font>
+	</td>
+</tr>
+</table>
+<?
+ $query = "
+			INSERT temp_resut
+			(
+				cd_order_no ,
+				name_eg  ,
+				name_kr ,
+				cd_sell_status ,
+				vcd_sell_status ,
+				manufacture_name ,
+				thumb  , 
+				download  ,
+				reg_date 
+			)
+			
+			
+			SELECT	SQL_CACHE
+					pc.cd_order_no ,
+					pc.name_eg ,
+					pc.name_kr ,
+					pc.cd_sell_status ,
+					pc.vcd_sell_status ,
+					pmc.manufacture_name ,
+					0 ,
+					0 ,
+					pc.reg_date 
+			FROM	product_cd as pc 
+			LEFT JOIN product_manufacture_code as pmc
+			ON	pc.manufacture_code = pmc.manufacture_code
+			GROUP BY pc.cd_order_no
+			
+	
+
+		
+";
+
+$db->query( $query );
+
+
+$query = "
+		SELECT	SQL_CACHE
+				cd_order_no
+		FROM	temp_resut
+		WHERE 1
+		LIMIT 10
+		
+";
+
+$db->query( $query );
+
+?>
+
+
+<? FOR( $loop=0; $loop<$db->total_record(); $loop++ ) : ?>
+<?
+	$db->fetch();
+	$rs_cd_order_no		= $db->result( 'cd_order_no' );
+
+
+// 등록된 이미지
+$query = "
+				SELECT	SQL_CACHE
+						count(*) as thumb 
+				FROM	product_images 
+				WHERE	cd_order_no = '$rs_cd_order_no'
+		
+			
+			
+	";
+$db2->query( $query );
+$db2->fetch();
+$rs_thumb	= $db2->result( 'thumb' );
+
+
+// 다운로드등록 이미지
+$query = "
+				SELECT		SQL_CACHE
+							count(*) as download
+				FROM  		product_cd_images as pci
+				LEFT JOIN		product_images as pi
+				ON			pci.image_no = pi.image_no
+				WHERE		pi.cd_order_no = '$rs_cd_order_no'
+			
+			
+	";
+$db3->query( $query );
+$db3->fetch();
+$rs_download	= $db3->result( 'download' );
+
+
+$query = "
+			UPDATE temp_resut	SET		thumb = '$rs_thumb' ,
+									download = '$rs_download'
+							WHERE	cd_order_no = '$rs_cd_order_no'
+";
+
+$db4->query( $query );
+
+
+
+
+?>
+<? ENDFOR ?>
+
+
+<?
+
+// cd & vcd  여부
+$class_query2 ='';
+if( 'CD' == $prouct_class ) 
+{ 
+	$class_query2  = "AND product_class = 'CD'"; 
+}
+elseif( 'VCD' == $prouct_class  )
+{
+	$class_query2  ="AND product_class = 'VCD'"; 
+}
+
+
+// 정렬쿼리
+if( "thumb" == $sort )
+{
+	$orderby_query = "ORDER BY thumb $orderby";
+}
+
+elseif( "download" == $sort )
+{
+	$orderby_query = "ORDER BY download $orderby";
+}
+elseif( "reg_date" == $sort OR !$sort )
+{
+	if( !$orderby ) $orderby = "DESC";
+	$orderby_query = "ORDER BY reg_date $orderby";
+}
+
+
+
+if( $search_key )
+{
+
+	$search_query2 = '';
+	switch( $search_field )
+	{
+		case 'ALL'			:	$search_query2 = " AND	( cd_order_no LIKE '%$search_key%' OR name_kr LIKE '%$search_key%' OR						name_eg	LIKE '%$search_key%' OR manufacture_name LIKE  '%$search_key%' ) ";
+							break;
+
+
+		case 'NAME'		:	$search_query2 = "AND	( name_kr LIKE '%$search_key%' OR name_eg LIKE '%$search_key%' )";
+							break;
+
+
+		case 'ORDER_NO'		:	$search_query2 = " AND	cd_order_no LIKE '%$search_key%' ";
+								break;		
+	
+		case 'MANUFACTURE'	:	$search_query2 = " AND	manufacture_name LIKE '%$search_key%' ";
+								break;	
+											
+	}
+
+}
+
+
+$query1 = "
+			SELECT	SQL_CACHE
+						count(*)
+			FROM	temp_resut
+			WHERE	1
+			$class_query2
+			$search_query2
+			$orderby_query 
+			
+";
+
+
+$query = "
+			SELECT	SQL_CACHE
+					cd_order_no ,
+					name_eg  ,
+					name_kr ,
+					cd_sell_status ,
+					vcd_sell_status ,
+					manufacture_name ,
+					thumb  , 
+					download  ,
+					reg_date
+			FROM	temp_resut
+			WHERE	1
+			$class_query2
+			$search_query2
+			$orderby_query 
+					
+						
+";
+
+
+$page = request( 'page', 'get' );
+if( !$page ) $page = 0;
+
+$mdb->query( $query1 );
+
+$total_record = $mdb->is_count();
+$max_show_list = 25;
+$max_show_page = 17;
+page_calcu();
+
+$mdb->query( $query );
+
+$query .= "LIMIT	$start, $max_show_list";
+$mdb2->query( $query );
+
+?>
+
+<? if( $total_page > 1 ) : ?>
+<table width=800 border=0>
+<tr>
+	 <td height="22" bgcolor="#ffffff" width=20%>
+	  <? if( $search_key ) : ?>
+	  검색된 시디 갯수
+	  <? else : ?>
+	  전체 시디 갯수
+	  <? endif ?>
+	  : <?=(int)$total_record?>개
+	  </td>
+	<td align=center >
+	<? page_list( $_SERVER["PHP_SELF"], $location ); ?>
+	</td>
+	 <td align="right" bgcolor="#FFFFFF" width=20%><font style="font-family:verdana; font-size:8pt"><?=$page?> / <?=$total_page?> page</font></td>
+</tr>
+</table>
+<br>
+<? endif ?>
+
+
+
+<table border=0 cellpadding=0 cellspacing=2 border=0 bgcolor="#CDCD9A">
+<tr>
+	<td>
+	<table border=0 cellpadding=0 cellspacing=1 border=0 bgcolor="#FFFFFF">
+	<tr height=30>
+		<td align=center width=80 style="padding-left:5px">
+		<font color=#666666><b>구분</b></font>
+		</td>
+		<td align=center width=120 style="padding-left:5px">
+		<font color=#666666><b>주문번호</b></font>
+		</td>
+		<td align=center width=280 style="padding-left:5px">
+		<font color=#666666><b>이름</b></font>
+		</td>
+		<td align=center width=120  style="padding-left:5px">
+		<font color=#666666><b>이미지컷수</b></font>
+		</td>
+		<td align=center width=120 style="padding-left:5px">
+		<font color=#666666><b>다운로드컷수</b></font>
+		</td>
+		<td align=center width=80 style="padding-left:5px">
+		&nbsp;
+		</td>
+	</tr>
+	</table>
+	</td>
+</tr>
+
+<tr>
+	<td>
+
+	<? if( !$mdb->total_record() ) : ?>
+	<table width=100% border="0" cellpadding="0" cellspacing="0">
+	<tr> 
+		  <td align=center height="180" bgcolor="#ffffff">
+		  <? if( $search_key ) : ?>
+		  <font color=#3333CC>검색된 시디가 없습니다.</font>
+		  <? else : ?>
+		  <font color=#FF9966>등록된 시디가 없습니다.</font>
+		  <? endif ?>
+		  </td>
+	</tr>
+	</table>
+	<? endif ?>
+	
+<table width=100% border=0 cellpadding=0 cellspacing=0 border=0 bgcolor="#FFFFFF">
+<? FOR( $loop=0; $loop<$mdb2->total_record(); $loop++ ) : ?>
+<?
+	$mdb2->fetch();
+	$rs_cd_order_no		= $mdb2->result( 'cd_order_no' );
+	$rs_name_eg			= $mdb2->result( 'name_eg' );
+	$rs_name_kr			= $mdb2->result( 'name_kr' );
+	$rs_cd_sell_status		= $mdb2->result( 'cd_sell_status' );
+	$rs_vcd_sell_status		= $mdb2->result( 'vcd_sell_status' );
+	$rs_manufacture_name	= $mdb2->result( 'manufacture_name' );
+	$rs_thumb			= $mdb2->result( 'thumb' );
+	$rs_download			= $mdb2->result( 'download' );
+
+
+
+
+IF( 'No' == $rs_cd_sell_status ) 
+{
+	$product_class = 'VCD';
+
+}
+ELSE
+{
+	$product_class = 'CD';
+}
+
+?>
+	<tr onMouseOver=this.style.backgroundColor="#EFEFEF" onMouseOut=this.style.backgroundColor="" height=20> 
+		<td width=80 style="padding-left:5px">
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?=$product_class?>
+		</td>
+		<td width=100 style="padding-left:5px">
+		<font face=verdana style="font-size:8pt" color=#666666>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?=$rs_cd_order_no?></font>
+		</td>
+		<td width=260 style="padding-left:5px">
+		<font face=verdana style="font-size:8pt" color=#666666>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?=$rs_name_eg?></font>
+		</td>
+		<td width=80 style="padding-left:5px" align=right>
+		<font face=verdana style="font-size:8pt" color=#666666>
+		<? if ( $rs_thumb ) : ?>
+		<?=number_format($rs_thumb)?> 컷 
+		<? endif ?>
+		</font>
+		</td>
+		<td width=80 style="padding-left:5px" align=right>
+		<font face=verdana style="font-size:8pt" color=#666666>
+		<? if ( $rs_download ) : ?>
+		<a href="#" onClick="download_view( '<?=$rs_cd_order_no?>' ); return false;"><?=number_format($rs_download)?></a> 컷
+		<? endif ?>
+		</font>
+		</td>
+		<td align=center width=110 style="padding-left:5px">
+			&nbsp;
+		</td>
+	</tr>
+	<? if( $mdb2->total_record() > 1 AND $loop != $mdb2->total_record() - 1 ) : ?>
+	<tr>
+		<td colspan=6 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+	<? endif ?>
+<? ENDFOR ?>
+
+
+	</table>
+	</td>
+</tr>
+</table>
+
+
+<? if( $total_page > 1 ) : ?>
+<table width=820 border=0>
+<tr>
+	<td height=40 align=center>
+	<? page_list( $_SERVER["PHP_SELF"], $location ); ?>
+	</td>
+</tr>
+</table>
+<? endif ?>
+
+</form>
+
+<iframe name=cd_hidden_frame border=0 width=0 height=0></iframe>
+
+</body>
+</html>

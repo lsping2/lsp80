@@ -1,0 +1,5 @@
+0428-200057 - 22627 - SR42Y4SJxq3GGFaN - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2018042819483654]+log_level=[3]
+0428-200057 - 22627 - SR42Y4SJxq3GGFaN - MSG : PG_서버_접속__정상
+0428-200057 - 22627 - SR42Y4SJxq3GGFaN - MSG : PG_서버_요청_전문_전송__정상
+0428-200057 - 22627 - SR42Y4SJxq3GGFaN - MSG : PG_서버_응답_전문_수신__정상
+0428-200057 - 22627 - SR42Y4SJxq3GGFaN - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y4SJxq3GGFaNpay_method=PACAorder_no=2018042819483654card_cd=CCLOcard_name=롯데카드acqu_cd=CCAMacqu_name=롯데아멕스카드card_no=5137920000007477mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2018042819483654tno=18748664087560amount=105600card_mny=105600coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20180428200057van_apptime=20180428200057app_no=47674005bizx_numb=9878628031quota=03noinf=Ynoinf_type=CARDpg_txid=0428200057MP01CBDIKO8W0000001056000347674005res_tax_flag=TG01res_tax_mny=96000res_free_mny=0res_vat_mny=9600partcanc_yn=Ycard_bin_type_01=0card_bin_type_02=0join_cd=0000]

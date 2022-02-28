@@ -1,0 +1,5 @@
+0712-113633 - 39757 - SR42Y7CBYp79QMkT - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2019071211312509]+log_level=[3]
+0712-113633 - 39757 - SR42Y7CBYp79QMkT - MSG : PG_서버_접속__정상
+0712-113634 - 39757 - SR42Y7CBYp79QMkT - MSG : PG_서버_요청_전문_전송__정상
+0712-113634 - 39757 - SR42Y7CBYp79QMkT - MSG : PG_서버_응답_전문_수신__정상
+0712-113634 - 39757 - SR42Y7CBYp79QMkT - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y7CBYp79QMkTpay_method=PACAorder_no=2019071211312509card_no=9431170000000894mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2019071211312509cert_no=19823296765923tno=19823296765923amount=22300card_mny=22300coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20190712113634van_apptime=20190712113634app_no=30001222bizx_numb=148034830quota=00noinf=Npg_txid=0712113634MNK4FFKAO4IX0000000223000030001222use_point=0res_tax_flag=TG01res_tax_mny=20272res_free_mny=0res_vat_mny=2028partcanc_yn=Ycard_bin_type_01=1card_bin_type_02=1join_cd=0000card_cd=CCNHcard_name=NH카드acqu_cd=CCNHacqu_name=NH카드]

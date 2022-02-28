@@ -1,0 +1,265 @@
+<?
+
+require_once "../../../include/include.php";
+
+require_once "../../login/login_check.php";
+login_check( $PHP_SELF );
+
+$db = new MYSQL;
+$pc = new ProductInfo;
+
+$query = "
+                DELETE FROM		cart_info
+                WHERE			reg_date < DATE_SUB( now(), INTERVAL 3 DAY )
+";
+$db->query( $query );
+
+
+?>
+<html>
+<head>
+<title><?$HTML->Title( 'Admin' )?></title>
+<?=$HTML->Metatag()?>
+<link rel="stylesheet" href="../../admin_style.css" type="text/css">
+<script language=javascript>
+<!--
+
+	function digit(c)
+	{
+		return ((c >= "0") && (c <= "9"));
+	}
+
+	function digitCheck( data, input_pos )
+	{	
+		for( i=0; i<data.length; i++)
+		{
+			var ch = data.charAt( i );
+			if( false == digit( ch ) )
+			{ 
+				alert("숫자로만 입력해 주세요.");
+				input_pos.focus();
+				input_pos.select();
+				return false;
+			}
+		}
+		return true;
+	}
+
+	function empty( data )
+	{
+		if( !data ) return true;
+
+		for( i=0; i<data.length; i++ )
+		{
+			if( data.substring( i, i+1 ) != ' ' )
+				return false;
+		}
+		return true;
+	}
+
+	function modify( image_no )
+	{
+		window.open( "image_modify.html?image_no=" + image_no + '&search_field=<?=$search_field?>&search_key=<?=$search_key?>', '_image_modify', 'width=100, height=100' );
+	}
+
+	function checkForm( form )
+	{
+		if( empty( form.search_key.value ) )
+		{
+			alert( '검색어를 입력하세요.' );
+			form.search_key.focus();
+			return false;
+		}
+
+		return true;
+	}    
+
+	function viewUser( user_no )
+	{
+		openURL = "../../user/info/user_info.html?user_no=" + user_no;
+		window.open( openURL, "_viewUser", "width=450, height=500, scrollbar=yes" );
+	}
+
+-->
+</script>
+<script lanugae=javascript>
+<!--
+	function viewPicNo( order_no )
+	{
+		window.open( 'http://www.coowoo.com/home/search/image4.html?option=name&single_order_no=' + order_no, '_viewPicNo','width=915, height=635,resizable=Yes,scrollbars=Yes' );
+	}
+-->
+</script>
+</head>
+<body>
+<b><font size=3>* 장바구니(Cart)</font></b>
+<?
+
+$query = "
+				SELECT	count(*)
+				FROM	cart_info
+				ORDER BY reg_date DESC
+";
+
+$db->query( $query );
+
+$total_record = $db->is_count();
+
+$max_show_page = 15;
+$max_show_list  = 10;
+
+page_calcu();
+
+$query = "
+				SELECT	ci.cart_no ,
+							ci.cart_uid ,
+							ci.product_class ,
+							ci.product_no ,
+							ci.manufacture_code ,
+							ci.folder_no ,
+							ci.original_sell_price ,
+							ci.sell_price ,
+							ci.discount_rate ,
+							ci.discount_price ,
+							ci.mileage_rate ,
+							ci.mileage_price ,
+							ci.quantity ,
+							ci.coupon_no ,
+							ci.user_id ,
+							ui.user_name ,
+							ui.user_no ,
+							DATE_FORMAT( ci.reg_date , '%Y-%m-%d %H:%i:%s' ) as reg_date
+				FROM	cart_info as ci LEFT JOIN user_info as ui ON ci.user_id = ui.user_id
+				ORDER BY reg_date DESC
+				LIMIT	$start, $max_show_list
+";
+$db->query( $query );
+
+?>
+<br><br>
+<table width=620 border=0 cellpadding=0 cellspacing=0>
+<tr>
+	<td>
+	전체 : <?=(int)$total_record?> 개
+	</td>
+	<td align=right>
+	<?=$page?> / <?=$total_page?> page
+	</td>
+</tr>
+<tr>
+	<td align=center height=40 colspan=2>
+	<? page_list( $_SERVER['PHP_SELF'], $location ); ?>
+	</td>
+</tr>
+</table>
+
+<table border=0 cellpadding=0 cellspacing=3 bgcolor="#CDCD9A">
+<tr>
+	<td>
+	<table width=100% border=0 cellpadding=0 cellspacing=0 border=0 bgcolor="#FFFFFF">
+	<tr>
+		<td align=center width=90 height=22>
+		<font color=#666666 face=verdana><b>이미지</b></font>
+		</td>
+		<td align=center width=60>
+		<font color=#666666 face=verdana><b>분류</b></font>
+		</td>
+		<td align=center width=100>
+		<font color=#666666 face=verdana><b>제품번호</b></font>
+		</td>
+		<td align=center width=80>
+		<font color=#666666 face=verdana><b>가격</b></font>
+		</td>
+		<td align=center width=140>
+		<font color=#666666 face=verdana><b>아이디</b></font>
+		</td>
+		<td align=center width=130>
+		<font color=#666666 face=verdana><b>날자</b></font>
+		</td>
+		<td align=center>
+		&nbsp;
+		</td>
+	</tr>
+	</table>
+	</td>
+</tr>
+<tr>
+	<td>
+	<table border=0 cellpadding=0 cellspacing=0 border=0 bgcolor="#FFFFFF">
+<? for( $loop=0; $loop<$db->total_record(); $loop++ ) : ?>
+<?
+	$db->fetch();
+	$rs_cart_no				= $db->result( 'cart_no' );
+	$rs_cart_uid				= $db->result( 'cart_uid' );
+	$rs_product_class			= $db->result( 'product_class' );
+	$rs_product_no			= $db->result( 'product_no' );
+	$rs_manufacture_code		= $db->result( 'manufacture_code' );
+	$rs_folder_no				= $db->result( 'folder_no' );
+	$rs_original_sell_price		= $db->result( 'original_sell_price' );
+	$rs_sell_price				= $db->result( 'sell_price' );
+	$rs_discount_rate			= $db->result( 'discount_rate' );
+	$rs_discount_price			= $db->result( 'discount_price' );
+	$rs_discount_mileage_rate	= $db->result( 'discount_mileage_rate' );
+	$rs_mileage_rate			= $db->result( 'mileage_rate' );
+	$rs_mileage_price			= $db->result( 'mileage_price' );
+	$rs_quantity				= $db->result( 'quantity' );
+	$rs_coupon				= $db->result( 'coupon' );
+	$rs_user_id				= $db->result( 'user_id' );
+	$rs_user_name			= $db->result( 'user_name' );
+	$rs_user_no				= $db->result( 'user_no' );
+	$rs_reg_date				= $db->result( 'reg_date' );
+
+	$pc->product_info( $rs_product_class, $rs_product_no );
+
+?>
+
+		<td width=90 height=90 align=center>
+<? if( 'image' == $rs_product_class OR 'single' == $rs_product_class ) : ?>							
+			<a href="javascript:viewPicNo( '<?=$pc->product_order_no?>' );" onFocus="this.blur()"><img src="http://www.coowoo.com/home/search/image.s?data_folder=<?=$pc->product_data_folder_name?>&sub_folder=<?=$pc->product_sub_folder_name?>&size=80&image_name=<?=$pc->product_image_name?>" border=0></a>
+<? elseif( 'cd' == $rs_product_class OR 'vcd' == $rs_product_class ) : ?>
+			<a href="http://www.coowoo.com/home/search/cd.html?cd_no=<?=$rs_product_no?>" onFocus="this.blur()" target='_new'><img src="http://www.coowoo.com/jacket/80/<?=$pc->product_image_name?>" width=80 height=80 border=0></a>
+<? endif ?>
+		</td>
+		<td width=60 align=center>
+		<font style="font-family:tahoma; font-size:8pt"><?=$rs_product_class?></font>
+		</td>
+		<td width=100 align=center>
+		<font style="font-family:tahoma; font-size:8pt"><?=$pc->product_order_no?></font>
+		</td>
+		<td width=80 align=right style="padding-right:10pt">
+		<font style="font-family:tahoma; font-size:8pt"><?=number_format( $rs_sell_price )?></font> 원
+		</td>
+		<td width=140 align=center>
+		<? if( $rs_user_id ) : ?>
+		<a href="javascript:viewUser( <?=$rs_user_no?> )" onFocus="this.blur()"><font style="font-family:tahoma; font-size:8pt"><?=$rs_user_name?>(<?=$rs_user_id?>)</font></a>
+		<? else : ?>
+		<font style="font-family:tahoma; font-size:8pt" color=#666666>unknown</font>
+		<? endif ?>
+		
+		</td>
+		<td width=130 align=center>
+		<font style="font-family:tahoma; font-size:8pt"><?=$rs_reg_date?></font>
+		</td>
+	<? if( $db->total_record() > 1 AND $loop != $db->total_record() - 1 ) : ?>
+	<tr>
+		<td colspan=8 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+	<? endif ?>
+<? endfor ?>
+	</table>
+	</td>
+</tr>
+</table>
+
+<table width=620 border=0 cellpadding=0 cellspacing=0>
+<tr>
+	<td align=center height=40 colspan=2>
+	<? page_list( $_SERVER['PHP_SELF'], $location ); ?>
+	</td>
+</tr>
+</table>
+
+</body>
+</html>
+<meta http-equiv='Refresh' content='20' URL='<?=$_SERVER['PHP_SELF'];?>'>
