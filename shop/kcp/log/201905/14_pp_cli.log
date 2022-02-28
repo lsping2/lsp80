@@ -1,5 +1,0 @@
-0514-170929 - 46264 - SR42Y5EH7cEee4IH - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2019051417052845]+log_level=[3]
-0514-170929 - 46264 - SR42Y5EH7cEee4IH - MSG : PG_서버_접속__정상
-0514-170929 - 46264 - SR42Y5EH7cEee4IH - MSG : PG_서버_요청_전문_전송__정상
-0514-170931 - 46264 - SR42Y5EH7cEee4IH - MSG : PG_서버_응답_전문_수신__정상
-0514-170931 - 46264 - SR42Y5EH7cEee4IH - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y5EH7cEee4IHpay_method=PACAorder_no=2019051417052845card_cd=CCBCcard_name=BC카드acqu_cd=CCBCacqu_name=BC카드card_no=5388110000009489mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2019051417052845tno=19764534130456amount=9100card_mny=9100coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20190514170931van_apptime=20190514170931app_no=50915706bizx_numb=712151936quota=00noinf=Npg_txid=0514170931MNK4CB7CP37R0000000091000050915706res_tax_flag=TG01res_tax_mny=8272res_free_mny=0res_vat_mny=828partcanc_yn=Ycard_bin_type_01=0card_bin_type_02=0card_bin_bank_cd=0011isp_issuer_cd=BC11isp_issuer_nm=농협비씨isp_partner_cd=050100111709851join_cd=0000]

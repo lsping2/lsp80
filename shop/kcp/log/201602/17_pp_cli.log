@@ -1,5 +1,0 @@
-0217-175011 - 15611 - SR42Y2HHmsE5dcSd - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2016021717254315]+log_level=[3]
-0217-175011 - 15611 - SR42Y2HHmsE5dcSd - MSG : PG_서버_접속__정상
-0217-175011 - 15611 - SR42Y2HHmsE5dcSd - MSG : PG_서버_요청_전문_전송__정상
-0217-175012 - 15611 - SR42Y2HHmsE5dcSd - MSG : PG_서버_응답_전문_수신__정상
-0217-175012 - 15611 - SR42Y2HHmsE5dcSd - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y2HHmsE5dcSdpay_method=PACAorder_no=2016021717254315card_cd=CCBCcard_name=BC카드acqu_cd=CCBCacqu_name=BC카드card_no=9425200000004694mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2016021717254315tno=20160217650520amount=5000card_mny=5000coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20160217175011van_apptime=20160217175011app_no=41588785bizx_numb=780284397quota=00noinf=Npg_txid=0217175011MG34EFCS9QC70000000050000041588785res_tax_flag=TG01res_tax_mny=4545res_free_mny=0res_vat_mny=455partcanc_yn=Ycard_bin_type_01=0card_bin_type_02=0isp_issuer_cd=BC20isp_issuer_nm=우리비씨isp_partner_cd=000100202059991join_cd=0000]

@@ -1,5 +1,0 @@
-0213-145846 - 21204 - SR42Y2DEqX6iQ4lD - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2018021201282505]+log_level=[3]
-0213-145846 - 21204 - SR42Y2DEqX6iQ4lD - MSG : PG_서버_접속__정상
-0213-145846 - 21204 - SR42Y2DEqX6iQ4lD - MSG : PG_서버_요청_전문_전송__정상
-0213-145847 - 21204 - SR42Y2DEqX6iQ4lD - MSG : PG_서버_응답_전문_수신__정상
-0213-145847 - 21204 - SR42Y2DEqX6iQ4lD - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y2DEqX6iQ4lDpay_method=PACAorder_no=2018021201282505card_cd=CCSScard_name=삼성카드acqu_cd=CCSSacqu_name=삼성카드card_no=4009070000005869mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2018021201282505tno=18294097937131amount=971500card_mny=971500coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20180213145847van_apptime=20180213145847app_no=21949914bizx_numb=24450105quota=00noinf=Npg_txid=0213145847MP01FAMM89RQ0000009715000021949914res_tax_flag=TG01res_tax_mny=883181res_free_mny=0res_vat_mny=88319partcanc_yn=Ycard_bin_type_01=1card_bin_type_02=0join_cd=0000]

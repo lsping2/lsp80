@@ -1,5 +1,0 @@
-1214-174532 - 15454 - SR42YCEHiTAMk7BF - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2015121417083303]+log_level=[3]
-1214-174532 - 15454 - SR42YCEHiTAMk7BF - MSG : PG_서버_접속__정상
-1214-174532 - 15454 - SR42YCEHiTAMk7BF - MSG : PG_서버_요청_전문_전송__정상
-1214-174534 - 15454 - SR42YCEHiTAMk7BF - MSG : PG_서버_응답_전문_수신__정상
-1214-174534 - 15454 - SR42YCEHiTAMk7BF - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42YCEHiTAMk7BFpay_method=PACAorder_no=2015121417083303card_cd=CCBCcard_name=BC카드acqu_cd=CCBCacqu_name=BC카드card_no=9445207700006977mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2015121417083303tno=20151214771073amount=153000card_mny=153000coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20151214174532van_apptime=20151214174532app_no=50758018bizx_numb=780284397quota=00noinf=Npg_txid=1214174532MG34CBPYPH2M0000001530000050758018partcanc_yn=Ycard_bin_type_01=0card_bin_type_02=1isp_issuer_cd=BC20isp_issuer_nm=우리비씨isp_partner_cd=000100202458074join_cd=0000]
