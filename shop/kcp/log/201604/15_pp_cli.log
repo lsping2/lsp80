@@ -1,5 +1,0 @@
-0415-151229 - 10382 - SR42Y4FFBc5mnF6d - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2016041316130511]+log_level=[3]
-0415-151229 - 10382 - SR42Y4FFBc5mnF6d - MSG : PG_서버_접속__정상
-0415-151229 - 10382 - SR42Y4FFBc5mnF6d - MSG : PG_서버_요청_전문_전송__정상
-0415-151231 - 10382 - SR42Y4FFBc5mnF6d - MSG : PG_서버_응답_전문_수신__정상
-0415-151231 - 10382 - SR42Y4FFBc5mnF6d - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y4FFBc5mnF6dpay_method=PACAorder_no=2016041316130511card_cd=CCNHcard_name=NH카드acqu_cd=CCNHacqu_name=NH카드card_no=9431160000002382mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2016041316130511tno=20160415598875amount=158000card_mny=158000coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20160415151229van_apptime=20160415151229app_no=30000791bizx_numb=103001131quota=00noinf=Npg_txid=0415151229MP01CAOH29SF0000001580000030000791use_point=0res_tax_flag=TG01res_tax_mny=143636res_free_mny=0res_vat_mny=14364partcanc_yn=Ycard_bin_type_01=1card_bin_type_02=1join_cd=0000]

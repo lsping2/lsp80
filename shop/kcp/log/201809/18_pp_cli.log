@@ -1,5 +1,0 @@
-0918-173856 - 42495 - SR42Y9IHbmF7MNDa - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2018091817364099]+log_level=[3]
-0918-173857 - 42495 - SR42Y9IHbmF7MNDa - MSG : PG_서버_접속__정상
-0918-173857 - 42495 - SR42Y9IHbmF7MNDa - MSG : PG_서버_요청_전문_전송__정상
-0918-173857 - 42495 - SR42Y9IHbmF7MNDa - MSG : PG_서버_응답_전문_수신__정상
-0918-173857 - 42495 - SR42Y9IHbmF7MNDa - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y9IHbmF7MNDapay_method=PACAorder_no=2018091817364099card_cd=CCKMcard_name=KB국민카드acqu_cd=CCKMacqu_name=KB국민카드card_no=5409470000007026mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2018091817364099tno=18891113354828amount=36100card_mny=36100coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20180918173858van_apptime=20180918173858app_no=30009840bizx_numb=00013219101quota=00noinf=Npg_txid=0918173858MP01FA4M4PO70000000361000030009840res_tax_flag=TG01res_tax_mny=32818res_free_mny=0res_vat_mny=3282partcanc_yn=Ycard_bin_type_01=0card_bin_type_02=0card_bin_bank_cd=0341isp_partner_cd=050204040020641join_cd=0000]

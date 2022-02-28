@@ -1,5 +1,0 @@
-0430-142403 - 12291 - SR42Y4UELX3GGFaN - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2018043014161550]+log_level=[3]
-0430-142403 - 12291 - SR42Y4UELX3GGFaN - MSG : PG_서버_접속__정상
-0430-142403 - 12291 - SR42Y4UELX3GGFaN - MSG : PG_서버_요청_전문_전송__정상
-0430-142405 - 12291 - SR42Y4UELX3GGFaN - MSG : PG_서버_응답_전문_수신__정상
-0430-142405 - 12291 - SR42Y4UELX3GGFaN - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y4UELX3GGFaNpay_method=PACAorder_no=2018043014161550card_cd=CCBCcard_name=BC카드acqu_cd=CCBCacqu_name=BC카드card_no=9451200000007976mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2018043014161550tno=18750677080915amount=126200card_mny=126200coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20180430142404van_apptime=20180430142404app_no=63858290bizx_numb=780284397quota=00noinf=Npg_txid=0430142404MG34FDG1F4ML0000001262000063858290res_tax_flag=TG01res_tax_mny=114727res_free_mny=0res_vat_mny=11473partcanc_yn=Ycard_bin_type_01=1card_bin_type_02=0card_bin_bank_cd=0020isp_issuer_cd=BC20isp_issuer_nm=우리비씨isp_partner_cd=000100202247764join_cd=0000]

@@ -1,5 +1,0 @@
-0526-213133 - 30465 - SR42Y5QLUV2JQGQO - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[QPAY__IF]+ordr_idxx=[2017052621295393]+log_level=[3]
-0526-213133 - 30465 - SR42Y5QLUV2JQGQO - MSG : PG_서버_접속__정상
-0526-213133 - 30465 - SR42Y5QLUV2JQGQO - MSG : PG_서버_요청_전문_전송__정상
-0526-213135 - 30465 - SR42Y5QLUV2JQGQO - MSG : PG_서버_응답_전문_수신__정상
-0526-213135 - 30465 - SR42Y5QLUV2JQGQO - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y5QLVYFmoqMppay_method=PACAordr_idxx=2017052621295393card_cd=CCDIcard_name=현대카드acqu_cd=CCDIacqu_name=현대카드card_no=9490640000001317mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2017052621295393tno=17776077296560amount=19000card_mny=19000coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20170526213135van_apptime=20170526213135app_no=00035514bizx_numb=150252705quota=00noinf=Npg_txid=0526213135MP34FEAGXTHC0000000190000000035514use_point=0res_tax_flag=TG01res_tax_mny=17272res_free_mny=0res_vat_mny=1728partcanc_yn=Ycard_bin_type_01=0card_bin_type_02=0join_cd=0000]

@@ -1,5 +1,0 @@
-0422-220012 - 22624 - SR42Y4MLXX1IQMH5 - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2017042221574244]+log_level=[3]
-0422-220012 - 22624 - SR42Y4MLXX1IQMH5 - MSG : PG_서버_접속__정상
-0422-220012 - 22624 - SR42Y4MLXX1IQMH5 - MSG : PG_서버_요청_전문_전송__정상
-0422-220013 - 22624 - SR42Y4MLXX1IQMH5 - MSG : PG_서버_응답_전문_수신__정상
-0422-220013 - 22624 - SR42Y4MLXX1IQMH5 - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y4MLXX1IQMH5pay_method=PACAorder_no=2017042221574244card_cd=CCKMcard_name=KB국민카드acqu_cd=CCKMacqu_name=KB국민카드card_no=9445420000008009mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2017042221574244tno=17742756254880amount=24300card_mny=24300coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20170422220013van_apptime=20170422220013app_no=30062111bizx_numb=00013219101quota=00noinf=Npg_txid=0422220013MP01DG60WU8L0000000243000030062111res_tax_flag=TG01res_tax_mny=22090res_free_mny=0res_vat_mny=2210partcanc_yn=Ycard_bin_type_01=0card_bin_type_02=0isp_partner_cd=000204040090581join_cd=0000]
