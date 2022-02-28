@@ -1,5 +1,0 @@
-0710-100311 - 25346 - SR42Y7A9m54mndR1 - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2017070622581673]+log_level=[3]
-0710-100311 - 25346 - SR42Y7A9m54mndR1 - MSG : PG_서버_접속__정상
-0710-100311 - 25346 - SR42Y7A9m54mndR1 - MSG : PG_서버_요청_전문_전송__정상
-0710-100312 - 25346 - SR42Y7A9m54mndR1 - MSG : PG_서버_응답_전문_수신__정상
-0710-100312 - 25346 - SR42Y7A9m54mndR1 - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y7A9m54mndR1pay_method=PACAorder_no=2017070622581673card_cd=CCKEcard_name=하나카드(외환)acqu_cd=CCKEacqu_name=하나카드(외환)card_no=4119040000003168mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2017070622581673tno=17821359147242amount=576000card_mny=576000coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20170710100312van_apptime=20170710100312app_no=02278829bizx_numb=00909776395quota=05noinf=Ynoinf_type=CARDpg_txid=0710100312MP01CD321TV30000005760000502278829res_tax_flag=TG01res_tax_mny=523636res_free_mny=0res_vat_mny=52364partcanc_yn=Ycard_bin_type_01=0card_bin_type_02=0join_cd=0000]

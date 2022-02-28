@@ -1,5 +1,0 @@
-0827-170137 -  9193 - SR42Y8RH0L2JQ4OS - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2017082716574760]+log_level=[3]
-0827-170137 -  9193 - SR42Y8RH0L2JQ4OS - MSG : PG_서버_접속__정상
-0827-170137 -  9193 - SR42Y8RH0L2JQ4OS - MSG : PG_서버_요청_전문_전송__정상
-0827-170137 -  9193 - SR42Y8RH0L2JQ4OS - MSG : PG_서버_응답_전문_수신__정상
-0827-170137 -  9193 - SR42Y8RH0L2JQ4OS - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y8RH0L2JQ4OSpay_method=PACAorder_no=2017082716574760card_cd=CCDIcard_name=현대카드acqu_cd=CCDIacqu_name=현대카드card_no=9490370000009219mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2017082716574760tno=17489694618917amount=13900card_mny=13900coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20170827170138van_apptime=20170827170138app_no=00775129bizx_numb=150252705quota=00noinf=Npg_txid=0827170138MP34CE110RG50000000139000000775129use_point=0res_tax_flag=TG01res_tax_mny=12636res_free_mny=0res_vat_mny=1264partcanc_yn=Ycard_bin_type_01=0card_bin_type_02=0join_cd=0000]

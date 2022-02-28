@@ -1,5 +1,0 @@
-0109-145710 - 28340 - SR42Y19EUPEHN2JT - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2018010914354440]+log_level=[3]
-0109-145710 - 28340 - SR42Y19EUPEHN2JT - MSG : PG_서버_접속__정상
-0109-145710 - 28340 - SR42Y19EUPEHN2JT - MSG : PG_서버_요청_전문_전송__정상
-0109-145711 - 28340 - SR42Y19EUPEHN2JT - MSG : PG_서버_응답_전문_수신__정상
-0109-145711 - 28340 - SR42Y19EUPEHN2JT - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y19EUPEHN2JTpay_method=PACAorder_no=2018010914354440card_cd=CCBCcard_name=BC카드acqu_cd=CCBCacqu_name=BC카드card_no=9100200000007434mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2018010914354440tno=18259724776383amount=29300card_mny=29300coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20180109145711van_apptime=20180109145711app_no=46119168bizx_numb=780284397quota=00noinf=Npg_txid=0109145711MG34CB7MVFX00000000293000046119168res_tax_flag=TG01res_tax_mny=26636res_free_mny=0res_vat_mny=2664partcanc_yn=Ycard_bin_type_01=0card_bin_type_02=0card_bin_bank_cd=0020isp_issuer_cd=BC20isp_issuer_nm=우리비씨isp_partner_cd=050100202022511join_cd=0000]

@@ -1,5 +1,0 @@
-0413-171438 - 10907 - SR42Y4DHEcE5dcSd - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00200000]+ordr_idxx=[]+log_level=[3]
-0413-171438 - 10907 - SR42Y4DHEcE5dcSd - MSG : PG_서버_접속__정상
-0413-171438 - 10907 - SR42Y4DHEcE5dcSd - MSG : PG_서버_요청_전문_전송__정상
-0413-171438 - 10907 - SR42Y4DHEcE5dcSd - MSG : PG_서버_응답_전문_수신__정상
-0413-171438 - 10907 - SR42Y4DHEcE5dcSd - MSG : TX_ENDED - res=[res_cd=0000res_msg=성공]

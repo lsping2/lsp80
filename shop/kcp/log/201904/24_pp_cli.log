@@ -1,5 +1,0 @@
-0424-105536 - 42780 - SR42Y4OAs95Ia6fs - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2019042410260292]+log_level=[3]
-0424-105536 - 42780 - SR42Y4OAs95Ia6fs - MSG : PG_서버_접속__정상
-0424-105536 - 42780 - SR42Y4OAs95Ia6fs - MSG : PG_서버_요청_전문_전송__정상
-0424-105537 - 42780 - SR42Y4OAs95Ia6fs - MSG : PG_서버_응답_전문_수신__정상
-0424-105537 - 42780 - SR42Y4OAs95Ia6fs - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y4OAs95Ia6fspay_method=PACAorder_no=2019042410260292card_cd=CCNHcard_name=NH카드acqu_cd=CCNHacqu_name=NH카드card_no=9431160000001814mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2019042410260292tno=19744312354287amount=1504800card_mny=1504800coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20190424105537van_apptime=20190424105537app_no=30000135bizx_numb=148034830quota=00noinf=Npg_txid=0424105537MNK4CDEEJ7Z20000015048000030000135use_point=0res_tax_flag=TG01res_tax_mny=1368000res_free_mny=0res_vat_mny=136800partcanc_yn=Ycard_bin_type_01=1card_bin_type_02=1join_cd=0000]

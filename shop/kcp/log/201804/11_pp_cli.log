@@ -1,5 +1,0 @@
-0411-154916 - 29774 - SR42Y4BFg53DD6eD - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2018041115392536]+log_level=[3]
-0411-154916 - 29774 - SR42Y4BFg53DD6eD - MSG : PG_서버_접속__정상
-0411-154916 - 29774 - SR42Y4BFg53DD6eD - MSG : PG_서버_요청_전문_전송__정상
-0411-154917 - 29774 - SR42Y4BFg53DD6eD - MSG : PG_서버_응답_전문_수신__정상
-0411-154917 - 29774 - SR42Y4BFg53DD6eD - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y4BFg53DD6eDpay_method=PACAorder_no=2018041115392536card_cd=CCKMcard_name=KB국민카드acqu_cd=CCKMacqu_name=KB국민카드card_no=5205040000002904mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2018041115392536tno=18351528033182amount=185000card_mny=185000coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20180411154917van_apptime=20180411154917app_no=30034141bizx_numb=00013219101quota=00noinf=Npg_txid=0411154917MP01EDX30P3E0000001850000030034141res_tax_flag=TG01res_tax_mny=168181res_free_mny=0res_vat_mny=16819partcanc_yn=Ycard_bin_type_01=1card_bin_type_02=1card_bin_bank_cd=0341isp_partner_cd=050204040033454join_cd=0000]
