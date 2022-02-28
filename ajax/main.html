@@ -1,0 +1,48 @@
+<html><head> 
+
+<script language=javascript> 
+  var xmlhttp = null; 
+
+function getHttprequest() { 
+
+  /* 브라우져 셋팅*/ 
+
+  if(window.XMLHttpRequest) { 
+
+  //파어이 폭스는 아래값으로 셋팅됨. 
+  xmlhttp = new XMLHttpRequest(); 
+  } else { 
+  //인터넷 익스플로어는 아래값으로 셋팅됨. 
+  xmlhttp = new ActiveXObject("Microsoft.XMLHTTP"); 
+  } //브라우져 셋팅 끝. 
+
+  //b.php를 호출한다.b.php에 값이 리로드 되는것을 확인하기 위해 
+
+  xmlhttp.open('get',"b.php",true); 
+  xmlhttp.onreadystatechange = function(){ 
+    if(xmlhttp.readyState == '4'){ //readyState 4는 로딩된후, 값을 모두 받았음을 의미함. 
+      if(xmlhttp.status == 200) { 
+        //data.php에서 불러온 값이 data라는 변수에 담기게 된다. 
+        //실제로 window.alert(data)로 찍어봐도 확인 가능. 
+        //이 값을 ajax.html 화면에 찍기 위해 innerHTML 사용 
+        var data=xmlhttp.responseText; 
+						document.getElementById("console").innerHTML = data  //아래 id를 console 이라는 값을 가진 텍스트박스에 결과값을 뿌려준다.
+
+        //utf 설정 헤더를 넣을때 아래 추가 
+        //xmlhttp.setRequestHeader("Content-type", "application/x-www-urlencoded; charset=UTF-8"); 
+      } //End of 200
+    } //End of 4
+  }
+
+    xmlhttp.send(null); 
+    setTimeout("getHttprequest()", 1000); //3초 마다 서버와 통신함 
+    return false; //setTimeout이 제대로 호출된다면 여기로는 넘어오지 않음 
+} 
+
+
+</script> 
+</head> 
+<body onload="getHttprequest()"> 
+<div id="console" style="width:500px; height:500px"></div>
+</BODY>
+</HTML>

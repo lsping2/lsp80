@@ -1,0 +1,123 @@
+<html>
+<head>
+
+	<title>################달력################</title>
+
+	<script language="javascript">
+  function writeok(year,month,day){
+		var year,month,day;
+  window.open('write.html?year='+year+'&month='+month+'&day='+day,'aaa','width=450,height=600');
+   }
+   </script>
+</head>
+<?	
+	if(!$year || !$month || !$day)    //년 월 일  나타냄...
+	{
+		$year=date("Y");
+		$month=date("m");
+		$day=date("d");
+	}
+	if($mod=="pre")    //◀버튼을 눌렀을때 년 월이 이전으로 돌아감
+{
+		if($month==1)  
+			{
+				$year=$year-1;
+				$month=12;
+			}
+	
+	
+	else
+			$month=$month-1;
+	   	 
+}
+
+
+		 if($mod=="next")   //▶ 버튼을 눌렀을때 년 월이 다음으로 감...
+	{
+		if($month==12)
+			{
+				$year=$year+1;
+				$month=1;
+			}
+	
+	
+	else
+			$month=$month+1;
+}
+
+	
+	$week_first=date("w",mktime(0,0,0,$month,1,$year));  //1일에대한 요일
+	$week_last=date("t",mktime(0,0,0,$month,1,$year));    //1일부터 마지막날까지의 개수 t는 주워진 월의 일수를 나타냄
+
+?>
+
+<body>
+ 
+	<center><table border="1" width="700" >
+	<tr><td ><center> 
+	<? echo " <a href='calender.html?day=$day&month=$month&year=$year&mod=pre'>◀</a><$year-$month>
+	<a href='calender.html?day=$day&month=$month&year=$year&mod=next'>▶</a>";
+	?>
+	</center></td></tr>
+  </table>
+  
+	<table border="1" width="700" height="500">
+ </center>
+	<tr> 
+	<td><center><font color="red">일</font></center></td>
+	<td><center>월</center></td>
+	<td><center>화</center></td>
+	<td><center>수</center></td>
+	<td><center>목</center></td>
+	<td><center>금</center></td>
+	<td><center><font color="blue">토</font></center></td>
+	</tr>
+	
+	
+	<tr>
+	
+	<?
+		for($i=0;$i<$week_first;$i++)
+		{
+		echo("<td>&nbsp</td>");
+		}
+		for($j=1;$j<=$week_last;$j++)
+		{	
+				if($j<10) $j2="0".$j;
+				else       $j2=$j;
+                				
+				$week_day=date("w",mktime(0,0,0,$month,$j,$year)); //j는 숫자 1~31찍히는 값을 6씩끊어서 테이블에 표현
+				?>
+				<td>
+				<table width=100% height=100%  border=1 >
+				<tr><td height=20 bgcolor=skyblue>
+				<a href="javascript:writeok('<?=$year?>','<?=$month?>','<?=$j2?>')"><?=$j?></a></td></tr>
+				
+				<tr><td height=80 bgcolor=pink>&nbsp</td></tr>
+				
+			
+				</table></td>
+								
+			<?
+			if($j==$week_last)
+				{
+					if($week_day==6)echo "</tr>";
+					else{
+							for($k=($week_day+1);$k<7;$k++)
+							{
+								echo("<td>&nbsp;</td>");
+							}
+								echo("</tr>");
+						}				
+				}
+			else{
+					if($week_day==6)echo("</tr><tr>");
+					}
+			}
+
+
+			?>
+	
+	</table>
+</body>
+</html>

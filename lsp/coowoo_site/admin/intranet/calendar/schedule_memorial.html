@@ -1,0 +1,236 @@
+<?
+
+require_once "../../../include/include.php";
+html_cache_disable();
+require_once "../../login/login_check.php";
+login_check();
+
+$user_uid		= request( 'user_uid' , 'get' );
+$working_date	= request( 'working_date' , 'get' );
+
+?>
+<html>
+<head>
+<title></title>
+<link rel="stylesheet" href="../../admin_style.css" type="text/css">
+<script language=javascript>
+
+self.focus();
+
+function checkForm( form )
+{
+
+	
+	if ( form.comment.value == "" )
+	{
+		alert('내용을 입력하세요');
+		return false;
+	}
+
+	
+	return true;
+}
+
+
+function memorial_view( working_date, user_uid)
+{
+	window.open( "schedule_memorial_view.html?working_date=" +working_date +"&user_uid=" + user_uid , "_brank","width=420, height=330 , LEFT=200,TOP=10'" );
+}
+</script>
+
+</head>
+<body>
+
+<?
+$db = new MYSQL;
+$db2 = new MYSQL;
+
+$query = "
+			SELECT	DATE_FORMAT( lunar_date, '%m/%d' ) as lunar_date ,
+					ganji
+			FROM	intranet.lunar2solar
+			WHERE	solar_date = '$working_date'
+	";
+$db2->query( $query );
+$db2->fetch();
+$rs_lunar_date	= $db2->result( 'lunar_date' );
+?>
+<form name=frm  method="post" onSubmit="return checkForm( this )" action="schedule_memorial_exec.php">
+
+
+<table border=0 cellpadding=0 cellspacing=0>
+<tr>
+	<td colspan=2>
+	<table  border=0 width=380 cellpadding=0 cellspacing=2 bgcolor=#EFEFEF >
+	<tr>
+			<td height=20 align="center">
+			<?
+				list( $year, $month, $day ) = explode( "-" , $working_date );
+			?>
+				<span style="font-family:tahoma; font-size:10pt; padding-left:10px"><?=$year?>년 <?=$month?>월 <?=$day?>일 </span>
+				<span style="font-family:tahoma; font-size:8pt; color=#A5A5A5">( <?=$rs_lunar_date?> )</span>
+				<span style="font-family:tahoma; font-size:10pt; padding-left:10px"></span>기념일 등록
+
+			</td>
+	</tr>
+	<tr bgcolor=#FFFFFF>
+		<td>
+		<table border=0  cellpadding=1 cellspacing=1 width=100%>
+<?
+// 현재일을 음력날자로 가져옴
+$query = "
+		SELECT	lunar_date
+		FROM	intranet.lunar2solar
+		WHERE	solar_date = '$working_date'
+";
+$db2->query( $query );
+$db2->fetch();
+$working_date_lunar = $db2->result( 'lunar_date' );
+
+
+
+list( $year, $month, $day )  = explode( "-" , $working_date);
+list( $year_lunar, $month_lunar, $day_lunar ) = explode( "-", $working_date_lunar );
+
+$query = "
+			SELECT	user_uid ,
+					user_id , 
+					color ,
+					comment ,
+					working_date ,
+					repeat ,
+					lunar2solar
+			FROM	intranet.calendar_memorial_day 
+			WHERE
+					( IF(repeat ='Yearly' ,DATE_FORMAT( working_date, '%m-%d' ) = '$month-$day'  ,0)  AND lunar2solar = 'solar' )
+				OR	( IF(repeat ='Monthly' ,DATE_FORMAT( working_date, '%d' ) = '$day'  ,0)  AND lunar2solar = 'solar' )
+				OR	( working_date ='$working_date'  AND lunar2solar = 'solar' )	
+				OR	( IF(repeat ='Yearly' ,DATE_FORMAT( working_date, '%m-%d' ) = '{$month_lunar}-{$day_lunar}'  ,0)  AND lunar2solar = 'lunar' )
+				OR	( IF(repeat ='Monthly' ,DATE_FORMAT( working_date, '%d' ) = '$day_lunar'  ,0)  AND lunar2solar = 'lunar' )
+				OR	( working_date ='$working_date_lunar'  AND lunar2solar = 'lunar'  )
+		
+			
+
+		";
+$db->query($query);
+
+
+
+?>
+
+<? if ( !$db->total_record() ):?>
+		<tr>
+			<td colspan=3 align=center height=80><span style="color:#BBBBBB">등록된 게시물이 없습니다.</span></td>
+		</tr>
+		<tr>
+			<td colspan=3 height=1 background="../../image/dot.gif">
+		</tr>
+<? endif ?>
+
+<? for( $loop=0; $loop<$db->total_record(); $loop++ ) : ?>
+<?
+$db->fetch();
+$rs_user_uid		= $db->result( 'user_uid' );
+$rs_user_id		= $db->result( 'user_id' );
+$rs_color			= $db->result( 'color' );
+$rs_comment		= $db->result( 'comment' );
+$rs_working_date	= $db->result( 'working_date' );
+$rs_repeat 		= $db->result( 'repeat' );
+$rs_lunar2solar	= $db->result( 'lunar2solar' );
+?>
+
+
+	<? $txt_comment ='';  $c = '44';						?>
+	<? IF ( 'Yearly' == $rs_repeat AND 'solar' == $rs_lunar2solar ) :?>
+	<?  $txt_comment = "[ 매년/양력($rs_working_date) ] ";	   $c='20';   ?>
+	<? ELSEIF( 'Yearly' == $rs_repeat AND 'lunar' == $rs_lunar2solar ) :?>
+	<?  $txt_comment = "[ 매년/음력(" . (int)substr( $rs_working_date, 5,3 )."월".(int)substr( $rs_working_date, 8 ) . "일) ] ";         $c='20';   ?>
+	<? ELSEIF( 'Monthly' == $rs_repeat AND 'solar' == $rs_lunar2solar ) :?>
+	<?  $txt_comment = "[ 매월/양력(" . (int)substr( $rs_working_date, 8 ) . "일) ] ";          $c='20';    ?>
+	<? ELSEIF( 'Monthly' == $rs_repeat AND 'lunar' == $rs_lunar2solar ) :?>
+	  <?  $txt_comment = "[ 매월/음력(" . (int)substr( $rs_working_date, 8 ) . "일) ] ";          $c='20';    ?>
+	  <? ELSEIF( 'Usual' == $rs_repeat AND 'lunar' == $rs_lunar2solar ) :?>
+	  <?  $txt_comment = "[ 음력($rs_working_date) ] ";        $c='20';    ?> 
+	<? ENDIF ?>
+
+
+
+		<tr  onMouseOver=this.style.backgroundColor="#EFEFEF" onMouseOut=this.style.backgroundColor="">
+			<td height=20 colspan=3>
+				<table border=0  cellpadding=1 cellspacing=1 width=100%>
+				<tr >
+					<td height=20 width=20><?=$loop+1?>.</td>
+					<td align=left><a href="#" onClick="memorial_view( '<?=$working_date?>' , '<?=$rs_user_uid?>' ); return false;">
+					<font color=#9B9B9B style="font-size:8pt"><?=$txt_comment?></font><font color=<?=$rs_color?>><?=substr_kr(htmlspecialchars($rs_comment),$c,"..")?></font></td>
+					<td align=right><a href="schedule_memorial_del.php?user_uid=<?=$rs_user_uid?>&working_date=<?=$working_date?>" onclick="return confirm('삭제하시겠습니까?')"><img src="images/del.gif" border="0"></a></td>
+				</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td colspan=3 height=1 background="../../image/dot.gif">
+		</tr>
+<? endfor?>
+		<tr>
+			<td colspan=3 height=10>
+		</tr>
+		<tr valign=bottom>
+			<td align=right width=65>강조색 :&nbsp</td>
+			<td colspan=2>
+				<input type=radio name=colors value="BLACK" checked><b>BLACK</b>
+				<input type=radio name=colors value="BLUE"> <font color=#3333CC><b>BLUE</b></font>
+				<input type=radio name=colors value="RED"> <font color=#FF2424><b>RED</b></font>
+			</td>
+		</tr>
+		<tr height=15>
+			<td align=right>내&nbsp&nbsp&nbsp용 :&nbsp</td>
+			<td colspan=2>
+			<textarea name=comment  cols=55  rows=4 style="font-size:9pt"  class=underline></textarea>
+			</td>
+		</tr>
+
+		<tr valign=bottom>
+			<td align=right width=65>반&nbsp&nbsp&nbsp복 :&nbsp</td>
+			<td colspan=2>
+				<input type=radio name=repeat value="Usual" checked><b>없음</b> &nbsp&nbsp
+				<input type=radio name=repeat value="Yearly">매년&nbsp&nbsp
+				<input type=radio name=repeat value="Monthly">매월
+			</td>
+		</tr>
+
+		<tr valign=bottom>
+			<td align=right width=65>날짜기준 :&nbsp</td>
+			<td colspan=2>
+				<input type=radio name=lunar2solar value="solar" checked>양력(<?=$working_date?>)&nbsp&nbsp
+				<input type=radio name=lunar2solar value="lunar">음력(<?=$working_date_lunar?>)
+			</td>
+		</tr>
+
+		<tr>
+			<td colspan=3 height=10>
+		</tr>
+		</table>
+
+		</td>
+	</tr>
+	</table>
+	</td>
+</tr>
+</table>
+
+<table border=0 width=100%>
+<tr><td height=5></td></tr>
+<tr>
+	<td align=right>
+	<input type=image src="images/btn_reg.gif">
+	</td>
+</tr>
+</table>
+
+<input type=hidden name=working_date value="<?=$working_date?>">
+<input type=hidden name=lunar_date value="<?=$rs_lunar_date?>">
+<input type=hidden name=user_uid value="<?=$rs_user_uid?>">
+
+</form>
+</body>
+</html>

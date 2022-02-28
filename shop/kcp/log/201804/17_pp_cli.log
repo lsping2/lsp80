@@ -1,0 +1,10 @@
+0417-143839 - 32043 - SR42Y4HEYLCkNRME - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2018041620022534]+log_level=[3]
+0417-143839 - 32043 - SR42Y4HEYLCkNRME - MSG : PG_서버_접속__정상
+0417-143839 - 32043 - SR42Y4HEYLCkNRME - MSG : PG_서버_요청_전문_전송__정상
+0417-143840 - 32043 - SR42Y4HEYLCkNRME - MSG : PG_서버_응답_전문_수신__정상
+0417-143840 - 32043 - SR42Y4HEYLCkNRME - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y4HEYLCkNRMEpay_method=PACAorder_no=2018041620022534card_cd=CCHNcard_name=하나카드acqu_cd=CCKEacqu_name=하나카드(외환)card_no=9440810000002649mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2018041620022534tno=18357573680595amount=1337800card_mny=1337800coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20180417143840van_apptime=20180417143840app_no=19151581bizx_numb=00909776395quota=00noinf=Npg_txid=0417143840MP01FF5L501I0000013378000019151581res_tax_flag=TG01res_tax_mny=1216181res_free_mny=0res_vat_mny=121619partcanc_yn=Ycard_bin_type_01=0card_bin_type_02=1join_cd=0000]
+0417-164611 - 48926 - SR42Y4HGiD23nq8k - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2018041620060872]+log_level=[3]
+0417-164611 - 48926 - SR42Y4HGiD23nq8k - MSG : PG_서버_접속__정상
+0417-164611 - 48926 - SR42Y4HGiD23nq8k - MSG : PG_서버_요청_전문_전송__정상
+0417-164612 - 48926 - SR42Y4HGiD23nq8k - MSG : PG_서버_응답_전문_수신__정상
+0417-164612 - 48926 - SR42Y4HGiD23nq8k - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y4HGiD23nq8kpay_method=PACAorder_no=2018041620060872card_cd=CCHNcard_name=하나카드acqu_cd=CCKEacqu_name=하나카드(외환)card_no=9440810000002474mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2018041620060872tno=18357574668697amount=348100card_mny=348100coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20180417164612van_apptime=20180417164612app_no=41362755bizx_numb=00909776395quota=00noinf=Npg_txid=0417164612MP01FI5PP0JZ0000003481000041362755res_tax_flag=TG01res_tax_mny=316454res_free_mny=0res_vat_mny=31646partcanc_yn=Ycard_bin_type_01=0card_bin_type_02=1join_cd=0000]

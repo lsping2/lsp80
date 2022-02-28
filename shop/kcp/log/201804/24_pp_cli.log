@@ -1,0 +1,5 @@
+0424-103629 - 33863 - SR42Y4OAYn5G9FBE - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2018042410334040]+log_level=[3]
+0424-103629 - 33863 - SR42Y4OAYn5G9FBE - MSG : PG_서버_접속__정상
+0424-103629 - 33863 - SR42Y4OAYn5G9FBE - MSG : PG_서버_요청_전문_전송__정상
+0424-103629 - 33863 - SR42Y4OAYn5G9FBE - MSG : PG_서버_응답_전문_수신__정상
+0424-103629 - 33863 - SR42Y4OAYn5G9FBE - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y4OAYn5G9FBEpay_method=PACAorder_no=2018042410334040card_cd=CCNHcard_name=NH카드acqu_cd=CCNHacqu_name=NH카드card_no=9430160000007319mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2018042410334040tno=18744627776724amount=184800card_mny=184800coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20180424103630van_apptime=20180424103630app_no=30000110bizx_numb=103001131quota=03noinf=Ynoinf_type=CARDpg_txid=0424103630MP01EI78ND1U0000001848000330000110use_point=0res_tax_flag=TG01res_tax_mny=168000res_free_mny=0res_vat_mny=16800partcanc_yn=Ycard_bin_type_01=1card_bin_type_02=0join_cd=0000]

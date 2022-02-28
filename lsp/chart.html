@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<script>
+    window.onload = function ()
+    {
+        // The data to be shown on the Rose chart.
+        var data = [41,37,16,3,3];
+        
+        // To show a stacked Rose chart you specify the data like this. non-equi-angular
+        // Rose charts are very similar to this but with only two elements to
+        // each array - the magnitude of the segment and the size of the angle.
+        // var rose = new RGraph.Rose('myRose', [[4,5], [6,8], [4,3]]);
+    
+        // Create the rose chart.
+        var rose = new RGraph.Rose('myRose', data);
+        
+        // Configure the chart to look as you want.
+        rose.Set('chart.labels', ['MSIE 7 (41%)', 'MSIE 6 (37%)', 'Firefox (16%)', 'Safari (3%)', 'Other (3%)']);
+        
+        // Now call the .Draw() method to draw the chart.
+        rose.Draw();
+    }
+</script>
+
+</head>

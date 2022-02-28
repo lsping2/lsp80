@@ -1,0 +1,10 @@
+0626-215539 - 44337 - SR42Y6QLSLRTNONJ - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2018062621511652]+log_level=[3]
+0626-215539 - 44337 - SR42Y6QLSLRTNONJ - MSG : PG_서버_접속__정상
+0626-215539 - 44337 - SR42Y6QLSLRTNONJ - MSG : PG_서버_요청_전문_전송__정상
+0626-215539 - 44337 - SR42Y6QLSLRTNONJ - MSG : PG_서버_응답_전문_수신__정상
+0626-215539 - 44337 - SR42Y6QLSLRTNONJ - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y6QLSLRTNONJpay_method=PACAorder_no=2018062621511652card_cd=CCDIcard_name=현대카드acqu_cd=CCDIacqu_name=현대카드card_no=5221120000001000mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2018062621511652tno=18807255445960amount=60700card_mny=60700coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20180626215539van_apptime=20180626215539app_no=00014931bizx_numb=150252705quota=05noinf=Ynoinf_type=CARDpg_txid=0626215539MP34CFQWJDSY0000000607000500014931use_point=0res_tax_flag=TG01res_tax_mny=55181res_free_mny=0res_vat_mny=5519partcanc_yn=Ycard_bin_type_01=0card_bin_type_02=0join_cd=0000]
+0626-221215 - 14642 - SR42Y6QMBQZTNONJ - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2018062622102215]+log_level=[3]
+0626-221215 - 14642 - SR42Y6QMBQZTNONJ - MSG : PG_서버_접속__정상
+0626-221215 - 14642 - SR42Y6QMBQZTNONJ - MSG : PG_서버_요청_전문_전송__정상
+0626-221215 - 14642 - SR42Y6QMBQZTNONJ - MSG : PG_서버_응답_전문_수신__정상
+0626-221215 - 14642 - SR42Y6QMBQZTNONJ - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y6QMBQZTNONJpay_method=PACAorder_no=2018062622102215card_cd=CCDIcard_name=현대카드acqu_cd=CCDIacqu_name=현대카드card_no=5221120000001000mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2018062622102215tno=18807255589352amount=32100card_mny=32100coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20180626221216van_apptime=20180626221216app_no=00402514bizx_numb=150252705quota=00noinf=Npg_txid=0626221216MP34EIQX4QOM0000000321000000402514use_point=0res_tax_flag=TG01res_tax_mny=29181res_free_mny=0res_vat_mny=2919partcanc_yn=Ycard_bin_type_01=0card_bin_type_02=0join_cd=0000]

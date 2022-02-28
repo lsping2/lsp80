@@ -1,0 +1,352 @@
+<?
+
+require_once "../../../include/include.php";
+html_cache_disable();
+
+require_once "../../login/login_check.php";
+login_check( $PHP_SELF );
+
+
+$db = new MYSQL;
+
+$search_field	= request( 'search_field' , 'get' );			// 주문번호 셀렉트 값
+$search_key	= request( 'search_key' , 'get' );			// 검색어의 값
+$show		= request( 'show', 'get' );				//  라디오 버턴의 값
+
+$from_year	= request( 'from_year', 'get' );
+$from_month	= request( 'from_month', 'get' );
+$from_day	= request( 'from_day', 'get' );
+
+$to_year		= request( 'to_year', 'get' );
+$to_month	= request( 'to_month', 'get' );
+$to_day		= request( 'to_day', 'get' );
+
+
+$from_date	= $from_year . "-" . sprintf( "%02d" , $from_month ) . "-" . sprintf( "%02d" , $from_day );
+$to_date		= $to_year . "-" . sprintf( "%02d" , $to_month ) . "-" . sprintf( "%02d" , $to_day );
+
+
+
+$httpvar = make_httpvar( 'page' );
+
+
+if( $from_year )
+{
+	$date_query = "
+							 AND DATE_FORMAT( cp.publish_date , '%Y-%m-%d' ) >= '$from_date'
+							 AND DATE_FORMAT( cp.publish_date , '%Y-%m-%d' ) <= '$to_date'
+	";
+}
+
+
+
+//################### 전체이미지별  다운로드이미지별 라디오버튼 선택부분 쿼리 ########################
+
+if( $show == "ID" )
+{
+	
+	$search_query = " WHERE  cpi.user_id LIKE '$search_key%' ";
+
+
+}
+
+elseif( $show == "NAME" )
+{
+	$search_query = " WHERE  ui.user_name LIKE '$search_key%' ";
+
+}
+
+else
+{
+	$search_query ='';
+}
+//############################################################################
+
+
+
+
+
+
+
+$query = "
+		SELECT		count(*)
+		FROM		coupon.coupon_publish_info as cpi
+					LEFT JOIN coupon.coupon_publish as cp
+					ON cpi.publish_no = cp.publish_no
+					LEFT JOIN coupon.coupon as c
+					ON cp.coupon_no = c.coupon_no
+					LEFT JOIN coowoo.user_info as ui
+					ON cpi.user_id = ui.user_id
+		$search_query
+		$date_query
+";
+
+$db->query( $query );
+$total_record = $db->is_count();
+
+$max_show_list = 20;
+$max_show_page = 12;
+
+page_calcu();
+
+
+
+
+ $query = "
+		SELECT		publish_title,
+					cp.publish_date,
+					c.coupon_title,
+					cpi.user_id,
+					cpi.publish_no,
+					ui.user_name,
+					ui.user_no 
+		FROM		coupon.coupon_publish_info as cpi
+					LEFT JOIN coupon.coupon_publish as cp
+					ON cpi.publish_no = cp.publish_no
+					LEFT JOIN coupon.coupon as c
+					ON cp.coupon_no = c.coupon_no
+					LEFT JOIN coowoo.user_info as ui
+					ON cpi.user_id = ui.user_id
+		$search_query
+		$date_query
+		ORDER BY		cp.publish_date DESC
+		LIMIT		$start, $max_show_list
+
+
+";
+
+
+
+$db->query( $query );
+
+
+// 페이징 이후에도 값들을 유지하기위한 변수
+$location = "&search_key=" . htmlspecialchars( $search_key )."&show={$show}";
+
+?>
+<html>
+<head>
+<title><?$HTML->Title( 'Admin' )?></title>
+<?=$HTML->Metatag()?>
+<link rel="stylesheet" href="../../admin_style.css" type="text/css">
+
+<script language=javascript>
+
+
+function coupon_cancel( user_id , publish_no  )
+{
+	confirmStr = "[ " + user_id + " ] 님의 쿠폰발행을 취소하겠습니까?";
+	if( confirm( confirmStr ) )
+	{
+		window.open( 'coupon_cancel_exec.php?user_id=' + user_id + '&publish_no=' + publish_no , 'coupon_hidden_frame');  //coupon_hidden_frame 은 프레임의 값
+		return true;
+	}
+	return false;
+}
+
+function view_info( user_no )
+{
+	
+	openURL = "coupon_register_info.html?user_no=" + user_no;
+	window.open( openURL, "_viewinfo", "width=490, height=350" );
+}
+
+</script>
+
+</head>
+<body>
+
+<b><font size=3>※ 쿠폰 발행회원</font></b>
+<br><br>
+
+<!----#################################  검색 #####################################--->
+<form name=searchForm action=<?=$_SERVER["PHP_SELF"]?> method=get>
+<table width=820 border=0 cellpadding=0 cellspacing=0>
+<tr>
+	<td>
+	<center>
+	<table border=0 cellpadding=0 cellspacing=1  bgcolor="#CDCD9A">
+	<tr>
+		<td>
+		<table border=0 cellpadding=0 cellspacing=4 bgcolor=#F0F0F0>
+		<tr>
+			
+		      <td><input type=radio name=show value='ID' <? if ($show=='ID') echo 'checked';  ?>> ID</td>
+		      <td><input type=radio name=show value='NAME' <? if ($show=='NAME' OR $show=="" ) echo 'checked'; ?> > 이름</td>
+		      <td><input type=text size=16 style="font-family:굴림체; font-size:9pt" name=search_key <? if( $search_key ) echo "value=\"" . htmlspecialchars( $search_key ) . "\""; ?>>
+		      <input type=submit value="  검색  " class=btn_kr onFocus="this.blur()">
+			
+		
+		<? if( $search_field OR $from_year ) : ?>
+			<input type=button value="전체보기" class=btn_kr onFocus="this.blur()" onClick="window.open( '<?=$_SERVER["PHP_SELF"]?>', '_self' )">
+		<? endif ?>
+			</td>
+			
+		</tr>
+		<tr>
+			<td align=right style="padding-right:5pt">
+			발행일 :
+			</td>
+			<td colspan=3>
+			<select name=from_year>
+	<? for( $loop=2005; $loop<=2010; $loop++ ) : ?>
+			<option value=<?=$loop?> <? if( $loop == $from_year ) echo 'selected' ?>><?=$loop?></option>
+	<? endfor ?>
+			</select>년
+			<select name=from_month>
+	<? for( $loop=1; $loop<=12; $loop++ ) : ?>
+			<option value=<?=$loop?> <? if( $loop == $from_month ) echo 'selected' ?>><?=$loop?></option>
+	<? endfor ?>
+			</select>월
+			<select name=from_day>
+	<? for( $loop=1; $loop<=31; $loop++ ) : ?>
+			<option value=<?=$loop?> <? if( $loop == $from_day) echo 'selected' ?>><?=$loop?></option>
+	<? endfor ?>
+			</select>일 ~
+	<?
+
+	$today_year = date( 'Y', time() );
+	$today_month = date( 'n' , time() );
+	$today_day = date( 'j' , time() );
+
+	?>
+			<select name=to_year>
+	<? for( $loop=2005; $loop<=2010; $loop++ ) : ?>
+			<option value=<?=$loop?> <? if( $loop == $to_year OR ( !$to_year AND $loop == $today_year ) ) echo 'selected' ?>><?=$loop?></option>
+	<? endfor ?>
+			</select>년
+			<select name=to_month>
+	<? for( $loop=1; $loop<=12; $loop++ ) : ?>
+			<option value=<?=$loop?> <? if( $loop == $to_month OR ( !$to_month AND $loop == $today_month ) ) echo 'selected' ?>><?=$loop?></option>
+	<? endfor ?>
+			</select>월
+			<select name=to_day>
+	<? for( $loop=1; $loop<=31; $loop++ ) : ?>
+			<option value=<?=$loop?> <? if( $loop == $to_day OR ( !$to_day AND $loop == $today_day ) ) echo 'selected' ?>><?=$loop?></option>
+	<? endfor ?>
+			</select>일
+			</td>
+		</tr>
+		
+		</table>
+		</td>
+	</tr>
+	</table>
+	</td>
+</tr>
+</table>
+</form>
+</center>
+<!----#################################  검색 #####################################--->
+
+
+
+
+  <br>
+    <table width="820" height="10" border="0" cellspacing="0" cellpadding="0">
+      <tr> 
+	<td align=center><? page_list( $_SERVER['PHP_SELF'] , $httpvar); ?></td>
+      </tr>
+    </table>
+
+
+
+<table width=820 border="0" cellpadding="0" cellspacing="0">
+<tr> 
+	  <td height="22" bgcolor="#ffffff">
+	  전체 쿠폰 갯수 : 
+	  <?=(int)$total_record?>개
+	  </td>
+	  <td align="right" bgcolor="#FFFFFF"><font style="font-family:verdana; font-size:8pt"><?=$page?> / <?=$total_page?> page</font></td>
+</tr>
+</table>
+
+
+
+
+<table border=0 cellpadding=0 cellspacing=3 border=0 bgcolor="#CDCD9A">
+<tr>
+	<td>
+	<table border=0 cellpadding=0 cellspacing=1 border=0 bgcolor="#FFFFFF">
+	<tr>
+		<td align=center width=70><font color=#666666><b>ID</b></font></td>
+		<td align=center width=170><font color=#666666><b>이름</b></font></td>
+		<td align=center width=170><font color=#666666><b>발행제목</b></font></td>
+		<td align=center width=175><font color=#666666><b>쿠폰제목</b></font></td>
+		<td align=center width=165><font color=#666666><b>발행일</b></font></td>
+		<td align=center width=70><font color=#666666><b>발행여부</b></font></td>
+	</tr>
+	</table>
+	</td>
+</tr>
+<tr>
+	<td>
+		<table width=100% border=0 cellpadding=0 cellspacing=0 border=0 bgcolor="#FFFFFF">
+			<tr>
+				<td  align=center></td>
+				<td style="padding:4 0 4 0">
+					<table width=100% border=0 cellpadding=0 cellspacing=0>
+
+					<?	
+						if ( $total_record == 0) :
+					?>
+						<table width=100% border=0 cellpadding=0 cellspacing=0>
+						<tr>
+							<td align=center><font color=blue><?= $search_key ?></font> 는 존재하지 않습니다.</td>
+						</tr>
+						</table>
+
+				
+					<? endif ?>
+
+
+						<? for( $loop=0; $loop<$db->total_record();$loop++ ) : ?>
+						<?
+							$db->fetch();
+							$rs_publish_title			= $db->result( 'publish_title' );
+							$rs_publish_date			= $db->result( 'publish_date' );
+							$rs_coupon_title			= $db->result( 'coupon_title' );
+							$rs_user_id				= $db->result( 'user_id' );
+							$rs_user_name  			= $db->result( 'user_name' );
+							$rs_publish_no  			= $db->result( 'publish_no' );
+							$rs_user_no   				= $db->result( 'user_no' );
+							
+							
+						?>
+
+						<tr onMouseOver=this.style.backgroundColor="#EFEFEF" onMouseOut=this.style.backgroundColor="" height=24>
+							<td align=center width=70><?= $rs_user_id ?></td>
+							<td align=center width=170><a href="javascript:view_info('<?=$rs_user_no?>')" onFocus="this.blur()"><?= $rs_user_name ?></a></td>
+							<td align=center width=170><?= $rs_publish_title ?></td>
+							<td align=center width=175><?= $rs_coupon_title ?></td>
+							<td align=center width=165><?= $rs_publish_date ?></td>
+							<td align=center width=70><a href="#" style='font-size:9pt' onClick="coupon_cancel( '<?=$rs_user_id ?>','<?=$rs_publish_no ?>' ); return false">[발행취소]</a></td>
+						</tr>
+						<? if( $loop != $db->total_record() - 1 ) : ?>
+						<tr>
+							<td colspan=6 height=1 background="../../image/dot.gif">
+							</td>
+						</tr>
+						<? endif ?>
+						<? endfor ?>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</td>
+</tr>
+</table>
+		
+<br>
+    <table width="820" height="10" border="0" cellspacing="0" cellpadding="0">
+      <tr> 
+	<td align=center><? page_list( $_SERVER['PHP_SELF'] , $httpvar); ?></td>
+      </tr>
+    </table>
+
+    <!-- 다른페이지에서 리로드 될때의 (삭제) 페이지고정 width와 height값을 주면 에레메세지 확인가능-->
+<iframe name=coupon_hidden_frame border=0 width=0 height=0></iframe> 
+    </body>
+    </html>
+
+

@@ -1,0 +1,309 @@
+<?
+
+require_once "../../../include/include.php";
+html_cache_disable();
+
+require_once "../../login/login_check.php";
+login_check( $PHP_SELF );
+
+$db = new MYSQL();
+$db2 = new MYSQL();
+
+?>
+<html>
+<head>
+<title><?$HTML->Title( 'Admin' )?></title>
+<link rel="stylesheet" href="../../admin_style.css" type="text/css">
+<?=$HTML->Metatag()?>
+<script language=javascript>
+<!--
+
+	function digit(c)
+	{
+		return ((c >= "0") && (c <= "9"));
+	}
+
+	function digitCheck( data, input_pos )
+	{	
+		for( i=0; i<data.length; i++)
+		{
+			var ch = data.charAt( i );
+			if( false == digit( ch ) )
+			{ 
+				alert("숫자로만 입력해 주세요.");
+				input_pos.focus();
+				input_pos.select();
+				return false;
+			}
+		}
+		return true;
+	}
+
+	function empty( data )
+	{
+		if( !data ) return true;
+
+		for( i=0; i<data.length; i++ )
+		{
+			if( data.substring( i, i+1 ) != ' ' )
+				return false;
+		}
+		return true;
+	}
+
+	function product_register( category_no, gid, thread )
+	{
+		openURL = "product_register.html?category_no=" + category_no + "&gid=" + gid + "&thread=" + thread;
+		window.open( openURL, '_self' );
+	}
+
+	function category_modify( category_no )
+	{
+		openURL = "category_modify.html?category_no=" + category_no;
+		window.open( openURL, '_self' );
+	}
+
+	function category_delete( category_no, category_name )
+	{
+		confirm_string = "[ " + category_name + " ] 분류를 삭제하시겠습니까?";
+		if( false == confirm( confirm_string ) ) return void(0);
+		confirm_string = "[ " + category_name + " ] 분류의 하위분류 및 등록된 상품 모두 삭제됩니다.";
+		if( false == confirm( confirm_string ) ) return void(0);
+
+		openURL = "category_delete_exec.php?category_no=" + category_no;
+		window.open( openURL, '_self' );
+	}
+
+-->
+</script>
+</head>
+<body onLoad="document.Form.category_name.focus()">
+<b><font size=3>* 분류 등록</font></b>
+<?
+
+$gid = request( 'gid', 'get' );
+$thread = request( 'thread', 'get' );
+
+?>
+<br><br>
+<a href="category_register.html" onFocus="this.blur()"><font style="font-family:verdana; font-size:10pt"><b>TOP</b></font></a>
+<?
+
+if( $gid AND $thread )
+{
+
+	for( $loop=0; $loop<strlen( $thread ); $loop+=3 )
+	{
+
+		$current_thread = substr( $thread, 0, $loop+3 );
+
+		$query = "
+							SELECT	SQL_CACHE
+										category_no ,
+										category_name ,
+										category_gid ,
+										category_thread
+							FROM	cd_category
+							WHERE	category_gid = '$gid'
+							AND		category_thread = '$current_thread'
+		";
+		$db->query( $query );
+		$db->fetch();
+
+		$rs_category_no		= $db->result( 'category_no' );
+		$rs_category_name	= htmlspecialchars( $db->result( 'category_name' ) );
+		$rs_category_gid		= $db->result( 'category_gid' );
+		$rs_category_thread	= $db->result( 'category_thread' );
+
+		echo "
+					&nbsp;<font size=2 color=#AAAAAA>▶</font>&nbsp;
+					<a href='category_register.html?gid={$rs_category_gid}&thread={$rs_category_thread}' onFocus='this.blur()'><font style=\"font-family:verdana; font-size:10pt\"><b>{$rs_category_name}</b></font></a>
+		";
+
+	}
+}
+else
+{
+	$rs_category_name = "TOP";
+}
+
+?>
+
+<?
+
+if( $thread )
+{
+	$thread_length = strlen( $thread ) + 3;
+}
+else
+{
+	$thread_length = 3;
+}
+
+$gid_query = '';
+if( $gid )
+{
+	$gid_query = " AND category_gid = '$gid' ";
+}
+
+$category_query = "
+								SELECT	SQL_CACHE
+										category_no ,
+										category_gid ,
+										category_thread ,
+										category_name ,
+										category_title ,
+										category_sort
+								FROM	cd_category
+								WHERE	LENGTH( category_thread ) = $thread_length
+								AND		category_thread LIKE '$thread%'
+								$gid_query
+								ORDER BY category_sort ASC
+";
+$db->query( $category_query );
+
+?>
+
+<br><br>
+
+
+<script language=javascript>
+<!--
+	function checkForm( form )
+	{
+		if( !form.category_name.value )
+		{
+			alert( '분류명을 입력하세요. ' );
+			form.category_name.focus();
+			return false;
+		}
+		return true;
+	}
+-->
+</script>
+<table width=820 border=0 cellpadding=0 cellspacing=0 border=0 bgcolor='#FFFFFF'>
+<form name=Form action=category_register_exec.php method=post onSubmit="return checkForm( this )">
+<tr>
+	<td align=right height=24>
+	[ <?=$rs_category_name?> ] 분류에 <input type=text name=category_name size=20> 하위분류 <input type=submit value="  등록  ">
+	<input type=hidden name=gid value=<?=$gid?>>
+	<input type=hidden name=thread value=<?=$thread?>>
+	</td>
+</tr>
+</form>
+</table>
+<br>
+<table border=0 cellpadding=0 cellspacing=3 border=0 bgcolor="#CDCD9A">
+<tr>
+	<td>
+	<table border=0 cellpadding=0 cellspacing=1 border=0 bgcolor="#FFFFFF">
+	<tr>
+		<td align=center width=80 height=25>
+		<font color=#666666><b>정렬</font>
+		</td>
+		<td align=center width=300>
+		<font color=#666666><b>분류명</b></font>
+		</td>
+		<td align=center width=100>
+		<font color=#666666><b>하위분류</b></font>
+		</td>
+		<td align=center width=60>
+		<font color=#666666><b>제품갯수</b></font>
+		</td>
+		<td align=center width=280>
+		</td>
+	</tr>
+	</table>
+	</td>
+</tr>
+<tr>
+	<td>
+	<table width=100% border=0 cellpadding=0 cellspacing=0 border=0 bgcolor="#FFFFFF">
+<? for( $loop=0; $loop<$db->total_record();$loop++ ) : ?>
+<?
+
+	$db->fetch();
+	$rs_category_no		= $db->result( 'category_no' );
+	$rs_category_gid		= $db->result( 'category_gid' );
+	$rs_category_thread	= $db->result( 'category_thread' );
+	$rs_category_name	= htmlspecialchars( $db->result( 'category_name' ) );
+	$rs_category_title		= $db->result( 'category_title' );
+	$rs_category_sort		= $db->result( 'category_sort' );
+
+	$tmp_thread_length = strlen( $rs_category_thread ) + 3;
+	$query2 = "
+						SELECT SQL_CACHE
+									count(*)
+						FROM	cd_category
+						WHERE	category_gid = '$rs_category_gid'
+						AND		length( category_thread ) = $tmp_thread_length
+						AND		category_thread LIKE '$rs_category_thread%'
+	";
+	$db2->query( $query2 );
+	$sub_category_count = $db2->is_count();
+
+	$query2 = "
+						SELECT	SQL_CACHE
+									count(*)
+						FROM	cd_category_link
+						WHERE	category_no = '$rs_category_no'
+	";
+	$db2->query( $query2 );
+	$product_count = $db2->is_count();
+
+?>
+	<tr onMouseOver=this.style.backgroundColor="#EFEFEF" onMouseOut=this.style.backgroundColor="" height=24>
+	<form action=category_sort_modify.php method=post target=category_hidden_frame>
+		<td width=80 align=center>
+		<input type=text name=category_sort size=2 value=<?=$rs_category_sort?>> <input type=submit value=수정>
+		<input type=hidden name=category_no value=<?=$rs_category_no?>>
+		</td>
+	</form>
+		<td width=300 style="padding-left:5px">
+		[ <?=$rs_category_no?> ] <a href="category_register.html?gid=<?=$rs_category_gid?>&thread=<?=$rs_category_thread?>" onFocus="this.blur()"><?=$rs_category_name?></a>
+		</td>
+		<td width=100 align=center>
+	<? if( $sub_category_count ) : ?>
+	<?=$sub_category_count?>
+	<? else : ?>
+	.
+	<? endif ?>
+		</td>
+		<td align=center width=60>
+	<? if( $product_count ) : ?>
+	<?=$product_count?>
+	<? else : ?>
+	.
+	<? endif ?>
+		</td>
+		<td align=center>
+		<a href="javascript:product_register( '<?=$rs_category_no?>', '<?=$gid?>', '<?=$thread?>' )" onFocus="this.blur()">[ 제품 등록 ]</a>
+		<a href="javascript:category_modify( '<?=$rs_category_no?>' )" onFocus="this.blur()">[  분류명 수정  ]</a>
+		<a href="javascript:category_delete( '<?=$rs_category_no?>', '<?=$rs_category_name?>' )" onFocus="this.blur()">[  삭제  ]</a>
+		</td>
+	</tr>
+	<? if( $db->total_record() > 1 AND $loop != $db->total_record() - 1 ) : ?>
+	<tr>
+		<td colspan=5 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+	<? endif ?>
+<? endfor ?>
+<? if( !$db->total_record() ) : ?>
+	<tr>
+		<td height=80 align=center>
+		등록된 분류가 없습니다.
+		</td>
+	</tr>
+<? endif ?>
+	</table>
+
+
+	</td>
+</tr>
+</table>
+<br>
+
+<iframe name=category_hidden_frame border=0 width=0 height=0></iframe>
+</body>
+</html>

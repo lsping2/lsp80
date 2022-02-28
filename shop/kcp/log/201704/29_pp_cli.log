@@ -1,0 +1,10 @@
+0429-005130 -  8324 - SR42Y4T0O9C64SL0 - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2017042822182278]+log_level=[3]
+0429-005130 -  8324 - SR42Y4T0O9C64SL0 - MSG : PG_서버_접속__정상
+0429-005131 -  8324 - SR42Y4T0O9C64SL0 - MSG : PG_서버_요청_전문_전송__정상
+0429-005131 -  8324 - SR42Y4T0O9C64SL0 - MSG : PG_서버_응답_전문_수신__정상
+0429-005131 -  8324 - SR42Y4T0O9C64SL0 - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y4T0O9C64SL0pay_method=PACAorder_no=2017042822182278card_cd=CCKMcard_name=KB국민카드acqu_cd=CCKMacqu_name=KB국민카드card_no=5409470000001138mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2017042822182278tno=17369799831711amount=222000card_mny=222000coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20170429005132van_apptime=20170429005132app_no=30024047bizx_numb=00013219101quota=06noinf=Ypg_txid=0429005132MP01CE6NR3FA0000002220000630024047res_tax_flag=TG01res_tax_mny=201818res_free_mny=0res_vat_mny=20182partcanc_yn=Ycard_bin_type_01=0card_bin_type_02=0isp_partner_cd=050204040009051join_cd=0000]
+0429-011506 - 27415 - SR42Y4T1DDC64SL0 - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2017042901121476]+log_level=[3]
+0429-011506 - 27415 - SR42Y4T1DDC64SL0 - MSG : PG_서버_접속__정상
+0429-011506 - 27415 - SR42Y4T1DDC64SL0 - MSG : PG_서버_요청_전문_전송__정상
+0429-011506 - 27415 - SR42Y4T1DDC64SL0 - MSG : PG_서버_응답_전문_수신__정상
+0429-011506 - 27415 - SR42Y4T1DDC64SL0 - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y4T1DDC64SL0pay_method=PACAorder_no=2017042901121476card_cd=CCKMcard_name=KB국민카드acqu_cd=CCKMacqu_name=KB국민카드card_no=5409470000002621mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2017042901121476tno=17369799900631amount=52900card_mny=52900coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20170429011507van_apptime=20170429011507app_no=30024058bizx_numb=00013219101quota=06noinf=Ypg_txid=0429011507MP01CD6OLFJV0000000529000630024058res_tax_flag=TG01res_tax_mny=48090res_free_mny=0res_vat_mny=4810partcanc_yn=Ycard_bin_type_01=0card_bin_type_02=0isp_partner_cd=050204040009051join_cd=0000]

@@ -1,0 +1,10 @@
+0410-133635 -  5776 - SR42Y4ADZL8lqHr7 - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2017041013345124]+log_level=[3]
+0410-133635 -  5776 - SR42Y4ADZL8lqHr7 - MSG : PG_서버_접속__정상
+0410-133635 -  5776 - SR42Y4ADZL8lqHr7 - MSG : PG_서버_요청_전문_전송__정상
+0410-133636 -  5776 - SR42Y4ADZL8lqHr7 - MSG : PG_서버_응답_전문_수신__정상
+0410-133636 -  5776 - SR42Y4ADZL8lqHr7 - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y4ADZL8lqHr7pay_method=PACAorder_no=2017041013345124card_cd=CCLGcard_name=신한카드acqu_cd=CCLGacqu_name=신한카드card_no=9420650000000119mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2017041013345124tno=17730684073860amount=82500card_mny=82500coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20170410133636van_apptime=20170410133636app_no=30746567bizx_numb=0013425574quota=00noinf=Npg_txid=0410133636MP01DJODMYQ00000000825000030746567res_tax_flag=TG01res_tax_mny=75000res_free_mny=0res_vat_mny=7500partcanc_yn=Ycard_bin_type_01=1card_bin_type_02=1join_cd=0000]
+0410-221819 -  6344 - SR42Y4AMIJE5dcSd - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[07010000]+ordr_idxx=[2017040608332549]+log_level=[3]
+0410-221819 -  6344 - SR42Y4AMIJE5dcSd - MSG : PG_서버_접속__정상
+0410-221819 -  6344 - SR42Y4AMIJE5dcSd - MSG : PG_서버_요청_전문_전송__정상
+0410-221819 -  6344 - SR42Y4AMIJE5dcSd - MSG : PG_서버_응답_전문_수신__정상
+0410-221819 -  6344 - SR42Y4AMIJE5dcSd - MSG : TX_ENDED - res=[res_cd=RC66res_msg=현금 영수증 발급 불가 가맹점]

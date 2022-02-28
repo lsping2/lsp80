@@ -1,0 +1,20 @@
+0418-160555 - 17811 - SR42Y4IG71A83Qe6 - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2019041816024943]+log_level=[3]
+0418-160555 - 17811 - SR42Y4IG71A83Qe6 - MSG : PG_서버_접속__정상
+0418-160555 - 17811 - SR42Y4IG71A83Qe6 - MSG : PG_서버_요청_전문_전송__정상
+0418-160556 - 17811 - SR42Y4IG71A83Qe6 - MSG : PG_서버_응답_전문_수신__정상
+0418-160556 - 17811 - SR42Y4IG71A83Qe6 - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y4IG71A83Qe6pay_method=PACAorder_no=2019041816024943card_cd=CCLGcard_name=신한카드acqu_cd=CCLGacqu_name=신한카드card_no=4373680000009385mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2019041816024943tno=19738252892396amount=132000card_mny=132000coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20190418160556van_apptime=20190418160556app_no=49543713bizx_numb=0112042668quota=00noinf=Npg_txid=0418160556MNK4EB64Z69P0000001320000049543713use_point=0res_tax_flag=TG01res_tax_mny=120000res_free_mny=0res_vat_mny=12000partcanc_yn=Ycard_bin_type_01=1card_bin_type_02=1join_cd=0000]
+0418-161601 - 30772 - SR42Y4IGEU4mdKi4 - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2019041816043639]+log_level=[3]
+0418-161601 - 30772 - SR42Y4IGEU4mdKi4 - MSG : PG_서버_접속__정상
+0418-161601 - 30772 - SR42Y4IGEU4mdKi4 - MSG : PG_서버_요청_전문_전송__정상
+0418-161602 - 30772 - SR42Y4IGEU4mdKi4 - MSG : PG_서버_응답_전문_수신__정상
+0418-161602 - 30772 - SR42Y4IGEU4mdKi4 - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y4IGEU4mdKi4pay_method=PACAorder_no=2019041816043639card_cd=CCLGcard_name=신한카드acqu_cd=CCLGacqu_name=신한카드card_no=9420650000006096mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2019041816043639tno=19738252992924amount=55300card_mny=55300coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20190418161602van_apptime=20190418161602app_no=49653962bizx_numb=0112042668quota=00noinf=Npg_txid=0418161602MNK4EI65C64H0000000553000049653962use_point=0res_tax_flag=TG01res_tax_mny=50272res_free_mny=0res_vat_mny=5028partcanc_yn=Ycard_bin_type_01=1card_bin_type_02=1join_cd=0000]
+0418-162810 - 45225 - SR42Y4IGR64mdKi4 - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2019041816260216]+log_level=[3]
+0418-162810 - 45225 - SR42Y4IGR64mdKi4 - MSG : PG_서버_접속__정상
+0418-162810 - 45225 - SR42Y4IGR64mdKi4 - MSG : PG_서버_요청_전문_전송__정상
+0418-162811 - 45225 - SR42Y4IGR64mdKi4 - MSG : PG_서버_응답_전문_수신__정상
+0418-162811 - 45225 - SR42Y4IGR64mdKi4 - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y4IGR64mdKi4pay_method=PACAorder_no=2019041816260216card_cd=CCLGcard_name=신한카드acqu_cd=CCLGacqu_name=신한카드card_no=9420650000006096mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2019041816260216tno=19738253112163amount=132000card_mny=132000coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20190418162811van_apptime=20190418162811app_no=49780654bizx_numb=0112042668quota=00noinf=Npg_txid=0418162811MNK4EA65RS120000001320000049780654use_point=0res_tax_flag=TG01res_tax_mny=120000res_free_mny=0res_vat_mny=12000partcanc_yn=Ycard_bin_type_01=1card_bin_type_02=1join_cd=0000]
+0418-173711 - 45018 - 19738252992924   - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00200000]+ordr_idxx=[]+log_level=[3]
+0418-173711 - 45018 - 19738252992924   - MSG : PG_서버_접속__정상
+0418-173711 - 45018 - 19738252992924   - MSG : PG_서버_요청_전문_전송__정상
+0418-173711 - 45018 - 19738252992924   - MSG : PG_서버_응답_전문_수신__정상
+0418-173712 - 45018 - 19738252992924   - MSG : TX_ENDED - res=[res_cd=8133res_msg=기취소된 신용카드 거래 취소요청res_en_msg=Cannot process the request; the transaction cannot be cancelled.trace_no=19738252992924]

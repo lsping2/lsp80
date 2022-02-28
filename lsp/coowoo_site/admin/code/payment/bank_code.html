@@ -1,0 +1,294 @@
+<?
+
+require_once "../../../include/include.php";
+html_cache_disable();
+
+require_once "../../login/login_check.php";
+login_check( $PHP_SELF );
+
+?>
+<html>
+<head>
+<title><?$HTML->Title( 'Admin' )?></title>
+<link rel="stylesheet" href="../../admin_style.css" type="text/css">
+<script language=javascript>
+<!--
+
+	function digit(c)
+	{
+		return ((c >= "0") && (c <= "9"));
+	}
+
+	function digitCheck( data, input_pos )
+	{	
+		for( i=0; i<data.length; i++)
+		{
+			var ch = data.charAt( i );
+			if( false == digit( ch ) )
+			{ 
+				alert("숫자로만 입력해 주세요.");
+				input_pos.focus();
+				input_pos.select();
+				return false;
+			}
+		}
+		return true;
+	}
+
+	function empty( data )
+	{
+		if( !data ) return true;
+
+		for( i=0; i<data.length; i++ )
+		{
+			if( data.substring( i, i+1 ) != ' ' )
+				return false;
+		}
+		return true;
+	}
+
+	function deleteCode( code, name )
+	{
+
+		confirmStr = "[ " + code + " : " + name + " ] 삭제하시겠습니까?";
+
+		if( confirm( confirmStr ) )
+		{
+
+			url = "bank_code_delete_exec.php?bank_code=" + code;
+			window.open( url, '_self' );
+
+		}
+
+		return void(0);
+
+	}
+
+	function checkForm( form )
+	{
+		if( empty( form.bank_code.value ) )
+		{
+			alert( '코드를 입력하세요.' );
+			form.bank_code.focus();
+			return false;
+		}
+
+		if( empty( form.bank_name.value ) )
+		{
+			alert( '은행이름을 입력하세요.' );
+			form.bank_name.focus();
+			return false;
+		}
+
+		if( empty( form.bank_account.value ) )
+		{
+			alert( '계좌번호를 입력하세요.' );
+			form.bank_account.focus();
+			return false;
+		}
+
+		if( empty( form.bank_depositor.value ) )
+		{
+			alert( '예금주를 입력하세요.' );
+			form.bank_depositor.focus();
+			return false;
+		}
+
+		return true;
+	}
+
+-->
+</script>
+</head>
+<body>
+<b><font size=3>* 은행코드</font></b>
+<br><br>
+<form name=register action="bank_code_register_exec.php" method=post onSubmit="return checkForm( this )">
+<table border=0 cellpadding=0 cellspacing=2 border=0 bgcolor="#CDCD9A">
+<tr>
+	<td>
+	<table border=0 cellpadding=5 cellspacing=0>
+	<tr>
+		<td align=center height=25>
+		코드 :
+		<input type=text name=bank_code size=5 maxlength=3 class=input_text onblur="return digitCheck( this.value, register.type_code );">
+		</td>
+		<td align=center height=25>
+		은행 :
+		<input type=text name=bank_name size=10 maxlength=40 class=input_text>
+		</td>
+		<td align=center height=25>
+		계좌번호 :
+		<input type=text name=bank_account size=15 maxlength=40 class=input_text>
+		</td>
+		<td align=center height=25>
+		예금주 :
+		<input type=text name=bank_depositor size=10 maxlength=40 class=input_text>
+		</td>
+		<td>
+		사용
+		<input type=radio name=use_status value='Yes' checked>
+		비사용
+		<input type=radio name=use_status value='No'>
+		</td>
+		<td width=100 height=25 align=center>
+		<input type=submit value="   등록   " style="font-size:9pt">
+		</td>
+	</table>
+	</td>
+</tr>
+</table>
+</form>
+
+<table width=736 border=0 cellpadding=0 cellspacing=3 border=0 bgcolor="#CDCD9A">
+<tr>
+	<td>
+	<table width=100% border=0 cellpadding=0 cellspacing=0 border=0 bgcolor="#FFFFFF">
+	<tr>
+		<td align=center width=100 height=25>
+		<font color="#666666"><b>코드</b></font>
+		</td>
+		<td align=center width=440 height=25>
+		<font color="#666666"><b>은행 : 계좌번호 : 예금주</b></font>
+		</td>
+		<td>
+		&nbsp;
+		</td>
+	</tr>
+	</table>
+	</td>
+</tr>
+<tr>
+	<td>
+	<table width=100% border=0 cellpadding=1 cellspacing=1 bgcolor="#FFFFFF">
+<?
+
+$db = new MYSQL();
+$query = "
+			SELECT	bank_code ,
+					bank_name ,
+					bank_account ,
+					bank_depositor
+			FROM	order_bank_code
+			WHERE	use_status = 'Yes'
+";
+$db->query( $query );
+
+?>
+<? for( $loop=0; $loop< $db->total_record(); $loop++ ) : ?>
+<?
+
+$db->fetch();
+$bank_code		= $db->result( 'bank_code' );
+$bank_name		= htmlspecialchars( $db->result( 'bank_name' ) );
+$bank_account	= $db->result( 'bank_account' );
+$bank_depositor = htmlspecialchars( $db->result( 'bank_depositor' ) );
+
+?>
+
+	<tr>
+		<td align=center width=100 height=25>
+		<font color=#666666><?=$bank_code?></font>
+		</td>
+		<td align=center width=440 height=25>
+		<font color=#666666><?=$bank_name?> : <?=$bank_account?> : <?=$bank_depositor?></font>
+		</td>
+		<td align=center>
+		<a href='bank_code_modify.html?bank_code=<?=$bank_code?>' style='font-size:9pt'>[수정]</a>
+		<a href="javascript:deleteCode( '<?=$bank_code?>', '<?=$bank_name?>' )" style='font-size:9pt'>[삭제]</a>
+		</td>
+	</tr>
+<? if( $db->total_record() > 1 AND $loop != $db->total_record() - 1 ) : ?>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+<? endif ?>
+<? endfor ?>
+<? if( !$db->total_record() ) : ?>
+	<tr>
+		<td colspan=3 align=center height=100>
+		등록된 은행코드가 없습니다.
+		</td>
+	</tr>
+<? endif ?>
+	</table>
+	</td>
+</tr>
+</table>
+<br>
+
+<?
+
+$db = new MYSQL();
+$query = "
+			SELECT	bank_code ,
+					bank_name ,
+					bank_account ,
+					bank_depositor
+			FROM	order_bank_code
+			WHERE	use_status = 'No'
+";
+$db->query( $query );
+
+?>
+<? if( $db->total_record() ) : ?>
+<table width=736 border=0 cellpadding=0 cellspacing=3 border=0 bgcolor="#D2D2D2">
+<tr>
+	<td>
+	<table width=100% border=0 cellpadding=0 cellspacing=0 border=0 bgcolor="#FFFFFF">
+	<tr>
+		<td align=center width=100 height=25>
+		<font color="#666666"><b>비사용코드</b></font>
+		</td>
+		<td align=center width=440 height=25>
+		<font color="#666666"><b>은행 : 계좌번호 : 예금주</b></font>
+		</td>
+		<td>
+		&nbsp;
+		</td>
+	</tr>
+	</table>
+	</td>
+</tr>
+<tr>
+	<td>
+	<table width=100% border=0 cellpadding=1 cellspacing=1 bgcolor="#FFFFFF">
+
+<? for( $loop=0; $loop< $db->total_record(); $loop++ ) : ?>
+<?
+
+$db->fetch();
+$bank_code		= $db->result( 'bank_code' );
+$bank_name		= htmlspecialchars( $db->result( 'bank_name' ) );
+$bank_account	= $db->result( 'bank_account' );
+$bank_depositor = htmlspecialchars( $db->result( 'bank_depositor' ) );
+
+?>
+
+	<tr>
+		<td align=center width=100 height=25>
+		<font color=#666666><?=$bank_code?></font>
+		</td>
+		<td align=center width=440 height=25>
+		<font color=#666666><?=$bank_name?> : <?=$bank_account?> : <?=$bank_depositor?></font>
+		</td>
+		<td align=center>
+		<a href='bank_code_modify.html?bank_code=<?=$bank_code?>' style='font-size:9pt'>[수정]</a>
+		<a href="javascript:deleteCode( '<?=$bank_code?>', '<?=$bank_name?>' )" style='font-size:9pt'>[삭제]</a>
+		</td>
+	</tr>
+<? if( $db->total_record() > 1 AND $loop != $db->total_record() - 1 ) : ?>
+	<tr>
+		<td colspan=3 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+<? endif ?>
+<? endfor ?>
+	</table>
+	</td>
+</tr>
+</table>
+<? endif ?>
+</body>
+</html>
