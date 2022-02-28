@@ -1,5 +1,0 @@
-0215-095946 -  7574 - SR42Y2F9wv6iQ4lD - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2019021322242327]+log_level=[3]
-0215-095946 -  7574 - SR42Y2F9wv6iQ4lD - MSG : PG_서버_접속__정상
-0215-095946 -  7574 - SR42Y2F9wv6iQ4lD - MSG : PG_서버_요청_전문_전송__정상
-0215-095946 -  7574 - SR42Y2F9wv6iQ4lD - MSG : PG_서버_응답_전문_수신__정상
-0215-095946 -  7574 - SR42Y2F9wv6iQ4lD - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y2F9wv6iQ4lDpay_method=PACAorder_no=2019021322242327card_cd=CCSScard_name=삼성카드acqu_cd=CCSSacqu_name=삼성카드card_no=4009070000005869mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2019021322242327tno=19296550006348amount=904500card_mny=904500coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20190215095946van_apptime=20190215095946app_no=95051624bizx_numb=172450459quota=00noinf=Npg_txid=0215095946MNK4EEWBMOYU0000009045000095051624res_tax_flag=TG01res_tax_mny=822272res_free_mny=0res_vat_mny=82228partcanc_yn=Ycard_bin_type_01=1card_bin_type_02=0join_cd=0000]

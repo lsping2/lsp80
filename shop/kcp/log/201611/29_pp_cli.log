@@ -1,5 +1,0 @@
-1129-135245 - 30648 - SR42YBTDpMEE1GlH - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2016112913495483]+log_level=[3]
-1129-135245 - 30648 - SR42YBTDpMEE1GlH - MSG : PG_서버_접속__정상
-1129-135246 - 30648 - SR42YBTDpMEE1GlH - MSG : PG_서버_요청_전문_전송__정상
-1129-135246 - 30648 - SR42YBTDpMEE1GlH - MSG : PG_서버_응답_전문_수신__정상
-1129-135246 - 30648 - SR42YBTDpMEE1GlH - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42YBTDpMEE1GlHpay_method=PACAorder_no=2016112913495483card_cd=CCNHcard_name=NH카드acqu_cd=CCNHacqu_name=NH카드card_no=9430170000005629mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2016112913495483tno=16584837421540amount=36500card_mny=36500coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20161129135246van_apptime=20161129135246app_no=30000096bizx_numb=103001131quota=00noinf=Npg_txid=1129135246MP01ECCVFGZZ0000000365000030000096use_point=0res_tax_flag=TG01res_tax_mny=33181res_free_mny=0res_vat_mny=3319partcanc_yn=Ycard_bin_type_01=1card_bin_type_02=0join_cd=0000]

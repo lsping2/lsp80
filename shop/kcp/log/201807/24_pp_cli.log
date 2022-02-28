@@ -1,5 +1,0 @@
-0724-153104 - 15266 - SR42Y7OFTk3DD6eD - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2018072415274762]+log_level=[3]
-0724-153105 - 15266 - SR42Y7OFTk3DD6eD - MSG : PG_서버_접속__정상
-0724-153105 - 15266 - SR42Y7OFTk3DD6eD - MSG : PG_서버_요청_전문_전송__정상
-0724-153105 - 15266 - SR42Y7OFTk3DD6eD - MSG : PG_서버_응답_전문_수신__정상
-0724-153105 - 15266 - SR42Y7OFTk3DD6eD - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y7OFTk3DD6eDpay_method=PACAorder_no=2018072415274762card_cd=CCKMcard_name=KB국민카드acqu_cd=CCKMacqu_name=KB국민카드card_no=5205040000002904mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2018072415274762tno=18835500224644amount=15700card_mny=15700coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20180724153105van_apptime=20180724153105app_no=30035872bizx_numb=00013219101quota=00noinf=Npg_txid=0724153105MP01CFUJ4O4D0000000157000030035872res_tax_flag=TG01res_tax_mny=14272res_free_mny=0res_vat_mny=1428partcanc_yn=Ycard_bin_type_01=1card_bin_type_02=1card_bin_bank_cd=0341isp_partner_cd=050204040033454join_cd=0000]
