@@ -1,0 +1,87 @@
+<?
+
+require_once "../../../include/include.php";
+html_cache_disable();
+require_once "../../login/login_check.php";
+login_check( $PHP_SELF );
+
+$httpvar = make_httpvar();
+
+
+
+$working_date			= request( 'working_date','get' );
+$user_id				= request( 'user_id','get' );
+$diary_no				= request( 'diary_no' , 'get' );
+
+$db = new MYSQL;
+
+
+ 
+$query = "
+			SELECT	bd.user_id ,
+					ui.user_name ,
+					bd.comment
+			FROM	intranet.business_diary as bd
+			LEFT JOIN intranet.user_info as ui
+			ON		bd.user_id = ui.user_id
+			where	diary_no = '$diary_no'
+	";
+$db->query( $query );
+
+$db->fetch();
+
+$rs_user_name	= $db->result( 'user_name' );
+$rs_comment		= $db->result( 'comment' );
+
+?>
+<html>
+<head>
+<title><?$HTML->Title( 'Admin' )?></title>
+<?=$HTML->Metatag()?>
+<link rel="stylesheet" href="../../admin_style.css" type="text/css">
+<script language=javascript>
+<!--
+	
+-->
+</script>
+</head>
+
+<body>
+<form name=register action="team_write_modify_exec.php" method="post">
+<table width=100% height=300  border=0 cellpadding=0 cellspacing=2 bgcolor=#EFEFEF>
+	<tr>
+		<td align=center  bgcolor="#FAFAFA" height=25 colspan=2><b>업무일지</b></td>
+	</tr>
+	<tr>
+		<td width=80 bgcolor=#FFFFFF align=center><?=$rs_user_name?></td>
+		<td valign=top bgcolor=#FFFFFF>
+			<center><textarea rows=21 cols=94 name="comment" class=underline><?=$rs_comment ?></textarea></center>
+		</td>
+	</tr>
+</table>
+
+
+
+<table width=100% cellpadding=0 cellspacing=0>
+<tr>
+	<td colspan=2 height=5></td>
+</tr>
+<tr>
+	<td>
+		<input type=button value="   창닫기   " onClick="self.close()" class=btn_kr>
+	</td>
+	<td align=right>
+		<input type=submit value="  수정완료  " class=btn_kr>
+	</td>
+</tr>
+</table>
+
+
+<input type=hidden name=user_id value="<?=$user_id?>">
+<input type=hidden name=working_date value="<?=$working_date?>">
+<input type=hidden name=diary_no value="<?=$diary_no?>">
+
+
+</form>
+</body>
+</html>

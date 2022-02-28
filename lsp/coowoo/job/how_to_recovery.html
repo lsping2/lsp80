@@ -1,0 +1,15 @@
+<테이블 복구>
+
+
+/home/coowoo/www/thumnail3/backup/
+
+ll -h|grep coowoo 
+
+vi coowoo_200603021.sql ( 최근 백업된파일을 열어서 /찾을문짜로 찾아 테이블만 sql문으로 생성 )
+
+데이터는 용량이 많으므로 하나의 파일로 만듬 ( ex : table.sql )
+
+cat coowoo_200603021.sql | grep  product_inquiry ( product_inquiry 문구가 들어가는 부분 ) > table.sql
+
+./mysql -u coowoo -p coowoo < table.sql 
+( 파일을 coowoo 디비에 넣으면 데이터가 들어감 )

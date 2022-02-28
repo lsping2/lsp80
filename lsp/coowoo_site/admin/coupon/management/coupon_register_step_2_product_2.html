@@ -1,0 +1,81 @@
+<?
+
+require_once "../../../include/include.php";
+html_cache_disable();
+
+require_once "../../login/login_check.php";
+login_check( $PHP_SELF );
+
+$coupon_type		= request( 'coupon_type', 'get' );
+$product_class		= request( 'product_class' , 'get' );
+
+?>
+<html>
+<head>
+<title><?$HTML->Title( 'Admin' )?></title>
+<?=$HTML->Metatag()?>
+<link rel="stylesheet" href="../../admin_style.css" type="text/css">
+
+</head>
+<body onSubmit="document.register.product_order_no.focus()">
+<b><font style="font-size:9pt">* 쿠폰 정보 - ( Product )</font></b>
+
+<br><br>
+
+<form name=register action=coupon_register_step_end.html method=get>
+
+<table border=0 cellpadding=0 cellspacing=1 bgcolor="#ADAD5C">
+<tr>
+	<td>
+	<table border=0 cellpadding=0 cellspacing=0 bgcolor="#FFFFFF">
+	<tr height=30>
+		<td width=100 align=center>
+		제품 구분 : 
+		</td>
+		<td width=200 colspan=3 style="padding:5 5 5 5">
+		<?
+			switch( $product_class )
+			{
+				case 'single'	:	$class_name = "싱글이미지";
+								break;
+				case 'cd'		:	$class_name = "CD";
+								break;
+				case 'vcd'		:	$class_name = "VCD";
+								break;
+			}
+		?>
+		<?=$class_name?>
+		</td>
+	</tr>
+	<tr height=30>
+		<td width=100 align=center>
+		제품 번호 : 
+		</td>
+		<td width=200 colspan=3 style="padding:5 5 5 5">
+		<input type=text size=30 name="product_order_no">
+		</td>
+	</tr>
+	</table>
+	</td>
+</tr>
+</table>
+<table border=0 width=310>
+<tr>
+	<td>
+	<input type=button value="   돌아가기   " onClick="history.back()">
+	</td>
+	<td align=right>
+	<input type=submit value="      확인      ">
+	</td>
+</tr>
+</table>
+
+<input type=hidden name=coupon_type value="product">
+<input type=hidden name=product_class value="<?=$product_class?>">
+
+</form>
+<br>
+
+
+</body>
+</html>

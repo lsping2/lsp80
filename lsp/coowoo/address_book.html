@@ -1,0 +1,395 @@
+<?
+
+require_once "include/include.php";
+html_cache_disable();
+//require_once "login/login_check.php";
+//login_check();
+
+$db = new MYSQL;
+$db2 = new MYSQL;
+
+
+$httpvar = make_httpvar( array( 'page' ) );
+
+
+
+$where = request( 'where' , 'get' );
+
+
+
+
+?>
+<html>
+<head>
+<title><?$HTML->Title( 'Admin' )?></title>
+<?=$HTML->Metatag()?>
+<link rel="stylesheet" href="book_bbs/css/admin_style.css" type="text/css">
+<script language=javascript>
+
+
+function modify_address( ad_uid )
+	{
+		window.open( 'address_modify.html?ad_uid=' + ad_uid , '_self' );
+	}
+
+
+function delete_address( ad_uid , user_name )
+{
+	confirmStr = "[ " + user_name + " ] 회원정보를 정말로 삭제하시겠습니까?";
+	if( confirm( confirmStr ) )
+	{
+		window.open( 'address_delete_exec.php?ad_uid=' + ad_uid, 'address_hidden_frame' );  //address_hidden_frame 은 프레임의 값
+		return true;
+	}
+	return false;
+}
+
+function view_address( ad_uid )
+{
+	openURL = "address_info.html?ad_uid=" + ad_uid;
+	window.open( openURL, "_viewaddress", "width=490, height=450" );
+}
+
+d
+</script>
+</head>
+
+<body>
+
+<table width=840 border=0>
+<tr>
+	<td align=center height=20>
+	<font size=3 color=#000000><strong>주소록</strong></font>
+	</td>
+</tr>
+
+<tr>
+	<td align=center height=20>
+	<font size=1 color=#000000>이름(가다다순)</font>
+	</td>
+</tr>
+</table>
+
+
+
+<!----------------------------------------------------------------- ㄱ~ㅎ -------------------------------------------------------------------------------->
+
+<table width=840 border=0>
+                    <tr> 
+                      <td align="center">
+                        <table width="303" border="0" cellpadding="0" cellspacing="0">
+                          <tr align="center" valign="bottom"> 
+                            <td width="16" height="20"><a href="address_book.html?where=ㄱ">
+			    <? IF( 'ㄱ' == $where ) : ?>
+			    <img name="Image45" border="0" src="../../../image/gallery_btn01_2.gif" width="12" height="12">
+			    <? ELSE : ?>
+			    <img name="Image45" border="0" src="image/gallery_btn01.gif" width="12" height="12">
+			    <? ENDIF ?>
+			    </a></td>
+                            <td width="16" height="20"><a href="address_book.html?where=ㄴ">
+			    <? IF( 'ㄴ' == $where ) : ?>
+			    <img name="Image451" border="0" src="image/gallery_btn02_2.gif" width="12" height="12">
+			    <? ELSE : ?>
+			    <img name="Image45" border="0" src="image/gallery_btn02.gif" width="12" height="12">
+			    <? ENDIF ?>
+			    </a>
+			    
+			    </td>
+                            <td width="16" height="20"><a href="address_book.html?where=ㄷ">
+			    <? IF( 'ㄷ' == $where ) : ?>
+			    <img name="Image452" border="0" src="image/gallery_btn03_2.gif" width="12" height="12">
+			    <? ELSE : ?>
+			    <img name="Image452" border="0" src="image/gallery_btn03.gif" width="12" height="12">
+			    <? ENDIF ?>
+			    </a>
+			    </td>
+                            <td width="16" height="20"><a href="address_book.html?where=ㄹ">
+			    <? IF( 'ㄹ' == $where ) : ?>
+			    <img name="Image453" border="0" src="image/gallery_btn04_2.gif" width="12" height="12">
+			    <? ELSE : ?>
+			    <img name="Image453" border="0" src="image/gallery_btn04.gif" width="12" height="12">
+			    <? ENDIF ?>
+			    </a>
+			    </td>
+                            <td width="16" height="20"><a href="address_book.html?where=ㅁ">
+			    <? IF( 'ㅁ' == $where ) : ?>
+			    <img name="Image454" border="0" src="image/gallery_btn05_2.gif" width="12" height="12">
+			    <? ELSE : ?>
+			    <img name="Image454" border="0" src="image/gallery_btn05.gif" width="12" height="12">
+			    <? ENDIF ?>
+			    </a>
+			    </td>
+                            <td width="16" height="20"><a href="address_book.html?where=ㅂ">
+			    <? IF( 'ㅂ' == $where ) : ?>
+			    <img name="Image455" border="0" src="image/gallery_btn06_2.gif" width="12" height="12">
+			    <? ELSE : ?>
+			    <img name="Image455" border="0" src="image/gallery_btn06.gif" width="12" height="12">
+			    <? ENDIF ?>
+			    </a>
+			    </td>
+                            <td width="16" height="20"><a href="address_book.html?where=ㅅ">
+			    <? IF( 'ㅅ' == $where ) : ?>
+			    <img name="Image456" border="0" src="image/gallery_btn07_2.gif" width="12" height="12">
+			    <? ELSE : ?>
+			    <img name="Image456" border="0" src="image/gallery_btn07.gif" width="12" height="12">
+			    <? ENDIF ?>
+			    </a>
+			    </td>
+                            <td width="16" height="20"><a href="address_book.html?where=ㅇ">
+			    <? IF( 'ㅇ' == $where ) : ?>
+			    <img name="Image457" border="0" src="image/gallery_btn08_2.gif" width="12" height="12">
+			    <? ELSE : ?>
+			    <img name="Image457" border="0" src="image/gallery_btn08.gif" width="12" height="12">
+			    <? ENDIF ?>
+			    </a>
+			    </td>
+                            <td width="15" height="20"><a href="address_book.html?where=ㅈ">
+			    <? IF( 'ㅈ' == $where ) : ?>
+			    <img name="Image457" border="0" src="image/gallery_btn09_2.gif" width="12" height="12">
+			    <? ELSE : ?>
+			    <img name="Image457" border="0" src="image/gallery_btn09.gif" width="12" height="12">
+			    <? ENDIF ?>
+			    </a>
+			    </td>
+                            <td height="20"><a href="address_book.html?where=ㅊ">
+			    <? IF( 'ㅊ' == $where ) : ?>
+			    <img name="Image458" border="0" src="image/gallery_btn10_2.gif" width="12" height="12">
+			    <? ELSE : ?>
+			    <img name="Image458" border="0" src="image/gallery_btn10.gif" width="12" height="12">
+			    <? ENDIF ?>
+			    </a>
+			    </td>
+                            <td height="20"><a href="address_book.html?where=ㅋ">
+			    <? IF( 'ㅋ' == $where ) : ?>
+			    <img name="Image459" border="0" src="image/gallery_btn11_2.gif" width="12" height="12">
+			    <? ELSE : ?>
+			    <img name="Image459" border="0" src="image/gallery_btn11.gif" width="12" height="12">
+			    <? ENDIF ?>
+			    </a>
+			    </td>
+                            <td height="20"><a href="address_book.html?where=ㅌ">
+			    <? IF( 'ㅌ' == $where ) : ?>
+			    <img name="Image460" border="0" src="image/gallery_btn12_2.gif" width="12" height="12">
+			    <? ELSE : ?>
+			    <img name="Image460" border="0" src="image/gallery_btn12.gif" width="12" height="12">
+			    <? ENDIF ?>
+			    </a>
+			    </td>
+                            <td height="20"><a href="address_book.html?where=ㅍ">
+			    <? IF( 'ㅍ' == $where ) : ?>
+			    <img name="Image461" border="0" src="image/gallery_btn13_2.gif" width="12" height="12">
+			    <? ELSE : ?>
+			    <img name="Image461" border="0" src="image/gallery_btn13.gif" width="12" height="12">
+			    <? ENDIF ?>
+			    </a>
+			    </td>
+                            <td height="20"><a href="address_book.html?where=ㅎ">
+			    <? IF( 'ㅎ' == $where ) : ?>
+			    <img name="Image462" border="0" src="image/gallery_btn14_2.gif" width="12" height="12">
+			    <? ELSE : ?>
+			    <img name="Image462" border="0" src="image/gallery_btn14.gif" width="12" height="12">
+			    <? ENDIF ?>
+			    </a>
+			    </td>
+
+			 
+                            <td height="20" colspan=7><a href="address_book.html"> [  전체보기 ]</a></td>
+                        
+                          </tr>
+
+			  
+</table>
+<br>
+<!----------------------------------------------------------------- ㄱ~ㅎ -------------------------------------------------------------------------------->
+
+
+
+<?
+
+
+
+IF( $where )
+{
+	$search_query='';
+	switch( $where )
+	{
+		case 'ㄱ'	:	$search_query = "	where user_name  >= '가' AND user_name < '나'";
+					break;
+		case 'ㄴ'	:	$search_query = "	where user_name  >= '나' AND user_name < '다'";
+					break;
+		case 'ㄷ'	:	$search_query = "	where user_name  >= '다' AND user_name < '라'";
+					break;
+		case 'ㄹ'	:	$search_query = "	where user_name >= '라' AND user_name < '마'";
+					break;
+		case 'ㅁ'	:	$search_query = "	where user_name >= '마' AND user_name < '바'";
+					break;
+		case 'ㅂ'	:	$search_query = "	where user_name >= '마' AND user_name < '사'";
+					break;
+		case 'ㅅ'	:	$search_query = "	where user_name >= '사' AND user_name < '아'";
+					break;
+		case 'ㅇ'	:	$search_query = "	where user_name >= '아' AND user_name < '자'";
+					break;
+		case 'ㅈ'	:	$search_query = "	where user_name >= '자' AND user_name < '차'";
+					break;
+		case 'ㅊ'	:	$search_query = "	where user_name >= '차' AND user_name < '카'";
+					break;
+		case 'ㅋ'	:	$search_query = "	where user_name >= '카' AND user_name < '타'";
+					break;
+		case 'ㅌ'	:	$search_query = "	where user_name >= '타' AND user_name < '파'";
+					break;
+		case 'ㅍ'	:	$search_query = "	where user_name >= '파' AND user_name < '하'";
+					break;
+		case 'ㅎ'	:	$search_query = "	where user_name >= '하'";
+					break;
+	}
+
+}
+
+
+
+$query = "
+		SELECT	count(*)
+		FROM	lsp80.user_info
+		$search_query
+		ORDER BY reg_date DESC
+";
+$db->query( $query );
+
+$total_record = $db->is_count();
+$max_show_list = 25;
+$max_show_page = 17;
+page_calcu();
+
+$query = "
+		SELECT	user_no  ,
+				user_class  ,
+				user_id ,
+				user_name  ,
+				address1  ,
+				address2  ,
+				telephone  ,
+				fax  ,
+				handphone  ,
+				email  ,
+				reg_date
+		FROM	lsp80.user_info
+		$search_query
+		ORDER BY reg_date DESC   
+		 LIMIT	$start, $max_show_list
+";
+$db->query( $query );
+
+
+?>
+
+<?// if( $total_page > 1 ) : ?>
+<table width=840 border=0>
+<tr>
+	<td width=100>
+	<?=(int)$total_record?> record
+	</td>
+	<td align=center>
+	<? page_list( $_SERVER["PHP_SELF"], $httpvar ); ?>
+	</td>
+	<td width=100 align=right>
+	<?=$page?> / <?=$total_page?> page
+	</td>
+</tr>
+</table>
+<? //endif ?>
+
+<table border=0 cellpadding=0 cellspacing=1 bgcolor=#ADAD5C>
+<tr height=18>
+	<td width=120 align=center bgcolor=#C2C287>
+	<font style="font-family:tahoma; font-size:8pt" color=#FFFFFF><b>Name</b></font>
+	</td>
+	<td width=120 align=center bgcolor=#C2C287>
+	<font style="font-family:tahoma; font-size:8pt" color=#FFFFFF><b>ID</b></font>
+	</td>
+	<td width=200 align=center bgcolor=#C2C287>
+	<font style="font-family:tahoma; font-size:8pt" color=#FFFFFF><b>Address</b></font>
+	</td>
+	<td width=120 align=center bgcolor=#C2C287>
+	<font style="font-family:tahoma; font-size:8pt" color=#FFFFFF><b>Telephone</b></font>
+	</td>
+	<td width=120 align=center bgcolor=#C2C287>
+	<font style="font-family:tahoma; font-size:8pt" color=#FFFFFF><b>H.P</b></font>
+	</td>
+	<td width=150 align=center bgcolor=#C2C287>
+	&nbsp;
+	</td>
+</tr>
+</table>
+
+<? if( $total_page == 0 ) : ?>
+	
+	<table border=0 cellpadding=0 cellspacing=1>
+		<tr>
+			<td height=30></td>
+		</tr>
+		<tr>
+			<td> <font color=red><?= $where ?></font> 로 시작하는 이름은 없습니다.</td>
+		</tr>
+	</table>
+
+<? endif ?>
+				
+<table border=0 cellpadding=0 cellspacing=1>
+<? FOR( $loop=0; $loop<$db->total_record(); $loop++ ) : ?>
+<?
+	$db->fetch();
+	$rs_user_no		= $db->result( 'user_no' );
+	$rs_user_class		= $db->result( 'user_class' );
+	$rs_user_id		= $db->result( 'user_id' );
+	$rs_user_name	= $db->result( 'user_name' );
+	$rs_address1		= $db->result( 'address1' );
+	$rs_address2		= $db->result( 'address2' );
+	$rs_telephone		= $db->result( 'telephone' );
+	$rs_fax			= $db->result( 'fax' );
+	$rs_handphone 	= $db->result( 'handphone' );
+	$rs_email			= $db->result( 'email' );
+	$rs_reg_date		= $db->result( 'reg_date' );
+
+?>
+<tr onMouseOver=this.style.backgroundColor="#F0F0F0" onMouseOut=this.style.backgroundColor="" bgcolor="#FFFFFF">
+	<td width=120 height=20 align=center>
+	<a href="javascript:view_address( <?=$rs_user_no?> )" onFocus="this.blur()"><?=$rs_user_name?></a>
+	</td>
+	<td width=120 align=center>
+	<?=$rs_user_id?>
+	</td>
+	<td width=200 align=center>
+	<?=$rs_address1?>
+	</td>
+	<td width=120 align=center>
+	<?=$rs_telephone?>
+	</td>
+	<td width=120 align=center>
+	<?=$rs_handphone ?>
+	</td>
+	<td width=150 align=center>
+	<a href="#" style='font-size:9pt' onClick="modify_address( '<?=$rs_user_no ?>' ); return false;">[ modify ] </a>
+	<a href="#" style='font-size:9pt' onClick="delete_address( '<?=$rs_user_no ?>', '<?= $rs_user_name ?>' ); return false"> [ delete ]</a>
+	</td>
+</tr>
+<tr height=1><td colspan=10 background="../../image/dot.gif"></td></tr>
+<? ENDFOR ?>
+</table>
+
+<table width=840 border=0>
+<tr>
+	<td align=right><a href="address_register.php">[ 등록 ]</a></td>
+</tr>
+</table>
+
+<? if( $total_page > 1 ) : ?>
+<table width=840 border=0>
+<tr>
+	<td colspan=2 height=30 align=center>
+	<? page_list( $_SERVER["PHP_SELF"], $httpvar ); ?>
+	</td>
+</tr>
+</table>
+<? endif ?>
+<!-- 다른페이지에서 리로드 될때의 (삭제) 페이지고정 width와 height값을 주면 에레메세지 확인가능-->
+<iframe name=address_hidden_frame border=0 width=0 height=0></iframe> 

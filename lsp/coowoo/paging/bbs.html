@@ -1,0 +1,342 @@
+<?
+
+header("Pragma: no-cache");
+header("Cache-Control: no-cache, must-revalidate");
+
+require_once "../../include/include.php";
+require_once "../login/login_check.php";
+login_check( $PHP_SELF );
+
+html_cache_disable();
+
+?>
+<html>
+<head>
+<title><?$HTML->Title( 'Admin' )?></title>
+<link rel="stylesheet" href="../admin_style.css" type="text/css">
+<script language=javascript>
+<!--
+
+
+function Reflesh( table )
+{
+	 window.open( 'bbs.html?table=' + table , '_self' );
+}
+
+
+function modify_news( bbs_uid , table )
+{
+	window.open( 'bbs_modify.html?bbs_uid=' + bbs_uid + '&table=' + table , '_self' );
+}
+
+
+
+
+function delete_news( bbs_uid , table )
+{
+	confirmStr = "정말로 삭제하시겠습니까?";
+	if( confirm( confirmStr ) )
+	{
+		window.open( 'bbs_delete_exec.php?bbs_uid=' + bbs_uid + '&table=' + table , 'news_hidden_frame');  
+		return true;
+	}
+	return false;
+}
+
+-->
+</script>
+</head>
+<body>
+<?
+
+$search_key = stripcslashes( request( 'search_key', 'get' ) );
+ $table = request( 'table', 'get' );
+
+if( !$table )
+{
+
+	Error::error_msg( "게시판 데이터베이스 테이블이 없습니다. [$boash_bbs]" );
+
+}
+
+ $table = request( 'table', 'get' );
+$page = request( 'page', 'get' );
+
+
+$search_query = $location = '';
+
+
+if ( $search_key )    
+{
+	$search_query = "where comment like '%$search_key%'";     
+	$location = "&search_key=" . htmlspecialchars( $search_key );
+}
+else	$search_key = "";
+
+
+
+
+
+$db = new mysql();
+
+$query = "
+			SELECT	count(*)
+			FROM	{$table}
+			$search_query
+";
+$db->query( $query );
+
+$total_record = $db->is_count();
+
+$max_show_list = 15;
+$max_show_page = 15;
+
+$total_page = @ceil( $total_record / $max_show_list );
+
+
+if( $page <= 0 ) $page = 1;
+if( $total_page < $page ) $page = $total_page;
+
+$start = $max_show_list * ( $page - 1 );
+if( $start<0 ) $start=0;
+
+
+ $query = "
+			SELECT		bbs_uid ,
+						comment ,
+						date_format(reg_date, '%Y-%m-%d' ) as reg_date
+			FROM	$table
+			$search_query
+			ORDER BY reg_date DESC ,  bbs_uid DESC
+			LIMIT	$start, $max_show_list
+";
+$db->query( $query );
+
+
+
+
+
+?>
+
+<? IF( 'bbs_order' == $table ) : ?>
+<font style="font-size:9pt"><b>※ 주문관리 게시판</b></font>
+<? ELSEIF( 'bbs_sian' == $table ) : ?>
+<font style="font-size:9pt"><b>※ 시안관리 게시판</b></font>
+<? ELSEIF( 'bbs_cd' == $table ) : ?>
+<font style="font-size:9pt"><b>※ CD관리 게시판</b></font>
+<? ELSEIF( 'bbs_single' == $table ) : ?>
+<font style="font-size:9pt"><b>※ 싱글관리 게시판</b></font>
+<? ELSEIF( 'bbs_news' == $table ) : ?>
+<font style="font-size:9pt"><b>※ 싱글 업데이트 게시판</b></font>
+<? ELSEIF( 'bbs_keyword' == $table ) : ?>
+<font style="font-size:9pt"><b>※  키워드 관리 게시판</b></font>
+<? ENDIF ?>
+<br><br>
+
+
+
+
+<table border=0 cellpadding=0 cellspacing=0>
+<tr>
+	<td>
+	<table width=100% border=0 cellpadding=0 cellspacing=1 bgcolor=#8080FF>
+	<tr>
+		<td width=50 align=center height=18>
+		<font style="font-family:verdana;font-size:9pt" color=#FFFFFF>No.</font>
+		</td>
+		<td width=500 align=center>
+		<font style="font-family:verdana;font-size:9pt" color=#FFFFFF>commnet</font>
+		</td>
+		<td width=100 align=center>
+		<font style="font-family:verdana;font-size:9pt" color=#FFFFFF>DATE</font>
+		</td>
+		<td width=150 align=center>
+		<font style="font-family:verdana;font-size:9pt" color=#FFFFFF>수정/삭제</font>
+		</td>
+	</tr>
+	</td>
+</tr>
+</table>
+<table border=0 cellpadding=0 cellspacing=0>
+<tr>
+	<td height=3>
+	</td>
+</tr>
+</table>
+<table border=0 cellpadding=0 cellspacing=0>
+
+<? for($loop=0; $loop<$db->total_record(); $loop++) : ?>
+<?
+
+$db->fetch();
+
+$bbs_uid		= $db->result( 'bbs_uid' );
+$comment	= $db->result( 'comment' );
+$reg_date		= $db->result( 'reg_date');
+
+
+?>
+
+<tr bgcolor=#FFFFFF>
+	<td>
+	<table border=0 cellpadding=0 cellspacing=1>
+	<tr onMouseOver=this.style.backgroundColor="#EFEFEF" onMouseOut=this.style.backgroundColor="">
+		<td width=50 align=center height=22>
+		<?=$total_record - ( ( $page - 1 ) * $max_show_list ) - $loop?>
+		</td>
+		<td width=500 style="padding-left:30px">
+		<?=$comment?>
+		</td>
+		<td width=100 align=center>
+		<?=$reg_date?> 
+		</td>
+		<td width=150 align=center>
+		<a href="#" style='font-size:8pt' onClick="modify_news('<?=$bbs_uid?>' , '<?=$table?>' ); return false;">[ modify ] </a>
+		<a href="#" style='font-size:8pt' onClick="delete_news('<?=$bbs_uid?>' , '<?=$table?>' ); return false"> [ delete ]</a>
+		</td>
+	</tr>
+	<tr>
+		<td height=1 colspan=4 background=../bbs/image/dot.gif></td>
+	</tr>
+	</table>
+	</td>
+</tr>
+
+<? endfor?>
+
+<tr>
+	<td height=30 align=center>
+	<? if( $db->total_record() ) : ?>
+	<?
+
+	$half = ceil( $max_show_page / 2 );
+
+	if ( $page - $half <= 0 )  
+	{
+
+		$s = 1;
+		$e = $max_show_page - 1;
+
+		}
+		else if ( $page + $half > $total_page )
+		{
+
+		$s = $total_page - $max_show_page + 1;
+		$e = $total_page;
+
+	}
+	else
+	{
+
+		$s = $page - $half + 1;
+		$e = $page + $half - 1;
+
+	} // end of if
+
+	if ( $s < 0 ) $s = 1;
+	if ( $e > $total_page ) $e = $total_page;
+
+	if ( $page - 1 > 0 )
+	{
+
+		echo "<a href='bbs.html?table={$table}&page=" . ( $page - 1 ) . "&{$location}' onFocus='this.blur()'><font size='1' color=#AAAAAA>◀</font></a>&nbsp;";
+
+	} // end of if
+
+	for ( $loop = $s; $loop <= $e; $loop++ )
+	{
+
+		if ( $loop == $page ) echo "<b><font color=#E60000 class=main_kr>$loop</font></b>";
+		else echo "<a href='bbs.html?table={$table}&page=$loop&{$location}' onFocus='this.blur()'>$loop<a>";
+
+		if( $loop != $e ) echo " <font color=#AAAAAA>|</font> ";
+
+	} // end of for
+
+	if ( $page < $total_page )
+	{
+
+		echo "&nbsp;&nbsp;<a href='bbs.html?table={$table}&page=" . ( $page + 1 ) . "&{$location}' onFocus='this.blur()'><font size='1' color=#AAAAAA>▶</font></a>";
+
+	} // end of if
+
+	?>
+	<? endif ?>
+	</td>
+</tr>
+</table>
+<? if( !$db->total_record() ) : ?>
+<table width=700 border=0>
+<tr>
+	<td align=center height=100>
+	<font color=#FF9966>등록된 게시물이 없습니다.</font>
+	</td>
+</tr>
+</table>
+<? endif ?>
+
+
+<script language=javascript>
+<!--
+	function empty( data )
+	{
+		if( !data ) return true;
+
+		for( i=0; i<data.length; i++ )
+		{
+			if( data.substring( i, i+1 ) != ' ' )
+				return false;
+		}
+		return true;
+	}
+
+	function CheckSearchForm()
+	{
+
+		form = document.searchForm;
+
+		if( empty( form.search_key.value ) )
+		{
+			alert( '검색어를 입력하세요.' );
+			form.search_key.focus();
+			return false;
+		} 
+
+		return true;
+
+	}
+
+-->
+</script>
+
+<form name=searchForm action=bbs.html method=get>
+<table border=0 width=100%>
+<tr>
+	<td width=200></td>
+	<td>
+		<table border=0 cellpadding=0 cellspacing=2 bgcolor=#8080FF>
+		<tr>
+			<td>  
+				<input type=text size=20 class=input_text name=search_key <? if( $search_key ) echo "value=\"" . htmlspecialchars( $search_key ) . "\""; ?>>
+			</td>
+			<td style="padding-left:10px">
+				<input type=submit value="  검색  " class=btn_kr onFocus="this.blur()" onClick="return CheckSearchForm()">
+			</td>
+			<? if( $search_key ) : ?>
+			<td bgcolor=#FFFFFF><input type=button value="전체보기" class=btn_kr onFocus="this.blur()" onClick=Reflesh('<?=$table?>')></td>
+			<? endif ?>
+		</tr>
+		</table>
+	</td>
+	<td><a href="bbs_register.html?table=<?=$table?>" onFocus="this.blur()"><font color="#0000CC">[ 등 록 ]</font></a></td>
+	<td width=70>&nbsp;</td>
+</tr>
+</table>
+
+<input type=hidden name=table value="<?=$table?>">
+<input type=hidden name=page value="<?=$page?>">
+
+<iframe name=news_hidden_frame border=0 width=0 height=0></iframe> 
+</form>
+</body>
+</html>

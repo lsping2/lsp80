@@ -1,0 +1,242 @@
+<?
+
+require_once "../../../include/include.php";
+html_cache_disable();
+
+require_once "../../login/login_check.php";
+login_check( $PHP_SELF );
+
+$coupon_type = request( 'coupon_type', 'get' );
+
+?>
+<html>
+<head>
+<title><?$HTML->Title( 'Admin' )?></title>
+<?=$HTML->Metatag()?>
+<link rel="stylesheet" href="../../admin_style.css" type="text/css">
+
+</head>
+<body>
+<b><font style="font-size:9pt">* 쿠폰 정보 - ( Category - STEP 2 )</font></b>
+
+<br><br>
+
+<form name=register action=coupon_register_exec.php method=post target="coupon_hidden_frame">
+
+<script language=javascript>
+<!--
+	function showMenu( no )
+	{
+		menu=eval("document.all.menu"+no+".style");
+		
+		if (menu.display=="block")
+		{ 
+			menu.display="none";
+		}
+		else
+		{
+			menu.display="block";
+		} 
+	}
+-->
+</script>
+<table border=0 cellpadding=0 cellspacing=1 bgcolor="#ADAD5C">
+<tr>
+	<td>
+	<table border=0 cellpadding=0 cellspacing=0 bgcolor="#FFFFFF">
+	<tr height=30>
+		<td width=100 align=center>
+		분류 구분 : 
+		</td>
+		<td width=250 colspan=3 style="padding:5 5 5 25">
+<br>
+<?
+
+	$sdb1 = new MYSQL;
+	$sdb2 = new MYSQL;
+	$sdb3 = new MYSQL;
+
+	$basic_category_no = 2;
+
+	$query = "
+				SELECT	category_name ,
+						category_gid ,
+						category_thread
+				FROM	single_category
+				WHERE	category_no = $basic_category_no
+	";
+	$sdb1->query( $query );
+	$sdb1->fetch();
+	$rs_category_gid = $sdb1->result( 'category_gid' );
+	$rs_category_thread = $sdb1->result( 'category_thread' );
+
+	$next_category_depth = strlen( $rs_category_thread ) + 3;
+
+	$query = "
+				SELECT	category_no ,
+						category_name ,
+						category_gid ,
+						category_thread
+				FROM	single_category
+				WHERE	category_gid = $rs_category_gid
+				AND		category_thread LIKE '$rs_category_thread%'
+				AND		LENGTH( category_thread ) = $next_category_depth
+				ORDER BY category_sort ASC
+	";
+	$sdb1->query( $query );
+
+
+	for( $loop=0; $loop<$sdb1->total_record(); $loop++ )
+	{
+		$sdb1->fetch();
+	
+		$rs_category_no		= $sdb1->result( 'category_no' );
+		$rs_category_gid		= $sdb1->result( 'category_gid' );
+		$rs_category_thread	= $sdb1->result( 'category_thread' );
+		$rs_category_name		= $sdb1->result( 'category_name' );
+
+		$next_category_depth = strlen( $rs_category_thread ) + 3;
+
+		$query2 = "
+				SELECT	category_no ,
+						category_name ,
+						category_gid ,
+						category_thread
+				FROM	single_category
+				WHERE	category_gid = $rs_category_gid
+				AND		category_thread LIKE '$rs_category_thread%'
+				AND		LENGTH( category_thread ) = $next_category_depth
+				ORDER BY category_sort ASC
+		";
+		$sdb2->query( $query2 );
+
+		echo "<table borde=0 height=5><tr><td></td></table>";
+		if( $rs_category_no == $category_no )
+		{
+			echo "<font color=#FF9966><b><u>{$rs_category_name}</u></font></b>";
+		}
+		else
+		{
+			echo "<a href=\"coupon_register_step_end.html?coupon_type=category&category_class=single&category_no={$rs_category_no}\"><b>" . $rs_category_name . "</b></a><br>";
+		}
+
+
+		if( $sdb2->total_record() )
+		{
+
+			for( $loop2=0; $loop2<$sdb2->total_record(); $loop2++ )
+			{
+
+				$sdb2->fetch();
+
+				$rs_category_no = $sdb2->result( 'category_no' );
+				$rs_category_gid = $sdb2->result( 'category_gid' );
+				$rs_category_thread = $sdb2->result( 'category_thread' );
+				$rs_category_name = $sdb2->result( 'category_name' );
+				if( $rs_category_no == $category_no ) $rs_category_name = "<font color=#FF9966><b><u>{$rs_category_name}</u></font></b>";
+
+				$next_category_depth = strlen( $rs_category_thread ) + 3;
+
+				$query3 = "
+							SELECT	category_no ,
+									category_name ,
+									category_gid ,
+									category_thread
+							FROM	single_category
+							WHERE	category_gid = $rs_category_gid
+							AND		category_thread LIKE '$rs_category_thread%'
+							AND		LENGTH( category_thread ) = $next_category_depth
+							ORDER BY category_sort ASC
+				";
+				$sdb3->query( $query3 );
+
+				if( $sdb3->total_record() )
+				{
+
+					if( $rs_category_no == $category_no )
+					{
+						$menu = "1{$loop}{$loop2}";
+					}
+
+
+					echo "<table border=0 cellpadding=0 cellspacing=0>
+						<tr><td valign=middle>&nbsp;&nbsp;&nbsp;<a href='javascript:showMenu( 1{$loop}{$loop2} )'><img src='images/tree_plus.gif' border=0></a></td><td>&nbsp;<a href=\"coupon_register_step_end.html?coupon_type=category&category_class=single&category_no={$rs_category_no}\"><font style='font-family:tahoma'>{$rs_category_name}</font></a></td></tr></table>";
+					echo "<div id=menu1{$loop}{$loop2} style='display:none'>";
+					echo "<table border=0 cellpadding=0 cellspacing=0>";
+
+					for( $loop3=0; $loop3<$sdb3->total_record(); $loop3++ )
+					{
+
+						$sdb3->fetch();
+
+						$rs_category_no = $sdb3->result( 'category_no' );
+						$rs_category_gid = $sdb3->result( 'category_gid' );
+						$rs_category_thread = $sdb3->result( 'category_thread' );
+						$rs_category_name = $sdb3->result( 'category_name' );
+
+						if( $rs_category_no == $category_no )
+						{
+							$rs_category_name = "<font color=#FF9966><b><u>{$rs_category_name}</u></font></b>";
+							$menu = "1{$loop}{$loop2}";
+						}
+
+						if( $loop3 == $sdb3->total_record() - 1 )
+						{
+							echo "<tr><td height=17><img src='images/tree_blank.gif' width=8><img src='images/tree_line.gif' height=19><img src='images/tree_line_bottom.gif' height=19></td><td>&nbsp;<a href=\"coupon_register_step_end.html?coupon_type=category&category_class=single&category_no={$rs_category_no}\"><font style='font-family:tahoma'>{$rs_category_name}</font></a></td></tr>";
+						}
+						else
+						{
+							echo "<tr><td><img src='images/tree_blank.gif' width=8><img src='images/tree_line.gif' height=19><img src='images/tree_line_middle.gif' height=19></td><td>&nbsp;<a href=\"coupon_register_step_end.html?coupon_type=category&category_class=single&category_no={$rs_category_no}\"><font style='font-family:tahoma'>{$rs_category_name}</font></a></td></tr>";
+						}
+
+					}
+					echo "</table>";
+					echo "</div>";
+
+
+				}
+				else
+				{
+					echo "<table border=0 cellpadding=0 cellspacing=0>";
+					if( $loop2 == $sdb2->total_record() - 1 )
+					{
+						echo "<tr><td height=17><img src='images/tree_blank.gif' width=8><img src='images/tree_line_bottom.gif' height=19></td><td>&nbsp;<a href=\"coupon_register_step_end.html?coupon_type=category&category_class=single&category_no={$rs_category_no}\"><font style='font-family:tahoma'>{$rs_category_name}</font></a></td></tr>";
+					}
+					else
+					{
+						echo "<tr><td><img src='images/tree_blank.gif' width=8><img src='images/tree_line_middle.gif' height=19></td><td>&nbsp;<a href=\"coupon_register_step_end.html?coupon_type=category&category_class=single&category_no={$rs_category_no}\"><font style='font-family:tahoma'>{$rs_category_name}</font></a></td></tr>";
+					}
+					echo "</table>";
+				}
+
+			}
+
+
+		}
+
+	}
+
+?>
+<br>
+		</td>
+	</tr>
+	</table>
+	</td>
+</tr>
+</table>
+<table border=0 width=620>
+<tr>
+	<td>
+	<input type=button value="   돌아가기   " onClick="history.back()">
+	</td>
+</tr>
+</table>
+
+<input type=hidden name=coupon_type value="<?=$coupon_type?>">
+
+</form>
+<br>
+
+
+</body>
+</html>

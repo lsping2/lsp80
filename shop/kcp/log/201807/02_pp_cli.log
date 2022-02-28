@@ -1,0 +1,10 @@
+0702-095238 -  7016 - SR42Y729oO4mndR1 - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2018070209255471]+log_level=[3]
+0702-095238 -  7016 - SR42Y729oO4mndR1 - MSG : PG_서버_접속__정상
+0702-095238 -  7016 - SR42Y729oO4mndR1 - MSG : PG_서버_요청_전문_전송__정상
+0702-095238 -  7016 - SR42Y729oO4mndR1 - MSG : PG_서버_응답_전문_수신__정상
+0702-095238 -  7016 - SR42Y729oO4mndR1 - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y729oO4mndR1pay_method=PACAorder_no=2018070209255471card_cd=CCKEcard_name=하나카드(외환)acqu_cd=CCKEacqu_name=하나카드(외환)card_no=4119040000003168mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2018070209255471tno=18813296936527amount=529000card_mny=529000coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20180702095239van_apptime=20180702095239app_no=09298605bizx_numb=00909776395quota=06noinf=Ynoinf_type=CARDpg_txid=0702095239MP01CHYRCPI90000005290000609298605res_tax_flag=TG01res_tax_mny=480909res_free_mny=0res_vat_mny=48091partcanc_yn=Ycard_bin_type_01=0card_bin_type_02=0join_cd=0000]
+0702-153928 - 38813 - SR42Y72FbaFQE1jN - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2018070215354538]+log_level=[3]
+0702-153928 - 38813 - SR42Y72FbaFQE1jN - MSG : PG_서버_접속__정상
+0702-153928 - 38813 - SR42Y72FbaFQE1jN - MSG : PG_서버_요청_전문_전송__정상
+0702-153929 - 38813 - SR42Y72FbaFQE1jN - MSG : PG_서버_응답_전문_수신__정상
+0702-153929 - 38813 - SR42Y72FbaFQE1jN - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y72FbaFQE1jNpay_method=PACAorder_no=2018070215354538card_cd=CCLGcard_name=신한카드acqu_cd=CCLGacqu_name=신한카드card_no=9420650000001410mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2018070215354538tno=18813300092207amount=9100card_mny=9100coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20180702153930van_apptime=20180702153930app_no=48723442bizx_numb=0013425574quota=00noinf=Npg_txid=0702153930MP01DHZ3QR700000000091000048723442use_point=0res_tax_flag=TG01res_tax_mny=8272res_free_mny=0res_vat_mny=828partcanc_yn=Ycard_bin_type_01=1card_bin_type_02=1join_cd=0000]

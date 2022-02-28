@@ -1,0 +1,5 @@
+0409-110901 - 19954 - SR42Y49B7w1HjfjN - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2018040617534376]+log_level=[3]
+0409-110901 - 19954 - SR42Y49B7w1HjfjN - MSG : PG_서버_접속__정상
+0409-110901 - 19954 - SR42Y49B7w1HjfjN - MSG : PG_서버_요청_전문_전송__정상
+0409-110902 - 19954 - SR42Y49B7w1HjfjN - MSG : PG_서버_응답_전문_수신__정상
+0409-110902 - 19954 - SR42Y49B7w1HjfjN - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y49B7w1HjfjNpay_method=PACAorder_no=2018040617534376card_cd=CCBCcard_name=BC카드acqu_cd=CCBCacqu_name=BC카드card_no=4140110000007889mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2018040617534376tno=18349510119826amount=399570card_mny=399570coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20180409110902van_apptime=20180409110902app_no=56961053bizx_numb=780284397quota=00noinf=Npg_txid=0409110902MG34FETY4LHD0000003995700056961053res_tax_flag=TG01res_tax_mny=363245res_free_mny=0res_vat_mny=36325partcanc_yn=Ycard_bin_type_01=1card_bin_type_02=0card_bin_bank_cd=0011isp_issuer_cd=BC11isp_issuer_nm=농협비씨isp_partner_cd=040100114500324join_cd=0000]

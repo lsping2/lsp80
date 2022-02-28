@@ -1,0 +1,5 @@
+0718-151303 -  9488 - SR42Y7IFAb0966SE - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2017071815090717]+log_level=[3]
+0718-151303 -  9488 - SR42Y7IFAb0966SE - MSG : PG_서버_접속__정상
+0718-151303 -  9488 - SR42Y7IFAb0966SE - MSG : PG_서버_요청_전문_전송__정상
+0718-151303 -  9488 - SR42Y7IFAb0966SE - MSG : PG_서버_응답_전문_수신__정상
+0718-151303 -  9488 - SR42Y7IFAb0966SE - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y7IFAb0966SEpay_method=PACAorder_no=2017071815090717card_cd=CCLGcard_name=신한카드acqu_cd=CCLGacqu_name=신한카드card_no=4518420000006580mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2017071815090717tno=17829418527480amount=9100card_mny=9100coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20170718151303van_apptime=20170718151303app_no=48350140bizx_numb=0013425574quota=00noinf=Npg_txid=0718151303MP01EFESN43L0000000091000048350140use_point=0res_tax_flag=TG01res_tax_mny=8272res_free_mny=0res_vat_mny=828partcanc_yn=Ycard_bin_type_01=0card_bin_type_02=0join_cd=0000]

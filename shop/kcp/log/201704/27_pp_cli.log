@@ -1,0 +1,5 @@
+0427-115711 -  9729 - SR42Y4RBu292k01h - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2017042702005410]+log_level=[3]
+0427-115711 -  9729 - SR42Y4RBu292k01h - MSG : PG_서버_접속__정상
+0427-115711 -  9729 - SR42Y4RBu292k01h - MSG : PG_서버_요청_전문_전송__정상
+0427-115712 -  9729 - SR42Y4RBu292k01h - MSG : PG_서버_응답_전문_수신__정상
+0427-115712 -  9729 - SR42Y4RBu292k01h - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y4RBu292k01hpay_method=PACAorder_no=2017042702005410card_cd=CCBCcard_name=BC카드acqu_cd=CCBCacqu_name=BC카드card_no=9440110000007498mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2017042702005410tno=17367787984748amount=968000card_mny=968000coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20170427115712van_apptime=20170427115712app_no=57007675bizx_numb=780284397quota=00noinf=Npg_txid=0427115712MG34CF4GNG710000009680000057007675res_tax_flag=TG01res_tax_mny=880000res_free_mny=0res_vat_mny=88000partcanc_yn=Ycard_bin_type_01=0card_bin_type_02=1isp_issuer_cd=BC11isp_issuer_nm=농협비씨isp_partner_cd=000100111130494join_cd=0000]

@@ -1,0 +1,428 @@
+<?
+
+require_once "../../../include/include.php";
+html_cache_disable();
+
+require_once "../../login/login_check.php";
+login_check( $PHP_SELF );
+
+$db = new mysql();
+
+?>
+<html>
+<head>
+<title><?$HTML->Title( 'Admin' )?></title>
+<?=$HTML->Metatag()?>
+<link rel="stylesheet" href="../../admin_style.css" type="text/css">
+<script language=javascript>
+<!--
+
+	function digit(c)
+	{
+		return ((c >= "0") && (c <= "9"));
+	}
+
+	function digitCheck( data, input_pos )
+	{	
+		for( i=0; i<data.length; i++)
+		{
+			var ch = data.charAt( i );
+			if( false == digit( ch ) )
+			{ 
+				alert("숫자로만 입력해 주세요.");
+				input_pos.focus();
+				input_pos.select();
+				return false;
+			}
+		}
+		return true;
+	}
+
+	function empty( data )
+	{
+		if( !data ) return true;
+
+		for( i=0; i<data.length; i++ )
+		{
+			if( data.substring( i, i+1 ) != ' ' )
+				return false;
+		}
+		return true;
+	}
+
+	function checkForm( form )
+	{
+		if( empty( form.search_key.value ) )
+		{
+			alert( '검색어를 입력하세요.' );
+			form.search_key.focus();
+			return false;
+		}
+
+		return true;
+	}
+
+	function deleteCD( cd_no )
+	{
+		confirmStr = "CD삭제는 연관된 DB자료에 영향을 미칠 수 있습니다.    \nCD를 정말로 삭제하시겠습니까?";
+		if( confirm( confirmStr ) )
+		{
+			window.open( 'cd_delete_exec.php?cd_no=' + cd_no, 'cd_hidden_frame' );
+			return true;
+		}
+		return false;
+	}
+
+-->
+</script>
+</head>
+<body>
+<b><font size=3>* 시디 목록</font></b>
+<?
+
+$search_field		= request( 'search_field' , 'get' );
+$search_key		= request( 'search_key' , 'get' );
+
+$httpvar = make_httpvar( 'page' );
+
+?>
+<form name=searchForm action=<?=$_SERVER["PHP_SELF"]?> method=get>
+
+<table width=820 border=0 cellpadding=0 cellspacing=0>
+<tr>
+	<td align=center>
+	<table border=0 cellpadding=0 cellspacing=4 bgcolor=#F0F0F0>
+	<tr>
+		<td width=100 align=right style="padding-right:5pt">
+		검색 : 
+		</td>
+		<td width=45 align=center>
+		<select name=search_field style="font-size:9pt">
+		<option value='ALL'<? if( $search_key AND 'ALL' == $search_field ) echo ' selected'; ?>>전체</option>
+		<option value='ORDER_NO'<? if( $search_key AND 'ORDER_NO' == $search_field ) echo ' selected'; ?>>주문번호</option>
+		<option value='NAME'<? if( $search_key AND 'NAME' == $search_field ) echo ' selected'; ?>>이름</option>
+		<option value='MANUFACTURE'<? if( $search_key AND 'MANUFACTURE' == $search_field ) echo ' selected'; ?>>제작사</option>
+		</select>
+		</td>
+		<td width=150>
+		<input type=text size=22 class=input_text name=search_key <? if( $search_key ) echo "value=\"$search_key\""; ?>>
+		</td>
+		<td width=190>
+		<input type=submit value="  검색  " class=btn_kr onFocus="this.blur()">
+	<? if( $search_key ) : ?>
+		<input type=button value="전체보기" class=btn_kr onFocus="this.blur()" onClick="window.open( '<?=$_SERVER["PHP_SELF"]?>', '_self' )">
+	<? elseif( $page > 1 ) : ?>
+		<input type=button value="처음으로" class=btn_kr onFocus="this.blur()" onClick="window.open( '<?=$_SERVER["PHP_SELF"]?>', '_self' )">
+	<? endif ?>
+		</td>
+	</tr>
+	</table>
+	</td>
+</tr>
+</table>
+</form>
+
+<?
+
+$search_query = '';
+if( $search_key )
+{
+
+	switch( $search_field )
+	{
+		case 'ALL'		:	$query1 = "
+										SELECT	SQL_CACHE
+													count(*)
+										FROM	product_cd as pc ,
+												product_manufacture_code as pmc
+										WHERE	pc.manufacture_code = pmc.manufacture_code
+										AND		( cd_order_no LIKE '%$search_key%' OR name_kr LIKE '%$search_key%' OR name_eg LIKE '%$search_key%' OR pmc.manufacture_name LIKE '%$search_key%' )
+							";
+
+							$query2 = "
+										SELECT	SQL_CACHE
+													pc.cd_no ,
+												pc.cd_order_no ,
+												pc.name_eg ,
+												pc.manufacture_code ,
+												pmc.manufacture_name
+										FROM	product_cd as pc ,
+												product_manufacture_code as pmc
+										WHERE	pc.manufacture_code = pmc.manufacture_code
+										AND		( cd_order_no LIKE '%$search_key%' OR name_kr LIKE '%$search_key%' OR name_eg LIKE '%$search_key%' OR pmc.manufacture_name LIKE '%$search_key%' )
+							";
+							break;
+		case 'ORDER_NO'	:	$query1 = "
+										SELECT	SQL_CACHE
+													count(*)
+										FROM	product_cd as pc
+										WHERE	cd_order_no LIKE '%$search_key%'
+							";
+
+							$query2 = "
+										SELECT	SQL_CACHE
+													pc.cd_no ,
+												pc.cd_order_no ,
+												pc.name_eg ,
+												pc.manufacture_code ,
+												pmc.manufacture_name
+										FROM	product_cd as pc ,
+												product_manufacture_code as pmc
+										WHERE	pc.manufacture_code = pmc.manufacture_code
+										AND		cd_order_no LIKE '%$search_key%'
+							";
+							break;
+		case 'NAME'		:	$query1 = "
+										SELECT	SQL_CACHE
+													count(*)
+										FROM	product_cd as pc
+										WHERE	( name_kr LIKE '%$search_key%' OR name_eg LIKE '%$search_key%' )
+							";
+
+							$query2 = "
+										SELECT	SQL_CACHE
+													pc.cd_no ,
+												pc.cd_order_no ,
+												pc.name_eg ,
+												pc.manufacture_code ,
+												pmc.manufacture_name
+										FROM	product_cd as pc ,
+												product_manufacture_code as pmc
+										WHERE	pc.manufacture_code = pmc.manufacture_code
+										AND		( name_kr LIKE '%$search_key%' OR name_eg LIKE '%$search_key%' )
+							";
+							break;
+
+		case 'MANUFACTURE'	:	$query1 = "
+											SELECT	SQL_CACHE
+														count(*)
+											FROM	product_cd as pc ,
+													product_manufacture_code as pmc
+											WHERE	pc.manufacture_code = pmc.manufacture_code
+											AND		pmc.manufacture_name LIKE '%$search_key%'
+								";
+
+								$query2 = "
+											SELECT	SQL_CACHE
+														pc.cd_no ,
+													pc.cd_order_no ,
+													pc.name_eg ,
+													pc.manufacture_code ,
+													pmc.manufacture_name
+											FROM	product_cd as pc ,
+													product_manufacture_code as pmc
+											WHERE	pc.manufacture_code = pmc.manufacture_code
+											AND		pmc.manufacture_name LIKE '%$search_key%'
+								";
+								break;
+		default				:
+
+								$query1 = "
+											SELECT	SQL_CACHE
+														count(*)
+											FROM	product_cd as pc
+								";
+							
+								$query2 = "
+											SELECT	SQL_CACHE
+														pc.cd_no ,
+													pc.cd_order_no ,
+													pc.name_eg ,
+													pc.manufacture_code ,
+													pmc.manufacture_name
+											FROM	product_cd as pc ,
+													product_manufacture_code as pmc
+											WHERE	pc.manufacture_code = pmc.manufacture_code
+								";
+	}
+
+}
+else
+{
+
+	$query1 = "
+				SELECT	SQL_CACHE
+							count(*)
+				FROM	product_cd as pc
+				WHERE   1
+	";
+
+	$query2 = "
+				SELECT	SQL_CACHE
+							pc.cd_no ,
+						pc.cd_order_no ,
+						pc.name_eg ,
+						pc.manufacture_code ,
+						pmc.manufacture_name
+				FROM	product_cd as pc ,
+						product_manufacture_code as pmc
+				WHERE	pc.manufacture_code = pmc.manufacture_code
+	";
+
+}
+
+$page = request( 'page', 'get' );
+if( !$page ) $page = 0;
+
+$db->query( $query1 );
+
+$total_record = $db->is_count();
+$max_show_list = 25;
+$max_show_page = 17;
+page_calcu();
+
+$query2 .= " ORDER BY reg_date DESC LIMIT	$start, $max_show_list";
+$db->query( $query2 );
+?>
+
+<?
+
+$string = '';
+if( $search_key )
+{
+	switch( $search_field )
+	{
+		case 'ALL'					: $search_string = "전체"; break;
+		case 'ORDER_NO'		: $search_string = "주문번호"; break;
+		case 'NAME'				: $search_string = "이름"; break;
+		case 'MANUFACTURE'	: $search_string = "제조사"; break;
+	}
+	$string = "{$search_string} : {$search_key}";
+}
+
+?>
+<table width=820 border="0" cellpadding="0" cellspacing="0">
+<tr> 
+	<td align=center>
+	<font color=#FF9966><?=$string?></font>
+	</td>
+</tr>
+</table>
+
+<table width=820 border="0" cellpadding="0" cellspacing="0">
+<tr> 
+	  <td height="22" bgcolor="#ffffff">
+	  <? if( $search_key ) : ?>
+	  검색된 시디 갯수
+	  <? else : ?>
+	  전체 시디 갯수
+	  <? endif ?>
+	  : <?=(int)$total_record?>개
+	  </td>
+	  <td align="right" bgcolor="#FFFFFF"><font style="font-family:verdana; font-size:8pt"><?=$page?> / <?=$total_page?> page</font></td>
+</tr>
+</table>
+
+<? if( $total_page > 1 ) : ?>
+<table width=820 border=0>
+<tr>
+	<td align=center>
+	<? page_list( $_SERVER["PHP_SELF"], $httpvar ); ?>
+	</td>
+</tr>
+</table>
+<br>
+<? endif ?>
+
+<table border=0 cellpadding=0 cellspacing=3 border=0 bgcolor="#CDCD9A">
+<tr>
+	<td>
+	<table border=0 cellpadding=0 cellspacing=1 border=0 bgcolor="#FFFFFF">
+	<tr>
+		<td align=center width=30 height=25>
+		<input type=checkbox>
+		</td>
+		<td align=center width=100>
+		<font color=#666666><b>주문번호</b></font>
+		</td>
+		<td align=center width=340 style="padding-left:5px">
+		<font color=#666666><b>이름</b></font>
+		</td>
+		<td align=center width=240 style="padding-left:5px">
+		<font color=#666666><b>제작사</b></font>
+		</td>
+		<td align=center width=90 style="padding-left:5px">
+		&nbsp;
+		</td>
+	</tr>
+	</table>
+	</td>
+</tr>
+
+<tr>
+	<td>
+
+	<? if( !$db->total_record() ) : ?>
+	<table width=100% border="0" cellpadding="0" cellspacing="0">
+	<tr> 
+		  <td align=center height="180" bgcolor="#ffffff">
+		  <? if( $search_key ) : ?>
+		  <font color=#3333CC>검색된 시디가 없습니다.</font>
+		  <? else : ?>
+		  <font color=#FF9966>등록된 시디가 없습니다.</font>
+		  <? endif ?>
+		  </td>
+	</tr>
+	</table>
+	<? endif ?>
+
+	<table width=100% border=0 cellpadding=0 cellspacing=0 border=0 bgcolor="#FFFFFF">
+<? for( $loop=0; $loop<$db->total_record();$loop++ ) : ?>
+<?
+
+$db->fetch();
+$rs_cd_no				= $db->result( 'cd_no' );
+$rs_cd_order_no			= $db->result( 'cd_order_no' );
+$rs_name_eg				= htmlspecialchars( $db->result( 'name_eg' ) );
+$rs_manufacture_code	= $db->result( 'manufacture_code' );
+$rs_manufacture_name	= htmlspecialchars( $db->result( 'manufacture_name' ) );
+
+?>
+	<tr onMouseOver=this.style.backgroundColor="#EFEFEF" onMouseOut=this.style.backgroundColor="">
+		<td width=30 align=center>
+		<input type=checkbox value="<?=$rs_cd_no?>">
+		</td>
+		<td width=100 style="padding-left:5px">
+		<font face=verdana style="font-size:8pt" color=#666666><?=$rs_cd_order_no?></font>
+		</td>
+		<td width=340 style="padding-left:5px">
+		<font face=verdana style="font-size:8pt" color=#666666><?=$rs_name_eg?></font>
+		</td>
+		<td width=240 style="padding-left:5px">
+		<font face=verdana style="font-size:8pt" color=#666666><?=$rs_manufacture_name?></font>
+		</td>
+
+
+		<td align=center width=90 style="padding-left:5px">
+		<a href="cd_modify.html?file=cd_list.html&cd_no=<?=$rs_cd_no?>&page=<?=$page?>&<?=$httpvar?>" style='font-size:9pt'>[수정]</a>
+		<a href="#" style='font-size:9pt' onClick="deleteCD( '<?=$rs_cd_no?>' ); return false">[삭제]</a>
+		</td>
+	</tr>
+	<? if( $db->total_record() > 1 AND $loop != $db->total_record() - 1 ) : ?>
+	<tr>
+		<td colspan=5 height=1 background="../../image/dot.gif">
+		</td>
+	</tr>
+	<? endif ?>
+<? endfor ?>
+	</table>
+	</td>
+</tr>
+</table>
+
+<? if( $total_page > 1 ) : ?>
+<table width=820 border=0>
+<tr>
+	<td height=40 align=center>
+	<? page_list( $_SERVER["PHP_SELF"], $httpvar ); ?>
+	</td>
+</tr>
+</table>
+<? endif ?>
+
+</form>
+
+<iframe name=cd_hidden_frame border=0 width=0 height=0></iframe>
+
+</body>
+</html>

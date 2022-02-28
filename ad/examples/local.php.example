@@ -1,0 +1,6 @@
+<?php
+//Rename this file local.php and change the constants to match your Google Account credentials
+define('GOOGLE_EMAIL','kkeing1@gmail.com');
+define('GOOGLE_PASSWD','dldks0530');
+define('ANDROID_DEVICEID','0000000000000000');
+?>

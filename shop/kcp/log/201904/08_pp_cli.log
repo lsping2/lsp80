@@ -1,0 +1,5 @@
+0408-155736 - 44511 - SR42Y48Ft88aE4M2 - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2019040815505072]+log_level=[3]
+0408-155737 - 44511 - SR42Y48Ft88aE4M2 - MSG : PG_서버_접속__정상
+0408-155737 - 44511 - SR42Y48Ft88aE4M2 - MSG : PG_서버_요청_전문_전송__정상
+0408-155737 - 44511 - SR42Y48Ft88aE4M2 - MSG : PG_서버_응답_전문_수신__정상
+0408-155737 - 44511 - SR42Y48Ft88aE4M2 - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y48Ft88aE4M2pay_method=PACAorder_no=2019040815505072card_cd=CCNHcard_name=NH카드acqu_cd=CCNHacqu_name=NH카드card_no=9430160000006680mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2019040815505072tno=19728154225585amount=125400card_mny=125400coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20190408155737van_apptime=20190408155737app_no=30000408bizx_numb=148034830quota=00noinf=Npg_txid=0408155737MNK4FJZY74QP0000001254000030000408use_point=0res_tax_flag=TG01res_tax_mny=114000res_free_mny=0res_vat_mny=11400partcanc_yn=Ycard_bin_type_01=1card_bin_type_02=0join_cd=0000]

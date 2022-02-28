@@ -1,0 +1,5 @@
+0328-211944 - 44734 - SR42Y3SLIVTIQMH5 - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2019032821165942]+log_level=[3]
+0328-211944 - 44734 - SR42Y3SLIVTIQMH5 - MSG : PG_서버_접속__정상
+0328-211944 - 44734 - SR42Y3SLIVTIQMH5 - MSG : PG_서버_요청_전문_전송__정상
+0328-211945 - 44734 - SR42Y3SLIVTIQMH5 - MSG : PG_서버_응답_전문_수신__정상
+0328-211945 - 44734 - SR42Y3SLIVTIQMH5 - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y3SLIVTIQMH5pay_method=PACAorder_no=2019032821165942card_cd=CCDIcard_name=현대카드acqu_cd=CCDIacqu_name=현대카드card_no=6243680000008910mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2019032821165942tno=19717046741915amount=26300card_mny=26300coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20190328211945van_apptime=20190328211945app_no=00299764bizx_numb=880345297quota=00noinf=Npg_txid=0328211945MNK4FGKJV0TO0000000263000000299764use_point=0res_tax_flag=TG01res_tax_mny=23909res_free_mny=0res_vat_mny=2391partcanc_yn=Ycard_bin_type_01=0card_bin_type_02=0join_cd=0000]

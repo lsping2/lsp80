@@ -1,0 +1,31 @@
+<?
+$a = file("test.txt"); 
+
+/*
+$line = count($a); 
+
+for($i=0;$i<count($a);$i++) { 
+    $eee = explode(" ",$a[$i]); 
+    $word += count($eee); 
+    $string += strlen($a[$i]); 
+} 
+echo "<Br>".$line."<Br>"; 
+echo $word."<Br>"; 
+echo $string."<Br>"; 
+
+*/
+
+$fp = fopen("test.txt","r"); 
+
+while(!feof($fp)) { 
+     
+    
+      for($i=0;$i<count($a);$i++) { 
+    $eee = explode(" ",$a[$i]); 
+    $word += count($eee); 
+    $string += strlen($a[$i]); 
+} 
+} 
+
+?>
+

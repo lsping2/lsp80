@@ -1,0 +1,5 @@
+0430-091210 - 20316 - SR42Y4U99P17I7KF - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2019043009060318]+log_level=[3]
+0430-091210 - 20316 - SR42Y4U99P17I7KF - MSG : PG_서버_접속__정상
+0430-091210 - 20316 - SR42Y4U99P17I7KF - MSG : PG_서버_요청_전문_전송__정상
+0430-091211 - 20316 - SR42Y4U99P17I7KF - MSG : PG_서버_응답_전문_수신__정상
+0430-091211 - 20316 - SR42Y4U99P17I7KF - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y4U99P17I7KFpay_method=PACAorder_no=2019043009060318card_cd=CCKMcard_name=KB국민카드acqu_cd=CCKMacqu_name=KB국민카드card_no=9436460000006906mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2019043009060318tno=19750373890329amount=85800card_mny=85800coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20190430091211van_apptime=20190430091211app_no=30007338bizx_numb=00091382344quota=00noinf=Npg_txid=0430091211MNK4DEMVHBGG0000000858000030007338res_tax_flag=TG01res_tax_mny=78000res_free_mny=0res_vat_mny=7800partcanc_yn=Ycard_bin_type_01=1card_bin_type_02=1card_bin_bank_cd=0341isp_partner_cd=00020404004727Ijoin_cd=0000]

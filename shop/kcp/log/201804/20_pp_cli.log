@@ -1,0 +1,5 @@
+0420-140441 - 18870 - SR42Y4KE4492k01h - MSG : TX_START - site_cd=[SR42Y]+tx_cd=[00100000]+ordr_idxx=[2018041922280875]+log_level=[3]
+0420-140441 - 18870 - SR42Y4KE4492k01h - MSG : PG_서버_접속__정상
+0420-140441 - 18870 - SR42Y4KE4492k01h - MSG : PG_서버_요청_전문_전송__정상
+0420-140442 - 18870 - SR42Y4KE4492k01h - MSG : PG_서버_응답_전문_수신__정상
+0420-140442 - 18870 - SR42Y4KE4492k01h - MSG : TX_ENDED - res=[res_cd=0000res_msg=정상처리res_en_msg=processing completedtrace_no=SR42Y4KE4492k01hpay_method=PACAorder_no=2018041922280875card_cd=CCBCcard_name=BC카드acqu_cd=CCBCacqu_name=BC카드card_no=9440110000007498mcht_taxno=1138521083mall_taxno=2178147771ca_order_id=2018041922280875tno=18740598916930amount=489000card_mny=489000coupon_mny=0escw_yn=Nvan_cd=VNKCapp_time=20180420140442van_apptime=20180420140442app_no=46125683bizx_numb=780284397quota=00noinf=Npg_txid=0420140442MG34CC1QBPG10000004890000046125683res_tax_flag=TG01res_tax_mny=444545res_free_mny=0res_vat_mny=44455partcanc_yn=Ycard_bin_type_01=0card_bin_type_02=1card_bin_bank_cd=0011isp_issuer_cd=BC11isp_issuer_nm=농협비씨isp_partner_cd=000100111130494join_cd=0000]
